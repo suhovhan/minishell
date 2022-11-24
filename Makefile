@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes
+CFLAGS = -Wall -Wextra -Werror -I./includes #-fsanitize=address
 LINK = -lreadline -lcurses
 
 OBJ_SRC_DIR = obj_src

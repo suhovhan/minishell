@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax_error.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/19 16:41:59 by suhovhan          #+#    #+#             */
+/*   Updated: 2022/11/22 17:19:03 by suhovhan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	check_quotes(t_separators *separators)
@@ -39,9 +51,11 @@ int	check_redirections(t_separators *separators)
 			separators->sep == _HEREDOC || separators->sep == _APPEND)
 		{
 			separators = separators->next;
-			if (separators != NULL && separators->sep == _SPACE)
+			while (separators != NULL && (separators->sep == _SPACE || \
+			separators->sep == _SINGLE_QUOTE || separators->sep == _DUBLE_QUOTE ||\
+			separators->sep == _EXPANSION))
 				separators = separators->next;
-			if (separators == NULL || separators->sep != _EXTERNAL)
+			if (separators == NULL || (separators->sep != _EXTERNAL && separators->sep != _EXPRESSION))
 			{
 				print_syntax_error(1);
 				return (-1);
@@ -65,8 +79,7 @@ int	check_pipe(t_separators *separators)
 			separators = separators->next;
 			if (separators != NULL && separators->sep == _SPACE)
 				separators = separators->next;
-			if (separators == NULL || !(separators->sep == _EXTERNAL || \
-				separators->sep == _EXPRESSION))
+			if (separators == NULL || separators->sep == _PIPE)
 				return (-1);
 		}
 		if (separators != NULL)
