@@ -6,26 +6,28 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 17:20:42 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/11/24 16:33:49 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/04 04:54:53 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	tokenization(t_pars	**parser, t_separators *sep, char **get_line)
+void	p_mtx(char **str)
 {
-	t_redirection	*redir;
-	t_token 		*token;
-	char			**splited_token;
-	char			*get_line_tmp;
-	(void)parser;
+	int	i = -1;
+	while (str[++i])
+		printf("cmd_%d = [%s]\n", i, str[i]);
+}
 
-	token = NULL;
-	redir = NULL;
-	splited_token = ft_split(*get_line, '|');
+int	tokenization(t_addres *addres, char **get_line)
+{
+	char			*get_line_tmp;
+
+	(*addres).redir = NULL;
 	get_line_tmp = *get_line;
-	set_redirection(sep, &redir, &get_line_tmp);
-	get_line_tmp = ft_cleanline(*get_line);
-	append_token(&token, &redir, get_line_tmp);
+	set_redirection((*addres).sep, &(*addres).redir, &get_line_tmp);
+	get_line_tmp = epur_str(ft_cleanline(*get_line));
+	addres->pars.cmd_line = ft_split(get_line_tmp, '|');
+	free(*get_line);
 	return (0);
 }

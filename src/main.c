@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/11/24 16:07:23 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/04 02:45:41 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,40 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
-	t_separators		*separators;
-	t_redirection		*redir;
-	t_token 			*token;
 
+	t_addres	addres;
 	char		*get_line;
 	char		*get_line_tmp;
+
 	while (1)
 		while (1)
 		{
-			token = NULL;
-			redir = NULL;
 			get_line = readline("minishell-$ ");
-			get_line_tmp = get_line;
+			addres.redir = NULL;
 			add_history(get_line);
 			if (!ft_strncmp(get_line, "exit", 4))
 				return (0);
-			set_sep(&get_line_tmp, &separators);
 			get_line_tmp = get_line;
-			if (check_separators(separators) == -1)	
+			set_sep(&get_line_tmp, &(addres.sep));
+			if (check_part_of_sep(addres.sep) == -1)	
 			{
-				free_separators(&separators);
+				free_addres(&addres);
 				break ;
 			}
-			set_redirection(separators, &redir, &get_line_tmp);
-			get_line_tmp = ft_cleanline(get_line);
-			append_token(&token, &redir, get_line_tmp);
-			free_token(&token);
-			free_separators(&separators);
+			get_line_tmp = get_line;
+			tokenization(&addres, &get_line_tmp);
+			if (check_separators(addres.sep) == -1)	
+			{
+				free_addres(&addres);
+				break ;
+			}
+			p_mtx(addres.pars.cmd_line);
+			while (addres.redir)
+			{
+				printf("type = %d\tdel = %s\n", addres.redir->type, addres.redir->delimiter);
+				addres.redir = addres.redir->next;
+			}
+			free_addres(&addres);
 		}
 	return (0);
 }

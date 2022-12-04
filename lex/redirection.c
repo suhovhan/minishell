@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 04:55:47 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/11/24 13:47:21 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/04 02:19:25 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	set_redir_in(char **get_line, t_redirection **redir)
 	(*get_line)++;
 	while (**get_line == ' ')
 		(*get_line)++;
-	str = fill_word(get_line, ' ', 1);
+	str = ft_cleanline(fill_word(get_line, ' ', 1));
 	append_redir(redir, str, _RED_IN);
 	return (0);
 }
@@ -35,7 +35,7 @@ int	set_redir_out(char **get_line, t_redirection **redir)
 	(*get_line)++;
 	while (**get_line == ' ')
 		(*get_line)++;
-	str = fill_word(get_line, ' ', 1);
+	str = ft_cleanline(fill_word(get_line, ' ', 1));
 	append_redir(redir, str, _RED_OUT);
 	return (0);
 }
@@ -51,7 +51,7 @@ int	set_redir_append(char **get_line, t_redirection **redir)
 	(*get_line)++;
 	while (**get_line == ' ')
 		(*get_line)++;
-	str = fill_word(get_line, ' ', 1);
+	str = ft_cleanline(fill_word(get_line, ' ', 1));
 	append_redir(redir, str, _APPEND);
 	return (0);
 }
@@ -67,14 +67,14 @@ int	set_redir_heredoc(char **get_line, t_redirection **redir)
 	(*get_line)++;
 	while (**get_line == ' ')
 		(*get_line)++;
-	str = fill_word(get_line, ' ', 1);
+	str = ft_cleanline(fill_word(get_line, ' ', 1));
 	append_redir(redir, str, _HEREDOC);
 	return (0);
 }
 
 int	set_redirection(t_separators *sep, t_redirection **redir, char **get_line)
 {
-	while (sep && sep->sep != _PIPE)
+	while (sep)
 	{
 		if (sep->sep == _RED_IN)
 			set_redir_in(get_line, redir);

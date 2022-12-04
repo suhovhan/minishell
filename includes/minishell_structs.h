@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/11/22 16:41:31 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/04 00:14:29 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,19 @@ typedef	struct s_redirection
 	struct s_redirection	*prev;
 }				t_redirection;
 
-typedef	struct s_token
-{
-	char			**cmd_line;
-	t_redirection	*redir;
-	struct s_token	*next;
-	struct s_token	*prev;
-}				t_token;
-
 typedef struct s_pars
 {
 	int				count_heredoc;
 	int				count_pipe;
-	t_token			*token;
+	char			**cmd_line;
+	t_redirection	*redir;
 	t_separators	*separat;
 }				t_pars;
 
+typedef struct	s_addres
+{
+	t_pars			pars;
+	t_separators	*sep;
+	t_redirection	*redir;
+}				t_addres;
 #endif

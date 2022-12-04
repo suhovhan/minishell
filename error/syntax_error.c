@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:59 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/11/22 17:19:03 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/04 00:25:05 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_redirections(t_separators *separators)
 	while (separators != NULL)
 	{
 		if (separators->sep == _RED_IN || separators->sep == _RED_OUT || \
-			separators->sep == _HEREDOC || separators->sep == _APPEND)
+			separators->sep == _APPEND)
 		{
 			separators = separators->next;
 			while (separators != NULL && (separators->sep == _SPACE || \
@@ -56,6 +56,29 @@ int	check_redirections(t_separators *separators)
 			separators->sep == _EXPANSION))
 				separators = separators->next;
 			if (separators == NULL || (separators->sep != _EXTERNAL && separators->sep != _EXPRESSION))
+			{
+				print_syntax_error(1);
+				return (-1);
+			}
+		}
+		separators = separators->next;
+	}
+	return (0);
+}
+
+int	check_heredoc(t_separators *separators)
+{
+	while (separators != NULL)
+	{
+		if (separators->sep == _HEREDOC)
+		{
+			separators = separators->next;
+			while (separators != NULL && (separators->sep == _SPACE || \
+			separators->sep == _SINGLE_QUOTE || separators->sep == _DUBLE_QUOTE ||\
+			separators->sep == _EXPANSION))
+				separators = separators->next;
+			if (separators == NULL || (separators->sep != _EXTERNAL && \
+			separators->sep != _EXPRESSION))
 			{
 				print_syntax_error(1);
 				return (-1);
@@ -88,10 +111,17 @@ int	check_pipe(t_separators *separators)
 	return (0);
 }
 
-int	check_separators(t_separators *separators)
+int	check_part_of_sep(t_separators *separators)
 {
 	if (check_quotes(separators) == -1)
 		return (-1);
+	if (check_heredoc(separators) == -1)
+		return (-1);
+	return (0);
+}
+
+int	check_separators(t_separators *separators)
+{
 	if (check_pipe(separators) == -1)
 	{
 		print_syntax_error(124);

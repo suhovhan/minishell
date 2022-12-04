@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/11/24 15:16:58 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/04 02:51:54 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,29 +56,6 @@ int	append_redir(t_redirection **redir, char *delimiter, int type)
 	return (0);
 }
 
-int	append_token(t_token **token, t_redirection **redir, char *get_line)
-{
-	t_token	*new_node;
-	t_token *last_node;
-
-	new_node = malloc(sizeof(t_token));
-	new_node->cmd_line = ft_split(get_line, ' ');
-	new_node->redir = *redir;
-	new_node->next = NULL;
-	new_node->prev = NULL;
-	if (*token == NULL)
-		*token = new_node;
-	else
-	{
-		last_node = *token;
-		while (last_node->next != NULL)
-			last_node = last_node->next;
-		last_node->next = new_node;
-		new_node->prev = last_node;
-	}
-	return (0);
-}
-
 int	word_len(char *get_line, char ch)
 {
 	int	len;
@@ -122,6 +99,35 @@ char	*fill_word(char **get_line, char ch, int flag)
 	return (res);
 }
 
+char	*epur_str(char *str)
+{
+	char 	*res;
+	char	*end;
+	int		i;
+	int		j;
+
+	i = -1;
+	j = -1;
+	res = (char *)malloc(sizeof(char) * ft_strlen(str));
+	while (str[++i])
+	{
+		while (str[i] && str[i] == ' ')
+		{
+			if (str[i + 1] && str[i + 1] != ' ')
+				res[++j] = ' ';
+			i++;
+		}
+		i--;
+		while (str[++i] && str[i] != ' ')
+			res[++j] = str[i];
+		i--;
+	}
+	res[++j] = '\0';
+	end = (char *)malloc(sizeof(char) * ft_strlen(res));
+	ft_strlcpy(end, res, ft_strlen(res) + 1);
+	free(res);
+	return (end);
+}
 
 char	*ft_cleanline(char *get_line)
 {
