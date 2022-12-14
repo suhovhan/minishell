@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 20:04:32 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/11/23 20:15:15 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/09 17:14:18 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	getwordcount(char *s, char c)
 		;
 	while (s[--len] && s[len] == c && i < len)
 		;
-	if ((size_t)i == ft_strlen(s))
+	if (i == (int)ft_strlen(s))
 		return (0);
 	while (s[i] && i < len)
 	{
@@ -51,7 +51,7 @@ char	*fillword(char *s, int start_index, int len)
 	return (word);
 }
 
-char	**ft_smart_split(char *s, char c)
+char	**ft_smart_split(char *s)
 {
 	int		start;
 	int		end;
@@ -61,14 +61,14 @@ char	**ft_smart_split(char *s, char c)
 
 	start = 0;
 	i = -1;
-	count = getwordcount(s, c);
+	count = getwordcount(s, '|');
 	res = (char **)malloc(sizeof(char *) * count + 1);
 	while (++i < count)
 	{
-		while (s[start] && s[start] == c)
+		while (s[start] && s[start] == '|')
 			start++;
 		end = start;
-		while (s[end] != '\0' && s[end] != c)
+		while (s[end] != '\0' && s[end] != '|')
 			end++;
 		res[i] = fillword(s, start, end - start);
 		start = end;

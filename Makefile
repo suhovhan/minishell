@@ -11,9 +11,9 @@ OBJ_LEX_DIR = obj_lex
 SRC_LEX = $(wildcard lex/*.c)
 OBJ_LEX = $(patsubst lex/%.c, $(OBJ_LEX_DIR)/%.o, $(SRC_LEX))
 
-# OBJ_PARS_DIR = obj_pars
-# SRC_PARS = $(wildcard parsing/*.c)
-# OBJ_PARS = $(patsubst parsing/%.c, $(OBJ_PARS_DIR)/%.o, $(SRC_PARS))
+OBJ_PARS_DIR = obj_pars
+SRC_PARS = $(wildcard parsing/*.c)
+OBJ_PARS = $(patsubst parsing/%.c, $(OBJ_PARS_DIR)/%.o, $(SRC_PARS))
 
 OBJ_ERR_DIR = obj_error
 SRC_ERR = $(wildcard error/*.c)
@@ -34,28 +34,27 @@ RMRF = rm -rf
 LIBCACH = ~/Library/Caches/
 
 $(OBJ_SRC_DIR)/%.o: ./src/%.c | $(OBJ_SRC_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_LEX_DIR)/%.o: ./lex/%.c | $(OBJ_LEX_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# $(OBJ_PARS_DIR)/%.o: ./parsing/%.c | $(OBJ_PARS_DIR)
-# 	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_PARS_DIR)/%.o: ./parsing/%.c | $(OBJ_PARS_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_ERR_DIR)/%.o: ./error/%.c | $(OBJ_ERR_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_LIBFT_DIR)/%.o: ./libft/%.c | $(OBJ_LIBFT_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_UTILS_DIR)/%.o: ./utils/%.c | $(OBJ_UTILS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(NAME)
 
-$(NAME): $(OBJ_SRC) $(OBJ_LEX) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
-	@$(CC) $(CFLAGS) $(LINK) -o $(NAME) $(OBJ_SRC) $(OBJ_LEX) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
-	@# $(OBJ_PARS)
+$(NAME): $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
+	$(CC) $(CFLAGS) $(LINK) -o $(NAME) $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
 
 $(OBJ_SRC_DIR):
 	$(MK) $(OBJ_SRC_DIR)
@@ -63,8 +62,8 @@ $(OBJ_SRC_DIR):
 $(OBJ_LEX_DIR):
 	$(MK) $(OBJ_LEX_DIR)
 
-# $(OBJ_PARS_DIR):
-# 	$(MK) $(OBJ_PARS_DIR)
+$(OBJ_PARS_DIR):
+	$(MK) $(OBJ_PARS_DIR)
 
 $(OBJ_ERR_DIR):
 	$(MK) $(OBJ_ERR_DIR)
@@ -78,14 +77,14 @@ $(OBJ_UTILS_DIR):
 clean:
 	$(RMRF) $(OBJ_SRC_DIR)
 	$(RMRF) $(OBJ_LEX_DIR)
-	@# $(RMRF) $(OBJ_PARS_DIR)
+	$(RMRF) $(OBJ_PARS_DIR)
 	$(RMRF) $(OBJ_ERR_DIR)
 	$(RMRF) $(OBJ_LIBFT_DIR)
 	$(RMRF) $(OBJ_UTILS_DIR)
 
 fclean: clean
 	$(RM)  $(NAME)
-	@$(RMRF) $(LIBCACH)
+	$(RMRF) $(LIBCACH)
 
 re: fclean all
 

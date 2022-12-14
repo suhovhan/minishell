@@ -6,17 +6,30 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/04 02:45:41 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/14 17:16:42 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+void	p_mtx(char **mtx)
 {
-	(void)argc;
-	(void)argv;
-	(void)envp;
+	int	i = -1;
+	int	j;
+	char	**sp;
+	while (mtx[++i])
+	{
+		j = -1;
+		sp = ft_split(mtx[i], '=');
+		while (sp[++j])
+			printf("%s\n", sp[j]);
+	}
+}
+
+int	main(int ac, char **av, char **env)
+{
+	(void)ac;
+	(void)av;
 
 	t_addres	addres;
 	char		*get_line;
@@ -26,31 +39,33 @@ int	main(int argc, char **argv, char **envp)
 		while (1)
 		{
 			get_line = readline("minishell-$ ");
-			addres.redir = NULL;
-			add_history(get_line);
+			if (get_line && *get_line)
+				add_history(get_line);
 			if (!ft_strncmp(get_line, "exit", 4))
 				return (0);
 			get_line_tmp = get_line;
-			set_sep(&get_line_tmp, &(addres.sep));
-			if (check_part_of_sep(addres.sep) == -1)	
+			if (check_quotes(get_line_tmp))	
+				break ;
+			set_token(&get_line_tmp, &(addres.token));
+			if (check_heredoc(addres.token) == -1)	
 			{
-				free_addres(&addres);
+				free_token(&(addres.token));
 				break ;
 			}
-			get_line_tmp = get_line;
-			tokenization(&addres, &get_line_tmp);
-			if (check_separators(addres.sep) == -1)	
+			set_env(&(addres.env), env);
+			heredoc(&addres);
+			// t_token *tmp = addres.token;
+			// while (tmp)
+			// {
+			// 	printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
+			// 	tmp = tmp->next;
+			// }
+			if (check_syntax(addres.token) == -1)	
 			{
-				free_addres(&addres);
+				free_token(&(addres.token));
 				break ;
 			}
-			p_mtx(addres.pars.cmd_line);
-			while (addres.redir)
-			{
-				printf("type = %d\tdel = %s\n", addres.redir->type, addres.redir->delimiter);
-				addres.redir = addres.redir->next;
-			}
-			free_addres(&addres);
+			free_token(&(addres.token));
 		}
 	return (0);
 }

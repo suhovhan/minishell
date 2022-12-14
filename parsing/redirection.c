@@ -1,27 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_and_exit.c                                    :+:      :+:    :+:   */
+/*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/14 17:13:05 by suhovhan         ###   ########.fr       */
+/*   Created: 2022/12/13 21:43:03 by suhovhan          #+#    #+#             */
+/*   Updated: 2022/12/14 16:43:16 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	free_token(t_token **token)
-{
-	t_token *tmp;
-
-	while (*token)
-	{
-		tmp = *token;
-		(*token) = (*token)->next;
-		free(tmp);
-	}
-	return (0);
-}
 

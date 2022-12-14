@@ -6,25 +6,34 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/04 02:51:54 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/14 16:59:43 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	append_sep(t_separators **separators, int sep)
+int	append_token(t_token **token, int type, char *str)
 {
-	t_separators	*new_node;
-	t_separators *last_node;
+	static int	index = -1;
+	t_token		*new_node;
+	t_token 	*last_node;
 
-	new_node = malloc(sizeof(t_separators));
-	new_node->sep = sep;
+	if (*str == '\0')
+		return (0);
+	new_node = malloc(sizeof(t_token));
+	new_node->type = type;
+	new_node->index = ++index;
+	new_node->token = str;
 	new_node->next = NULL;
-	if (*separators == NULL)
-		*separators = new_node;
+	if (*token == NULL)
+	{
+		index = -1;
+		new_node->index = ++index;
+		*token = new_node;
+	}
 	else
 	{
-		last_node = *separators;
+		last_node = *token;
 		while (last_node->next != NULL)
 			last_node = last_node->next;
 		last_node->next = new_node;
@@ -32,26 +41,52 @@ int	append_sep(t_separators **separators, int sep)
 	return (0);
 }
 
-int	append_redir(t_redirection **redir, char *delimiter, int type)
+int	remove_node_from_token(t_token **token, int index)
 {
-	t_redirection	*new_node;
-	t_redirection	*last_node;
+	t_token	*tmp;
+	t_token	*ptr;
 
-	new_node = malloc(sizeof(t_redirection));
-	new_node->type = type;
-	new_node->delimiter = delimiter;
+	tmp = *token;
+	if (index == 0)
+	{
+		ptr = tmp->next;
+		free(tmp);
+		tmp = NULL;
+		*token = ptr;
+		return (0);
+	}
+	while (tmp && tmp->index + 1 < index)
+		tmp = tmp->next;
+	ptr = tmp;
+	if (tmp && tmp->next)
+	{
+		tmp = tmp->next;
+		if (tmp->index == index)
+			ptr->next = tmp->next;
+		free(tmp);
+		tmp = NULL;
+	}
+	return (0);
+}
+
+int	append_env(t_env **env, char *key, char *value)
+{
+	t_env	*new_node;
+	t_env	*last_node;
+
+	new_node = malloc(sizeof(t_env));
+	new_node->key = key;
+	new_node->value = value;
 	new_node->next = NULL;
-	new_node->prev = NULL;
-	if (*redir == NULL)
-		*redir = new_node;
+	if (*env == NULL)
+		*env = new_node;
 	else
 	{
-		last_node = *redir;
-		while ((*redir)->next != NULL)
-			*redir = (*redir)->next;
-		(*redir)->next = new_node;
-		(*redir)->next->prev = *redir;
-		*redir = last_node;
+		last_node = *env;
+		while ((*env)->next != NULL)
+			*env = (*env)->next;
+		(*env)->next = new_node;
+		*env = last_node;
 	}
 	return (0);
 }
@@ -148,4 +183,69 @@ char	*ft_cleanline(char *get_line)
 	ft_strlcpy(end, res, ft_strlen(res) + 1);
 	free(res);
 	return (end);
+}
+
+// heredoc utils
+
+int	get_wordlen_expression(char **heredoc)
+{
+	char	*heredoc_line;
+	int		i;
+
+	i = 0;
+	heredoc_line = *heredoc;
+	while (heredoc_line && *heredoc_line && \
+	((*heredoc_line >= 'a' && *heredoc_line <= 'z') || \
+	(*heredoc_line >= 'A' && *heredoc_line <= 'Z') || \
+	(*heredoc_line >= '0' && *heredoc_line <= '9') || 
+	*heredoc_line == '-' || *heredoc_line == '_'))
+	{
+		heredoc_line++;
+		i++;
+	}
+	return (i);
+}
+
+char	*execute_expression(char **heredoc)
+{
+	char	*res;
+	int		len;
+	int		i;
+
+	i = -1;
+	if (heredoc && *heredoc && **heredoc && **heredoc == '$')
+	{
+		(*heredoc)++;
+		len = get_wordlen_expression(heredoc);
+		res = malloc(sizeof(char) * len + 1);
+	}
+	while (heredoc && *heredoc && **heredoc &&\
+	((**heredoc >= 'a' && **heredoc <= 'z') || \
+	(**heredoc >= 'A' && **heredoc <= 'Z') || \
+	(**heredoc >= '0' && **heredoc <= '9') || \
+	**heredoc == '-' || **heredoc == '_'))
+	{
+		res[++i] = **heredoc;
+		(*heredoc)++;
+	}
+	res[++i] = '\0';
+	return (res);
+}
+
+char *find_value_env(t_env	*env, char *key)
+{
+	char	*value;
+
+	value = NULL;
+	while (env)
+	{
+		if (ft_strlen(env->key) == ft_strlen(key) && \
+		!(ft_strncmp(env->key, key, ft_strlen(key))))
+		{
+			value = ft_strdup(env->value);
+			break;
+		}
+		env = env->next;
+	}
+	return (value);
 }

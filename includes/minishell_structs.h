@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/04 00:14:29 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/14 17:12:38 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,37 +27,32 @@ typedef enum s_types
 	_APPEND = 9, // >> append
 	_UNDEFINED = 10, // ; ` doesn't handle
 	_CMD = 11, // comands
-	_EXPANSION = 12, // [ '...' ] || [ "..." ]
+	_EXPANSION_SINGLE = 12, // [ '...' ]
+	_EXPANSION_DUBLE = 13, // [ "..." ]
 	_DELIMITER = 14, // redirection filename
 }			t_types;
 
-typedef	struct s_separators
+typedef	struct s_token
 {
-	int					sep;
-	struct s_separators	*next;
-}				t_separators;
+	int					index;
+	int					type;
+	char				*token;
+	struct s_token	*next;
+}				t_token;
 
-typedef	struct s_redirection
+typedef struct	s_env
 {
-	int						type;
-	char					*delimiter;
-	struct s_redirection	*next;
-	struct s_redirection	*prev;
-}				t_redirection;
-
-typedef struct s_pars
-{
-	int				count_heredoc;
-	int				count_pipe;
-	char			**cmd_line;
-	t_redirection	*redir;
-	t_separators	*separat;
-}				t_pars;
+	char 			*key;
+	char 			*value;
+	struct s_env	*next;
+}				t_env;
 
 typedef struct	s_addres
 {
-	t_pars			pars;
-	t_separators	*sep;
-	t_redirection	*redir;
+	int				exit_status;
+	int				descriptor;
+	int				pipe_count;
+	t_env			*env;
+	t_token			*token;
 }				t_addres;
 #endif

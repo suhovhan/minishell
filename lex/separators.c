@@ -6,116 +6,145 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/11/22 16:27:47 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/09 00:32:26 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	fill_spaces(char **get_line, t_separators **separators)
+int	fill_spaces(char **get_line, t_token **token)
 {
 	while (**get_line == ' ')
 		(*get_line)++;
 	(*get_line)--;
-	append_sep(separators, _SPACE);
+	append_token(token, _SPACE, " ");
 	return (0);
 }
 
-int	fill_redirections(char **get_line, t_separators **separators)
+int	fill_redirections(char **get_line, t_token **token)
 {
 	if (**get_line == '<')
 	{
 		(*get_line)++;
 		if (**get_line == '<')
-			append_sep(separators, _HEREDOC);
+			append_token(token, _HEREDOC, "<<");
 		else
 		{
 			(*get_line)--;
-			append_sep(separators, _RED_IN);
+			append_token(token, _RED_IN, "<");
 		}
 	}
 	else if (**get_line == '>')
 	{
 		(*get_line)++;
 		if (**get_line == '>')
-			append_sep(separators, _APPEND);
+			append_token(token, _APPEND, ">>");
 		else
 		{
 			(*get_line)--;
-			append_sep(separators, _RED_OUT);
+			append_token(token, _RED_OUT, ">");
 		}
 	}
 	return (0);
 }
 
-int	fill_quotes_external(char **get_line, t_separators **separators, int quote)
+int	fill_quotes_external(char **get_line, t_token **token, int quote)
 {
+	int	i;
+
 	if (quote == 39)
+	{
 		**get_line = _SINGLE_QUOTE;
+		i = _EXPANSION_SINGLE;
+	}
 	else
+	{
 		**get_line = _DUBLE_QUOTE;
-	(*get_line)++;
+		i = _EXPANSION_DUBLE;
+	}
 	if (**get_line != '\0' && **get_line != quote)
-		append_sep(separators, _EXTERNAL);
-		while (**get_line != '\0' && **get_line != quote)
-			(*get_line)++;
+			append_token(token, i, fill_word(get_line, quote, 0));
 	if (**get_line == quote)
 	{
 		if (quote == 39)
-		{
 			**get_line = _SINGLE_QUOTE;
-			append_sep(separators, _SINGLE_QUOTE);
-		}
 		else
-		{
 			**get_line = _DUBLE_QUOTE;
-			append_sep(separators, _DUBLE_QUOTE);
-		}
 	}
 	return (0);
 }
 
-int	fill_external(char **get_line, t_separators **separators)
+void	fill_external(char **get_line, t_token **token)
 {
-	(*get_line)++;
-	append_sep(separators, _EXTERNAL);
-		while (**get_line != '\0' && \
-			(**get_line != ' ' && \
-			**get_line != '<' && \
-			**get_line != '>' && \
-			**get_line != '|' && \
-			**get_line != '$' && \
-			**get_line != 39 && \
-			**get_line != '"'))
+	char	*res;
+	char	*line;
+	int		i;
+
+	i = -1;
+	res = malloc(sizeof(char) * ft_strlen(*get_line));
+	while (**get_line == ' ')
+		res[++i] = ' ';
+		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
+			&& **get_line != '>' && **get_line != '|' && **get_line != '$') && res)
+		{
+			res[++i] = **get_line;
 			(*get_line)++;
+		}
+	res[++i] = '\0';
+	line = (char*)malloc(sizeof(char) * ft_strlen(res));
+	i = -1;
+	while (res[++i])
+		line[i] = res[i];
+	free(res);
 	(*get_line)--;
-	return (0);
+	append_token(token, _EXTERNAL, line);
 }
 
-void	set_sep(char **get_line, t_separators **separators)
+void	fill_expression(char **get_line, t_token **token)
+{
+	char	*res;
+	char	*line;
+	int		i;
+
+	i = -1;
+	res = (char*)malloc(sizeof(char) * ft_strlen(*get_line));
+	res[++i] = **get_line;
+	(*get_line)++;
+		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
+			&& **get_line != '>' && **get_line != '|' && **get_line != '$' \
+			&& **get_line != 39 && **get_line != '"') && res)
+		{
+			res[++i] = **get_line;
+			(*get_line)++;
+		}
+	res[++i] = '\0';
+	line = (char*)malloc(sizeof(char) * ft_strlen(res));
+	i = -1;
+	while (res[++i])
+		line[i] = res[i];
+	(*get_line)--;
+	free(res);
+	append_token(token, _EXPRESSION, line);
+}
+
+void	set_token(char **get_line, t_token **token)
 {
 	while (**get_line)
 	{
 		if (**get_line == ' ')
-			fill_spaces(get_line, separators);
+			fill_spaces(get_line, token);
 		else if (**get_line == '|')
-			append_sep(separators, _PIPE);
+			append_token(token, _PIPE, "|");
 		else if (**get_line == '$')
-			append_sep(separators, _EXPRESSION);
+			fill_expression(get_line, token);
 		else if (**get_line == 39)
-		{
-			append_sep(separators, _SINGLE_QUOTE);
-			fill_quotes_external(get_line, separators, 39);
-		}
+			fill_quotes_external(get_line, token, 39);
 		else if (**get_line == '"')
-		{
-			append_sep(separators, _DUBLE_QUOTE);
-			fill_quotes_external(get_line, separators, '"');
-		}
+			fill_quotes_external(get_line, token, '"');
 		else if (**get_line == '<' || **get_line == '>')
-			fill_redirections(get_line, separators);
+			fill_redirections(get_line, token);
 		else
-			fill_external(get_line, separators);
+			fill_external(get_line, token);
 		(*get_line)++;
 	}
 }
