@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/14 16:39:27 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/17 02:56:16 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,17 +92,20 @@ int	run_heredoc_expansion(char *token, int descriptor)
 	return (0);
 }
 
-void	run_heredoc(t_env *env, char *token, int type)
+void	run_heredoc(t_addres *addres, char *token, int type)
 {
+	t_env	*env;
 	char	*del;
 	int		descriptor;
 
+	env = addres->env;
 	del = ft_strjoin(".heredoc_\7", token);
 	descriptor = open(del, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (type == _EXTERNAL)
 		run_heredoc_external(env, token, descriptor);
 	else
 		run_heredoc_expansion(token, descriptor);
+	addres->descriptor = descriptor;
 	dup2(0, descriptor);
 	close(descriptor);
 	unlink(del);
@@ -111,20 +114,31 @@ void	run_heredoc(t_env *env, char *token, int type)
 int	heredoc(t_addres *addres)
 {
 	t_token	*ptr;
-
+	t_token	*tmp;
+	int		index;
+	
+	tmp = addres->token;
 	ptr = addres->token;
-	while (ptr && ptr->type != _PIPE)
+	while (tmp && tmp->type != _PIPE)
 	{
-		if (ptr && ptr->type == _HEREDOC)
+		if (tmp && tmp->type == _HEREDOC)
 		{
-			ptr = ptr->next;
-			if (ptr && ptr->type == _SPACE)
-				ptr = ptr->next;
-			run_heredoc(addres->env, ptr->token, ptr->type);
-			ptr = ptr->next;
+			index = tmp->index;
+			tmp = tmp->next;
+			remove_node_from_token(&ptr, index);
+			if (tmp && tmp->type == _SPACE)
+			{
+				index = tmp->index;
+				tmp = tmp->next;
+				remove_node_from_token(&ptr, index);
+			}	
+			run_heredoc(addres, tmp->token, tmp->type);
+			index = tmp->index;
+			tmp = tmp->next;
+			remove_node_from_token(&ptr, index);
 		}
 		else
-			ptr = ptr->next;
+			tmp = tmp->next;
 	}
 	return (0);
 }

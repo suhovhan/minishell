@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/14 17:16:42 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:54:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,14 @@ int	main(int ac, char **av, char **env)
 	char		*get_line;
 	char		*get_line_tmp;
 
+	set_env(&(addres.env), env);
+	t_env	*env_tmp = addres.env;
+	while (env_tmp)
+	{
+		if (!ft_strncmp(env_tmp->key, "SHLVL", 5))
+			addres.shlvl = ft_atoi(env_tmp->value);
+		env_tmp = env_tmp->next;
+	}
 	while (1)
 		while (1)
 		{
@@ -42,24 +50,29 @@ int	main(int ac, char **av, char **env)
 			if (get_line && *get_line)
 				add_history(get_line);
 			if (!ft_strncmp(get_line, "exit", 4))
-				return (0);
-			get_line_tmp = get_line;
-			if (check_quotes(get_line_tmp))	
+			{
+				free(get_line);
+				exit(0);
+			}
+			if (check_quotes(get_line))	
 				break ;
-			set_token(&get_line_tmp, &(addres.token));
-			if (check_heredoc(addres.token) == -1)	
+			get_line_tmp = get_line;
+			set_token(&get_line, &(addres.token));
+			free(get_line);
+			if (check_heredoc(&addres) == -1)	
 			{
 				free_token(&(addres.token));
 				break ;
 			}
-			set_env(&(addres.env), env);
 			heredoc(&addres);
-			// t_token *tmp = addres.token;
-			// while (tmp)
-			// {
-			// 	printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
-			// 	tmp = tmp->next;
-			// }
+			pars_expression(&addres);
+			t_env *tmp = addres.env;
+			while (tmp)
+			{
+				printf("key = %s\tvalue = %s\n", tmp->key, tmp->value);
+				tmp = tmp->next;
+			}
+			// run_redirections(&addres);
 			if (check_syntax(addres.token) == -1)	
 			{
 				free_token(&(addres.token));

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   separators.c                                       :+:      :+:    :+:   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/09 00:32:26 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/17 23:16:21 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ void	fill_external(char **get_line, t_token **token)
 	while (**get_line == ' ')
 		res[++i] = ' ';
 		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
-			&& **get_line != '>' && **get_line != '|' && **get_line != '$') && res)
+			&& **get_line != '>' && **get_line != '|' && **get_line != '$' \
+			&& **get_line != '"' && **get_line != 39) && res)
 		{
 			res[++i] = **get_line;
 			(*get_line)++;
@@ -147,4 +148,5 @@ void	set_token(char **get_line, t_token **token)
 			fill_external(get_line, token);
 		(*get_line)++;
 	}
+	clean_space_from_token(token);
 }

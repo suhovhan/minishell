@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:59 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/14 16:54:00 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:56:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ int	check_redirections(t_token *token)
 			token->type == _APPEND)
 		{
 			token = token->next;
-			while (token && token->type == _SPACE)
-				token = token->next;
+			// while (token && token->type == _SPACE)
+			// 	token = token->next;
 			if (token == NULL || (token->type != _EXTERNAL && token->type != _EXPRESSION && \
 			token->type != _EXPANSION_DUBLE && token->type != _EXPANSION_SINGLE))
 			{
@@ -95,24 +95,31 @@ int	check_redirections(t_token *token)
 	return (0);
 }
 
-int	check_heredoc(t_token *token)
+int	check_heredoc(t_addres *addres)
 {
-	while (token != NULL)
+	int	i;
+	t_token	*tmp;
+
+	i = 0;
+	tmp = addres->token;
+	while (tmp != NULL)
 	{
-		if (token->type == _HEREDOC)
+		if (tmp->type == _HEREDOC)
 		{
-			token = token->next;
-			while (token != NULL && token->type == _SPACE)
-				token = token->next;
-			if (token == NULL || (token->type != _EXTERNAL && \
-			token->type != _EXPANSION_DUBLE && token->type != _EXPANSION_SINGLE && \
-			token->type != _EXPRESSION))
+			if (++i > 16)
+				exit_shell(addres, _HEREDOC);
+			tmp = tmp->next;
+			while (tmp != NULL && tmp->type == _SPACE)
+				tmp = tmp->next;
+			if (tmp == NULL || (tmp->type != _EXTERNAL && \
+			tmp->type != _EXPANSION_DUBLE && tmp->type != _EXPANSION_SINGLE && \
+			tmp->type != _EXPRESSION))
 			{
 				print_syntax_error(1);
 				return (-1);
 			}
 		}
-		token = token->next;
+		tmp = tmp->next;
 	}
 	return (0);
 }
@@ -141,6 +148,8 @@ int	check_pipe(t_token *token)
 
 int	check_syntax(t_token *token)
 {
+	if (token == NULL)
+		return (0);
 	if (check_pipe(token) == -1)
 	{
 		print_syntax_error(124);
