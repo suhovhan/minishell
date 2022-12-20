@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 23:18:59 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/20 03:06:46 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 # include "libft.h"
 # include "minishell_structs.h"
-
 
 //lexical analize functions
 
@@ -39,6 +38,7 @@ void	fill_expression(char **get_line, t_token **token);
 int		print_syntax_error(int c);
 void	exit_shell(t_addres *addres, int	exit_code);
 int		free_token(t_token **token);
+int		free_env(t_env **env);
 int		check_single_quotes(char **get_line);
 int		check_duble_quotes(char **get_line);
 int		check_quotes(char *get_line);
@@ -46,6 +46,7 @@ int		check_heredoc(t_addres *addres);
 int		check_syntax(t_token *token);
 int		check_pipe(t_token *token);
 int		check_redirections(t_token *token);
+void	print_no_such_file_or_directory();
 
 
 //parsing functions
@@ -57,18 +58,18 @@ int		run_heredoc_external(t_env *env, char *token, int descriptor);
 int		run_heredoc_expansion(char *token, int descriptor);
 char	*open_expression_in_line(t_env *env, char *str);
 void	pars_expression(t_addres *addres);
-void	run_redirections(t_addres *addres);
-int		run_red_in(t_token **token, int index);
-int		run_red_out(t_token **token, int index);
-int		run_red_append(t_token **token, int index);
+void	redirect_input(t_addres *addres);
 int		open_red_in(char *filename);
+void	run_redirections(t_addres *addres);
+int		open_red_out(char *filename);
+int		open_red_append(char *filename);
 
 //utils functions
 
 
 int		append_token(t_token **token, int sep, char *str);
 int		append_env(t_env **env, char *key, char *value);
-int		remove_node_from_token(t_token **token, int index);
+void	remove_node_from_token(t_token **token, int index);
 void	clean_space_from_token(t_token	**token);
 void	set_env(t_env **env, char **envp);
 char 	*find_value_env(t_env	*env, char *key);

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 02:56:16 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/20 02:18:24 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	run_heredoc(t_addres *addres, char *token, int type)
 		run_heredoc_external(env, token, descriptor);
 	else
 		run_heredoc_expansion(token, descriptor);
-	addres->descriptor = descriptor;
+	addres->descriptor_input = descriptor;
 	dup2(0, descriptor);
 	close(descriptor);
 	unlink(del);
@@ -125,17 +125,11 @@ int	heredoc(t_addres *addres)
 		{
 			index = tmp->index;
 			tmp = tmp->next;
-			remove_node_from_token(&ptr, index);
-			if (tmp && tmp->type == _SPACE)
-			{
-				index = tmp->index;
-				tmp = tmp->next;
-				remove_node_from_token(&ptr, index);
-			}	
+			remove_node_from_token(&(addres->token), index);
 			run_heredoc(addres, tmp->token, tmp->type);
 			index = tmp->index;
 			tmp = tmp->next;
-			remove_node_from_token(&ptr, index);
+			remove_node_from_token(&(addres->token), index);
 		}
 		else
 			tmp = tmp->next;

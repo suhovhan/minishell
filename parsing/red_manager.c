@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 21:43:03 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 23:46:45 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/20 05:36:57 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,72 +15,49 @@
 void	run_redirections(t_addres *addres)
 {
 	t_token	*tmp;
-	t_token	*ptr;
-	int		descriptor;
+	int		index;
 	
 	tmp = addres->token;
-	ptr = addres->token;
-	descriptor = 0;
 	while (tmp)
 	{
-		if (tmp && tmp->type == _RED_IN)
-			descriptor = run_red_in(&ptr, tmp->index);
-		// else if (tmp && tmp->type == _RED_OUT)
-		// {
-		// 	descriptor = run_red_out(&ptr, tmp->index);
-		// 	tmp = ptr;	
-		// }
-		// else if (tmp && tmp->type == _APPEND)
-		// {
-		// 	descriptor = run_red_append(&ptr, tmp->index);
-		// 	tmp = ptr;
-		// }
-		tmp = tmp->next;
-	}
-	addres->descriptor = descriptor;
-}
-
-int	run_red_in(t_token **token, int index)
-{
-	int		descriptor;
-	int		rem_node_index;
-	t_token	*tmp;
-	t_token	*ptr;;
-
-	tmp = *token;
-	ptr = *token;
-	descriptor = 0;
-	while (tmp && tmp->index != index)
-		tmp = tmp->next;
-	if (tmp && tmp->index == index)
-	{
-		rem_node_index = tmp->index;
-		tmp = tmp->next;
-		remove_node_from_token(&ptr, rem_node_index);
-		if (tmp->type == _EXTERNAL)
+		if (tmp && (tmp->type == _RED_OUT || tmp->type == _APPEND))
 		{
-			descriptor = open_red_in(tmp->token);
-			rem_node_index = tmp->index;
+			if (tmp && tmp->type == _RED_OUT)
+				addres->descriptor_output = open_red_out(tmp->next->token);
+			else if (tmp && tmp->type == _APPEND)
+				addres->descriptor_output = open_red_append(tmp->next->token);
 			tmp = tmp->next;
-			remove_node_from_token(&ptr, rem_node_index);
+			remove_node_from_token(&(addres->token), tmp->prev->index);
+			index = tmp->index;
+			tmp = tmp->next;
+			remove_node_from_token(&(addres->token), index);
 		}
+		else
+			tmp = tmp->next;
 	}
-	*token = ptr;
-	return (descriptor);
+	usleep(10);
 }
 
-// int	run_red_out(t_token **token, int index)
-// {
-// 	int		descriptor;
-	
-	
-// 	return (descriptor);
-// }
+int	open_red_out(char *filename)
+{
+	int	fd;
 
-// int	run_red_append(t_token **token, int index)
-// {
-// 	int		descriptor;
-	
-	
-// 	return (descriptor);
-// }
+	fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+		print_no_such_file_or_directory();
+	dup2(fd, 1);
+	close(fd);
+	return (fd);
+}
+
+int	open_red_append(char *filename)
+{
+	int	fd;
+
+	fd = open(filename, O_RDWR | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
+		print_no_such_file_or_directory();
+	dup2(fd, 1);
+	close(fd);
+	return (fd);
+}

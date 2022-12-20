@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 23:16:21 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/20 05:27:55 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	fill_spaces(char **get_line, t_token **token)
 	while (**get_line == ' ')
 		(*get_line)++;
 	(*get_line)--;
-	append_token(token, _SPACE, " ");
+	append_token(token, _SPACE, ft_strdup(" "));
 	return (0);
 }
 
@@ -27,22 +27,22 @@ int	fill_redirections(char **get_line, t_token **token)
 	{
 		(*get_line)++;
 		if (**get_line == '<')
-			append_token(token, _HEREDOC, "<<");
+			append_token(token, _HEREDOC, ft_strdup("<<"));
 		else
 		{
 			(*get_line)--;
-			append_token(token, _RED_IN, "<");
+			append_token(token, _RED_IN, ft_strdup("<"));
 		}
 	}
 	else if (**get_line == '>')
 	{
 		(*get_line)++;
 		if (**get_line == '>')
-			append_token(token, _APPEND, ">>");
+			append_token(token, _APPEND, ft_strdup(">>"));
 		else
 		{
 			(*get_line)--;
-			append_token(token, _RED_OUT, ">");
+			append_token(token, _RED_OUT, ft_strdup(">"));
 		}
 	}
 	return (0);
@@ -123,9 +123,11 @@ void	fill_expression(char **get_line, t_token **token)
 	i = -1;
 	while (res[++i])
 		line[i] = res[i];
+	line[i] = '\0';
 	(*get_line)--;
 	free(res);
-	append_token(token, _EXPRESSION, line);
+	append_token(token, _EXPRESSION, ft_strdup(line));
+	free(line);
 }
 
 void	set_token(char **get_line, t_token **token)
@@ -135,7 +137,7 @@ void	set_token(char **get_line, t_token **token)
 		if (**get_line == ' ')
 			fill_spaces(get_line, token);
 		else if (**get_line == '|')
-			append_token(token, _PIPE, "|");
+			append_token(token, _PIPE, ft_strdup("|"));
 		else if (**get_line == '$')
 			fill_expression(get_line, token);
 		else if (**get_line == 39)

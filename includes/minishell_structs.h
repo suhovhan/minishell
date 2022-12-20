@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 02:06:30 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/20 03:07:24 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ typedef struct	s_env
 typedef struct	s_addres
 {
 	int				exit_status;
-	int				descriptor;
+	int				descriptor_input;
+	int				descriptor_output;
 	int				pipe_count;
 	int				shlvl;
 	t_env			*env;

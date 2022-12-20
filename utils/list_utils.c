@@ -53,40 +53,46 @@ int	append_env(t_env **env, char *key, char *value)
 	return (0);
 }
 
-int	remove_node_from_token(t_token **token, int index)
+void	remove_node_from_token(t_token **token, int index)
 {
 	t_token	*tmp;
 
 	tmp = *token;
-	while (tmp->index != index)
-		tmp = tmp->next;
-	if (tmp->index == index)
+	if ((*token)->index == index)
+		tmp = (*token)->next;
+	while ((*token)->index != index)
+		(*token) = (*token)->next;
+	if ((*token)->index == index && !(*token)->prev && !(*token)->next)
 	{
-		if (tmp->prev)
-			tmp->prev->next = tmp->next;
-		if (tmp->next)
-			tmp->next->prev = tmp->prev;
-		free(tmp);
-		tmp = NULL;
+		free((*token)->token);
+		free((*token));
+		*token = NULL;
 	}
-	return (0);
+	else if ((*token)->index == index)
+	{
+		if ((*token)->prev)
+			(*token)->prev->next = (*token)->next;
+		if ((*token)->next)
+			(*token)->next->prev = (*token)->prev;
+		free((*token)->token);
+		free((*token));
+	}
+	*token = tmp;
 }
 
 void	clean_space_from_token(t_token	**token)
 {
-	t_token	*ptr;
 	t_token	*tmp;
 	int		index;
 
 	tmp = *token;
-	ptr = *token;
 	while (tmp)
 	{
 		if (tmp->type == _SPACE)
 		{
 			index = tmp->index;
 			tmp = tmp->next;
-			remove_node_from_token(&ptr, index);
+			remove_node_from_token(token, index);
 		}
 		else
 			tmp = tmp->next;

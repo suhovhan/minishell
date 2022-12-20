@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/15 21:09:34 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/20 01:18:17 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,30 @@ int	free_token(t_token **token)
 {
 	t_token *tmp;
 
+	if (!token || !*token)
+		return (0);
 	while (*token)
 	{
 		tmp = *token;
 		(*token) = (*token)->next;
+		free(tmp->token);
+		free(tmp);
+	}
+	return (0);
+}
+
+int	free_env(t_env **env)
+{
+	t_env *tmp;
+
+	if (!env || !*env)
+		return (0);
+	while (*env)
+	{
+		tmp = *env;
+		(*env) = (*env)->next;
+		free(tmp->key);
+		free(tmp->value);
 		free(tmp);
 	}
 	return (0);

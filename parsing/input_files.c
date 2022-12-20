@@ -1,30 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   input_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 17:29:45 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 23:20:30 by suhovhan         ###   ########.fr       */
+/*   Created: 2022/12/20 01:51:01 by suhovhan          #+#    #+#             */
+/*   Updated: 2022/12/20 02:11:31 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	print_no_such_file_or_directory()
+void	redirect_input(t_addres *addres)
 {
-	printf("no such file or directory\n");
+	t_token	*tmp;
+	int		index;
+
+	tmp = addres->token;
+	while (tmp)
+	{
+		if (tmp->type == _RED_IN)
+		{
+			index = tmp->index;
+			tmp = tmp->next;
+			remove_node_from_token(&(addres->token), index);
+			if (tmp->type == _EXTERNAL)
+			{
+				addres->descriptor_input = open_red_in(tmp->token);
+				index = tmp->index;
+				tmp = tmp->next;
+				remove_node_from_token(&(addres->token), index);
+			}
+		}
+		else
+			tmp = tmp->next;
+	}
 }
 
 int	open_red_in(char *filename)
 {
 	int	fd;
+
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		print_no_such_file_or_directory();
 	else
-		dup2(1, fd);
+		dup2(0, fd);
 	close(fd);
 	return (fd);
 }
