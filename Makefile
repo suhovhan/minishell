@@ -95,7 +95,7 @@ clean:
 
 fclean: clean
 	@$(RF)  $(NAME)
-	@$(RMRF) $(LIBCACH)
+	@# $(RMRF) $(LIBCACH)
 
 re: fclean all
 

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 04:59:03 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 08:16:51 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,10 @@ void	run_heredoc(t_addres *addres, char *token, int type)
 		run_heredoc_external(env, token, descriptor);
 	else
 		run_heredoc_expansion(token, descriptor);
+	close(descriptor);
+	descriptor = open(del, O_RDONLY, 0644);
 	addres->descriptor_input = descriptor;
-	dup2(0, descriptor);
+	dup2(descriptor, 0);
 	close(descriptor);
 	unlink(del);
 	free(del);

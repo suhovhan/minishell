@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 05:14:07 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 06:20:59 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 07:36:40 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ char	*get_cmdargs(t_token **token)
 		tmp = tmp->next;
 		remove_node_from_token(token, index);
 	}
+	if (!cmd_args || !*cmd_args)
+		return (NULL);
 	return (cmd_args);
 }
 
@@ -71,6 +73,8 @@ char	**get_cmdline(t_token **token)
 	t_token	*tmp;	
 
 	tmp = *token;
+	if (!tmp)
+		return (NULL);
 	arg_count = 1;
 	i = 0;
 	while (tmp)

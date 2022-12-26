@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 01:51:01 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 06:02:18 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 08:03:41 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	open_red_in(char *filename)
 	if (fd == -1)
 		print_no_such_file_or_directory();
 	else
-		dup2(0, fd);
+		dup2(fd, 0);
 	close(fd);
 	return (fd);
 }

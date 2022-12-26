@@ -2,6 +2,8 @@
 
 int	isbuiltin(char **cmd_line)
 {
+	if (!cmd_line)
+		return (0);
 	if (cmd_line[0] && !ft_strcmp(cmd_line[0], "/bin/echo"))
 		echo(cmd_line);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "/bin/pwd"))

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 06:37:53 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 07:25:39 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,13 @@ void	exit_shell(t_addres *addres, int	exit_code)
 
 void	free_mtx(char **mtx)
 {
-	int	i = -1;
+	int	i;
 
-	while (mtx[++i] && mtx[i][0])
-		free(mtx[i]);
-	free(mtx);
+	i = -1;
+	if (mtx)
+	{
+		while (mtx[++i] && mtx[i][0])
+			free(mtx[i]);
+		free(mtx);
+	}
 }

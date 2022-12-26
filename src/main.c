@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 06:59:42 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 08:03:56 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	main(int ac, char **av, char **env)
 			}
 		}
 		dup2(std_out_copy, 1);
-		dup2(0, std_input_copy);
+		dup2(std_input_copy, 0);
 		free(get_line);
 		free_mtx((addres.cmd_line));
 		free_token(&(addres.token));
