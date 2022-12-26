@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:59 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/20 00:59:58 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/20 05:58:37 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ int	check_redirections(t_token *token)
 			token->type == _APPEND)
 		{
 			token = token->next;
-			// while (token && token->type == _SPACE)
-			// 	token = token->next;
+			if (token && token->type == _SPACE)
+				token = token->next;
 			if (token == NULL || (token->type != _EXTERNAL && token->type != _EXPRESSION && \
 			token->type != _EXPANSION_DUBLE && token->type != _EXPANSION_SINGLE))
 			{

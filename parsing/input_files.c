@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 01:51:01 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/20 02:11:31 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 06:02:18 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,17 @@ void	redirect_input(t_addres *addres)
 			index = tmp->index;
 			tmp = tmp->next;
 			remove_node_from_token(&(addres->token), index);
-			if (tmp->type == _EXTERNAL)
+			if (tmp->type == _SPACE)
 			{
-				addres->descriptor_input = open_red_in(tmp->token);
 				index = tmp->index;
 				tmp = tmp->next;
 				remove_node_from_token(&(addres->token), index);
 			}
+			addres->descriptor_input = open_red_in(tmp->token);
+			index = tmp->index;
+			addres->input_file = ft_strdup(tmp->token);
+			tmp = tmp->next;
+			remove_node_from_token(&(addres->token), index);
 		}
 		else
 			tmp = tmp->next;

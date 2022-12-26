@@ -6,24 +6,12 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/20 05:35:21 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 07:05:35 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <string.h>
-
-void	jogenq_incha(t_env *env, char *heredoc)
-{
-	char *expression;
-
-	if (heredoc && *heredoc && *heredoc == '$')
-	{
-		expression = execute_expression(&heredoc);
-		expression = find_value_env(env, expression);
-		free(expression);
-	}
-}
 
 char	*open_expression_in_line(t_env *env, char *str)
 {

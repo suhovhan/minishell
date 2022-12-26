@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/20 03:07:24 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 04:13:40 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct	s_addres
 	int				descriptor_output;
 	int				pipe_count;
 	int				shlvl;
+	char			*input_file;
+	char			**cmd_line;
 	t_env			*env;
 	t_token			*token;
 }				t_addres;

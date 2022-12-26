@@ -92,7 +92,8 @@ void	clean_space_from_token(t_token	**token)
 		{
 			index = tmp->index;
 			tmp = tmp->next;
-			remove_node_from_token(token, index);
+			if (tmp && tmp->type == _SPACE)
+				remove_node_from_token(token, index);
 		}
 		else
 			tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/20 05:27:55 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/26 07:05:14 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	fill_spaces(char **get_line, t_token **token)
 	while (**get_line == ' ')
 		(*get_line)++;
 	(*get_line)--;
-	append_token(token, _SPACE, ft_strdup(" "));
+	append_token(token, _SPACE, ft_strdup(" \0"));
 	return (0);
 }
 
@@ -27,22 +27,22 @@ int	fill_redirections(char **get_line, t_token **token)
 	{
 		(*get_line)++;
 		if (**get_line == '<')
-			append_token(token, _HEREDOC, ft_strdup("<<"));
+			append_token(token, _HEREDOC, ft_strdup("<<\0"));
 		else
 		{
 			(*get_line)--;
-			append_token(token, _RED_IN, ft_strdup("<"));
+			append_token(token, _RED_IN, ft_strdup("<\0"));
 		}
 	}
 	else if (**get_line == '>')
 	{
 		(*get_line)++;
 		if (**get_line == '>')
-			append_token(token, _APPEND, ft_strdup(">>"));
+			append_token(token, _APPEND, ft_strdup(">>\0"));
 		else
 		{
 			(*get_line)--;
-			append_token(token, _RED_OUT, ft_strdup(">"));
+			append_token(token, _RED_OUT, ft_strdup(">\0"));
 		}
 	}
 	return (0);
@@ -50,27 +50,15 @@ int	fill_redirections(char **get_line, t_token **token)
 
 int	fill_quotes_external(char **get_line, t_token **token, int quote)
 {
-	int	i;
+	int	type;
 
 	if (quote == 39)
-	{
-		**get_line = _SINGLE_QUOTE;
-		i = _EXPANSION_SINGLE;
-	}
+		type = _EXPANSION_SINGLE;
 	else
-	{
-		**get_line = _DUBLE_QUOTE;
-		i = _EXPANSION_DUBLE;
-	}
+		type = _EXPANSION_DUBLE;
+	(*get_line)++;
 	if (**get_line != '\0' && **get_line != quote)
-			append_token(token, i, fill_word(get_line, quote, 0));
-	if (**get_line == quote)
-	{
-		if (quote == 39)
-			**get_line = _SINGLE_QUOTE;
-		else
-			**get_line = _DUBLE_QUOTE;
-	}
+			append_token(token, type, fill_word(get_line, quote, 0));
 	return (0);
 }
 
@@ -96,6 +84,7 @@ void	fill_external(char **get_line, t_token **token)
 	i = -1;
 	while (res[++i])
 		line[i] = res[i];
+	line[i] = res[i];
 	free(res);
 	(*get_line)--;
 	append_token(token, _EXTERNAL, line);
@@ -130,14 +119,14 @@ void	fill_expression(char **get_line, t_token **token)
 	free(line);
 }
 
-void	set_token(char **get_line, t_token **token)
+void	set_token(t_token **token, char **get_line)
 {
 	while (**get_line)
 	{
 		if (**get_line == ' ')
 			fill_spaces(get_line, token);
 		else if (**get_line == '|')
-			append_token(token, _PIPE, ft_strdup("|"));
+			append_token(token, _PIPE, ft_strdup("|\0"));
 		else if (**get_line == '$')
 			fill_expression(get_line, token);
 		else if (**get_line == 39)
@@ -150,5 +139,4 @@ void	set_token(char **get_line, t_token **token)
 			fill_external(get_line, token);
 		(*get_line)++;
 	}
-	clean_space_from_token(token);
 }

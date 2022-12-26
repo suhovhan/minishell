@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 18:06:48 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/22 05:40:17 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ char	*fill_word(char **get_line, char ch, int flag)
 	res = (char*)malloc(sizeof(char) * (word_len(*get_line, ch) + 2));
 	if (flag == 0)
 	{
-		(*get_line)++;
 		while (**get_line != ch)
 		{
 			res[++i] = **get_line;
 			(*get_line)++;
 		}
+		res[++i] = '\0';
 	}
 	else
 		while (**get_line && *get_line && get_line && **get_line != '\0' \
