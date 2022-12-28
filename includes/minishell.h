@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 06:32:39 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/28 03:13:32 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,9 @@ void	print_no_such_file_or_directory();
 
 char	*get_pathname(t_token **token);
 char	**get_cmdline(t_token **token);
+char	*get_heredoc_del(char *name, int index);
 int		heredoc(t_addres *addres);
-void	run_heredoc(t_addres *addres, char *token, int type);
+void	run_heredoc(t_addres *addres, char *token, int type, int index);
 int		run_heredoc_external(t_env *env, char *token, int descriptor);
 int		run_heredoc_expansion(char *token, int descriptor);
 char	*open_expression_in_line(t_env *env, char *str);

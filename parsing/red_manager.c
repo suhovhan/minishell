@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 21:43:03 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 03:30:40 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/28 04:27:42 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	run_redirections(t_addres *addres)
 		else
 			tmp = tmp->next;
 	}
-	usleep(10);
 }
 
 int	open_red_out(char *filename)

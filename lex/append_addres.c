@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 01:57:26 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 03:25:23 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/28 04:20:50 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	append_addres(t_addres *addres, char **get_line, char **env)
 	env_tmp = addres->env;
 	addres->pipe_count = 0;
 	addres->exit_status = 0;
+	addres->input_index = -1;
+	addres->descriptor_input = -1;
 	while (env_tmp)
 	{
 		if (!ft_strncmp(env_tmp->key, "SHLVL", 5))

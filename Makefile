@@ -2,6 +2,7 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes #-fsanitize=address
 LINK = -lreadline -lcurses
+HD = /var/tmp/hd_files
 
 OBJ_SRC_DIR = obj_src
 SRC_SRC = $(wildcard src/*.c)
@@ -62,6 +63,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
 	@$(CC) $(CFLAGS) $(LINK) -o $(NAME) $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
+	@$(MK) $(HD)
 
 $(OBJ_SRC_DIR):
 	@$(MK) $(OBJ_SRC_DIR)
@@ -96,6 +98,7 @@ clean:
 fclean: clean
 	@$(RF)  $(NAME)
 	@# $(RMRF) $(LIBCACH)
+	@$(RMRF) $(HD)
 
 re: fclean all
 

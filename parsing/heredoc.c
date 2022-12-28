@@ -6,29 +6,23 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 08:16:51 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/28 06:11:34 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*get_heredoc_del(char **get_line)
+char	*get_heredoc_del(char *name, int index)
 {
-	char *str;
-	while (**get_line != '<')
-		(*get_line)++;
-	**get_line = _RED_IN;
-	(*get_line)++;
-	**get_line = _RED_IN;
-	(*get_line)++;
-	while (**get_line == ' ')
-		(*get_line)++;
-	if (**get_line == _SINGLE_QUOTE)
-		str = ft_cleanline(fill_word(get_line, _SINGLE_QUOTE, 1));
-	else if (**get_line == _DUBLE_QUOTE)
-		str = ft_cleanline(fill_word(get_line, _DUBLE_QUOTE, 1));
-	else
-		str = ft_cleanline(fill_word(get_line, ' ', 1));
+	char	*del;
+	char	*str;
+	
+
+	str = ft_itoa(index);
+	del = ft_strjoin("/var/tmp/hd_files/.heredoc_", str);
+	free(str);
+	str = ft_strjoin(del, name);
+	free(del);
 	return (str);
 }
 
@@ -92,25 +86,31 @@ int	run_heredoc_expansion(char *token, int descriptor)
 	return (0);
 }
 
-void	run_heredoc(t_addres *addres, char *token, int type)
+void	run_heredoc(t_addres *addres, char *token, int type, int index)
 {
 	t_env	*env;
 	char	*del;
 	int		descriptor;
 
 	env = addres->env;
-	del = ft_strjoin(".heredoc_\7", token);
+	del = get_heredoc_del(token, index);
 	descriptor = open(del, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (type == _EXTERNAL)
 		run_heredoc_external(env, token, descriptor);
 	else
 		run_heredoc_expansion(token, descriptor);
-	close(descriptor);
-	descriptor = open(del, O_RDONLY, 0644);
-	addres->descriptor_input = descriptor;
-	dup2(descriptor, 0);
-	close(descriptor);
-	unlink(del);
+	if (index > addres->input_index)
+	{
+		addres->input_index = index;
+		addres->input_filename = ft_strdup(del);
+	}
+	close(addres->descriptor_input);
+	// close(descriptor);
+	// descriptor = open(del, O_RDONLY, 0644);
+	// addres->descriptor_input = descriptor;
+	// dup2(descriptor, 0);
+	// close(descriptor);
+	// unlink(del);
 	free(del);
 }
 
@@ -135,7 +135,7 @@ int	heredoc(t_addres *addres)
 				tmp = tmp->next;
 				remove_node_from_token(&(addres->token), index);
 			}
-			run_heredoc(addres, tmp->token, tmp->type);
+			run_heredoc(addres, tmp->token, tmp->type, tmp->index);
 			index = tmp->index;
 			tmp = tmp->next;
 			remove_node_from_token(&(addres->token), index);
