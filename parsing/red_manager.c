@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 21:43:03 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/28 04:27:42 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/28 20:29:33 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 void	run_redirections(t_addres *addres)
 {
 	t_token	*tmp;
-	int		index;
+	int		type;
 	
 	tmp = addres->token;
 	while (tmp)
 	{
-		if (tmp && tmp->type == _RED_OUT)
+		
+		if (tmp && (tmp->type == _RED_OUT || tmp->type == _APPEND))
 		{
+			type = tmp->type;
 			tmp = tmp->next;
 			remove_node_from_token(&(addres->token), tmp->prev->index);
 			if (tmp && tmp->type == _SPACE)
@@ -29,27 +31,13 @@ void	run_redirections(t_addres *addres)
 				tmp = tmp->next;
 				remove_node_from_token(&(addres->token), tmp->prev->index);
 			}
-			addres->descriptor_output = open_red_out(tmp->token);
-			index = tmp->index;
-			tmp = tmp->next;
-			remove_node_from_token(&(addres->token), index);
+			if (type == _RED_OUT)
+				addres->descriptor_output = open_red_out(tmp->token);
+			else
+				addres->descriptor_output = open_red_append(tmp->token);
+			remove_node_from_token(&(addres->token), tmp->index);
 		}
-		else if (tmp && tmp->type == _APPEND)
-		{
-			tmp = tmp->next;
-			remove_node_from_token(&(addres->token), tmp->prev->index);
-			if (tmp && tmp->type == _SPACE)
-			{
-				tmp = tmp->next;
-				remove_node_from_token(&(addres->token), tmp->prev->index);
-			}
-			addres->descriptor_output = open_red_append(tmp->token);
-			index = tmp->index;
-			tmp = tmp->next;
-			remove_node_from_token(&(addres->token), index);
-		}
-		else
-			tmp = tmp->next;
+		tmp = tmp->next;
 	}
 }
 

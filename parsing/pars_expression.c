@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/28 04:29:07 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/29 20:04:11 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	pars_expression(t_addres *addres)
 	tmp = addres->token;
 	while (tmp)
 	{
-		if (tmp->type == _EXPRESSION || tmp->type == _EXPANSION_DUBLE)
+		if (tmp->type == _EXTERNAL || tmp->type == _EXPANSION_DUBLE)
 		{
 			ptr = tmp->token;
 			tmp->token = open_expression_in_line(addres->env, ptr);

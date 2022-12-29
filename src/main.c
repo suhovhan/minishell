@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/28 06:12:34 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/29 22:06:52 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	main(int ac, char **av, char **env)
 		// 	printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
 		// 	tmp = tmp->next;
 		// }
-		addres.cmd_line = get_cmdline(&(addres.token));
+		addres.cmd_line = get_cmdline(&addres);
 		addres.descriptor_input = open(addres.input_filename, O_RDONLY);
 		dup2(addres.descriptor_input, 0);
 		close(addres.descriptor_input);

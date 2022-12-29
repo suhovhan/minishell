@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 07:05:14 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/29 20:03:47 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	fill_external(char **get_line, t_token **token)
 	while (**get_line == ' ')
 		res[++i] = ' ';
 		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
-			&& **get_line != '>' && **get_line != '|' && **get_line != '$' \
+			&& **get_line != '>' && **get_line != '|' \
 			&& **get_line != '"' && **get_line != 39) && res)
 		{
 			res[++i] = **get_line;
@@ -90,34 +90,34 @@ void	fill_external(char **get_line, t_token **token)
 	append_token(token, _EXTERNAL, line);
 }
 
-void	fill_expression(char **get_line, t_token **token)
-{
-	char	*res;
-	char	*line;
-	int		i;
+// void	fill_expression(char **get_line, t_token **token)
+// {
+// 	char	*res;
+// 	char	*line;
+// 	int		i;
 
-	i = -1;
-	res = (char*)malloc(sizeof(char) * ft_strlen(*get_line));
-	res[++i] = **get_line;
-	(*get_line)++;
-		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
-			&& **get_line != '>' && **get_line != '|' && **get_line != '$' \
-			&& **get_line != 39 && **get_line != '"') && res)
-		{
-			res[++i] = **get_line;
-			(*get_line)++;
-		}
-	res[++i] = '\0';
-	line = (char*)malloc(sizeof(char) * ft_strlen(res));
-	i = -1;
-	while (res[++i])
-		line[i] = res[i];
-	line[i] = '\0';
-	(*get_line)--;
-	free(res);
-	append_token(token, _EXPRESSION, ft_strdup(line));
-	free(line);
-}
+// 	i = -1;
+// 	res = (char*)malloc(sizeof(char) * ft_strlen(*get_line));
+// 	res[++i] = **get_line;
+// 	(*get_line)++;
+// 		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
+// 			&& **get_line != '>' && **get_line != '|' && **get_line != '$' \
+// 			&& **get_line != 39 && **get_line != '"') && res)
+// 		{
+// 			res[++i] = **get_line;
+// 			(*get_line)++;
+// 		}
+// 	res[++i] = '\0';
+// 	line = (char*)malloc(sizeof(char) * ft_strlen(res));
+// 	i = -1;
+// 	while (res[++i])
+// 		line[i] = res[i];
+// 	line[i] = '\0';
+// 	(*get_line)--;
+// 	free(res);
+// 	append_token(token, _EXPRESSION, ft_strdup(line));
+// 	free(line);
+// }
 
 void	set_token(t_token **token, char **get_line)
 {
@@ -127,8 +127,8 @@ void	set_token(t_token **token, char **get_line)
 			fill_spaces(get_line, token);
 		else if (**get_line == '|')
 			append_token(token, _PIPE, ft_strdup("|\0"));
-		else if (**get_line == '$')
-			fill_expression(get_line, token);
+		// else if (**get_line == '$')
+		// 	fill_expression(get_line, token);
 		else if (**get_line == 39)
 			fill_quotes_external(get_line, token, 39);
 		else if (**get_line == '"')

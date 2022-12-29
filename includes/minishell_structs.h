@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/28 05:58:57 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/29 20:02:45 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef enum s_types
 	_RED_IN = 2, // < redirection input
 	_RED_OUT = 3, // > redirection output
 	_PIPE = 4, // | pipe
-	_EXPRESSION = 5, // $ expression
+	// _EXPRESSION = 5, // $ expression
 	_SINGLE_QUOTE = 6, // ' quote
 	_DUBLE_QUOTE = 7, // " double qoute
 	_HEREDOC = 8, // << heredoc
