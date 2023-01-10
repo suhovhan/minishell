@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ergrigor < ergrigor@student.42yerevan.am > +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/29 20:47:25 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/10 13:40:50 by ergrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,10 @@ char 	*find_value_env(t_env	*env, char *key);
 char	*fill_word(char **get_line, char ch, int flag);
 int		word_len(char *get_line, char ch);
 char	*ft_cleanline(char *get_line);
-char	**ft_smart_split(char *s);
+char	**ft_smart_split(char *str, int i, int j);
 char	*fillword(char *s, int start_index, int len);
-int		getwordcount(char *s, char c);
+int		get_wordcount_smartsplit(char *str);
+char	*fill_word_smartsplit(char *str, int start, int end);
 char	*epur_str(char *str);
 char	*env_path(char **env, char *pathname);
 char	**get_env(char	*env);

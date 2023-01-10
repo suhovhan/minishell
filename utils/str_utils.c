@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ergrigor < ergrigor@student.42yerevan.am > +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/22 05:40:17 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/10 12:43:46 by ergrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,6 @@ char	*ft_cleanline(char *get_line)
 	free(res);
 	return (end);
 }
-
-// heredoc utils
 
 int	get_wordlen_expression(char **heredoc)
 {

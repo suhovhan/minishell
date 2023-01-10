@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ergrigor < ergrigor@student.42yerevan.am > +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 02:58:10 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/28 02:58:11 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/10 22:43:50 by ergrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ int	isbuiltin(char **cmd_line)
 	// 	env(cmd_line[1]);
 	else
 		return (-1);
+	exit(0);
 	return (0);
 }
