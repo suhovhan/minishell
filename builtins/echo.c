@@ -6,48 +6,62 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:05:23 by mpetrosy          #+#    #+#             */
-/*   Updated: 2022/12/26 10:40:15 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/13 13:59:30 by mpetrosy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	no_newline(char *s)
+int	new_line(char **s, int *res)
 {
 	int	i;
+	int	j;
 
-	i = 0;
-	if (!s)
-		return (0);
-	if (ft_strcmp(s, "-n") == 0)
-		return (1);
+	i = 1;
+	j = 0;
+	while (s[i])
+	{
+		j = 0;
+		if (s[i][j] == '-' && s[i][j + 1] == 'n')
+		{
+			j++;
+			while (s[i][j] == 'n')
+				j++;
+			if (s[i][j] != '\0')
+				break ;
+		}
+		else
+			break ;
+		i++;
+	}
+	printf("%d\n", i);
+	*res = i - 1;
 	return (0);
 }
 
 void	echo(char **cmd)
 {
-	int	i;
+	int		i;
 	char	**get_line;
 
 	i = 1;
 	get_line = cmd;
 	if (!get_line[1])
 		printf("\n");
-	if (get_line[1] && ft_strcmp(get_line[1], "-n") == 0)
+	if (get_line[1][0] == '-' && new_line(get_line, &i) == 0)
 	{
 		while (get_line[++i])
 		{
-			printf("%s", get_line[i]);      // \n ?? \\\\\\?
+			printf("%s", get_line[i]);
 			if (get_line[i + 1])
 				printf(" ");
 		}
 	}
-	i = 0;
-	if (get_line[1])
+	else if (get_line[1])
 	{
+		i = 0;
 		while (get_line[++i])
-			printf("%s ", get_line[i]);      
+			printf("%s ", get_line[i]);
 		printf("\n");
 	}
 }
-

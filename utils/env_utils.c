@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 21:03:31 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/20 00:45:24 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/13 21:07:56 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ char	**get_env(char	*env)
 
 	split_env = malloc(sizeof(split_env) * 3);
 	split_env[0] = env_get_key(env);
+	// printf("nor print %s\n", env_get_key(env));
 	split_env[1] = env_get_value(env);
 	split_env[2] = NULL;
 	return (split_env);
@@ -68,17 +69,39 @@ char	**get_env(char	*env)
 void	set_env(t_env **env, char **envp)
 {
 	int		i;
-	int		j;
 	char	**split_env;
 
 	i = -1;
 	while (envp[++i])
 	{
-		j = -1;
 		split_env = get_env(envp[i]);
-		append_env(env, ft_strdup(split_env[0]), ft_strdup(split_env[1]));
-		while (split_env[++j])
-			free(split_env[j]);
-		free(split_env);
+		append_env(env, split_env[0], split_env[1]);
 	}
 }
+
+void	print_env(t_env *env, char **envp)
+{
+	int	i;
+	t_env	*temp;
+
+	i = -1;
+	temp = env;
+	while (envp[++i])
+	{
+		printf("%s %s\n", env->key, env->value);
+
+	}
+}
+
+
+// int	main(int ac, char **av, char **envp)
+// {
+// 	t_env	*env;
+// 	//t_env	**temp;
+
+// 	//env = malloc(sizeof(t_env **));
+// 	//temp = set_env(env, envp);
+
+// 	print_env(env, envp);
+// 	return (0);
+// }

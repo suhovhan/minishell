@@ -3,75 +3,76 @@
 /*                                                        :::      ::::::::   */
 /*   ft_smart_split.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ergrigor < ergrigor@student.42yerevan.am > +#+  +:+       +#+        */
+/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 20:04:32 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/10 19:28:06 by ergrigor         ###   ########.fr       */
+/*   Updated: 2022/12/09 17:14:18 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	get_wordcount_smartsplit(char *str)
+int	getwordcount(char *s, char c)
 {
-	int i;
-	int count;
+	int	count;
+	int	i;
+	int	len;
 
 	i = -1;
-	count = 0;
-	while (str[++i])
+	count = 1;
+	len = ft_strlen(s);
+	while (s[++i] && s[i] == c)
+		;
+	while (s[--len] && s[len] == c && i < len)
+		;
+	if (i == (int)ft_strlen(s))
+		return (0);
+	while (s[i] && i < len)
 	{
-		if (str[i] == '"')
-			while (str[++i] != '"')
-				;
-		if (str[i] == 39)
-			while (str[++i] != 39)
-				;
-		if (str[i] == '|')
+		if (s[i] == c && s[i - 1] != c)
 			count++;
+		i++;
 	}
 	return (count);
 }
 
-char *fill_word_smartsplit(char *str, int start, int end)
+char	*fillword(char *s, int start_index, int len)
 {
-	int		len;
-	char	*res;
+	char	*word;
+	int		i;
 
-	len = end - start;
-	if (len < 0)
+	i = -1;
+	word = malloc(sizeof(char) * (len + 1));
+	if (!word)
 		return (NULL);
-	res = (char*)malloc(sizeof(char) * (len + 1));
-	res[len] = '\0';
-	while (start < end)
-		res[--len] = str[--end];	
-	return (res);
+	while (++i < len && s[i] != '\0')
+		word[i] = s[start_index + i];
+	word[i] = '\0';
+	return (word);
 }
 
-char	**ft_smart_split(char *str, int i, int j)
+char	**ft_smart_split(char *s)
 {
-	//i = -1;
-	//j = -1;
-	char	**res;
 	int		start;
+	int		end;
+	int		i;
+	int		count;
+	char	**res;
 
-	res = (char**)malloc(sizeof(char*) * (get_wordcount_smartsplit(str) + 2));
 	start = 0;
-	while (str[++i])
+	i = -1;
+	count = getwordcount(s, '|');
+	res = (char **)malloc(sizeof(char *) * count + 1);
+	while (++i < count)
 	{
-		if (str[i] == '"')
-			while (str[++i] != '"')
-				;
-		if (str[i] == 39)
-			while (str[++i] != 39)
-				;
-		if (str[i] == '|')
-		{
-			res [++j] = fill_word_smartsplit(str, start, i);
-			start = i + 1;
-		}
+		while (s[start] && s[start] == '|')
+			start++;
+		end = start;
+		while (s[end] != '\0' && s[end] != '|')
+			end++;
+		res[i] = fillword(s, start, end - start);
+		start = end;
 	}
-	res [++j] = fill_word_smartsplit(str, start, i);
-	res[++j] = 0;
+	res[i] = 0;
 	return (res);
 }

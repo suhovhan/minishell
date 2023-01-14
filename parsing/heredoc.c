@@ -6,23 +6,29 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/28 06:11:34 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/17 02:56:16 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*get_heredoc_del(char *name, int index)
+char	*get_heredoc_del(char **get_line)
 {
-	char	*del;
-	char	*str;
-	
-
-	str = ft_itoa(index);
-	del = ft_strjoin("/var/tmp/hd_files/.heredoc_", str);
-	free(str);
-	str = ft_strjoin(del, name);
-	free(del);
+	char *str;
+	while (**get_line != '<')
+		(*get_line)++;
+	**get_line = _RED_IN;
+	(*get_line)++;
+	**get_line = _RED_IN;
+	(*get_line)++;
+	while (**get_line == ' ')
+		(*get_line)++;
+	if (**get_line == _SINGLE_QUOTE)
+		str = ft_cleanline(fill_word(get_line, _SINGLE_QUOTE, 1));
+	else if (**get_line == _DUBLE_QUOTE)
+		str = ft_cleanline(fill_word(get_line, _DUBLE_QUOTE, 1));
+	else
+		str = ft_cleanline(fill_word(get_line, ' ', 1));
 	return (str);
 }
 
@@ -36,17 +42,17 @@ int	run_heredoc_external(t_env *env, char *token, int descriptor)
 	{
 		heredoc = readline("> ");
 		heredoc_tmp = heredoc;
-		if (ft_strlen(heredoc_tmp) == ft_strlen(token) && \
-		!ft_strncmp(heredoc_tmp, token, ft_strlen(token)))
+		if (ft_strlen(heredoc) == ft_strlen(token) && \
+		!ft_strncmp(heredoc, token, ft_strlen(token)))
 		{
 			free(heredoc);
 			return (0);
 		}
-		while (heredoc_tmp && *heredoc_tmp)
+		while (heredoc && *heredoc)
 		{
-			if (heredoc_tmp && *heredoc_tmp && *heredoc_tmp == '$')
+			if (heredoc && *heredoc && *heredoc == '$')
 			{
-				expression = execute_expression(&heredoc_tmp);
+				expression = execute_expression(&heredoc);
 				if (ft_strlen(expression) == 0)
 					write(descriptor, "$", 1);
 				expression = find_value_env(env, expression);
@@ -56,12 +62,12 @@ int	run_heredoc_external(t_env *env, char *token, int descriptor)
 			}
 			else
 			{
-				write(descriptor, &(*heredoc_tmp), 1);
-				heredoc_tmp++;
+				write(descriptor, &(*heredoc), 1);
+				heredoc++;
 			}
 		}
 		write(descriptor, "\n", 1);
-		free(heredoc);
+		free(heredoc_tmp);
 	}
 	return (0);
 }
@@ -86,32 +92,23 @@ int	run_heredoc_expansion(char *token, int descriptor)
 	return (0);
 }
 
-void	run_heredoc(t_addres *addres, char *token, int type, int index)
+void	run_heredoc(t_addres *addres, char *token, int type)
 {
 	t_env	*env;
 	char	*del;
 	int		descriptor;
 
 	env = addres->env;
-	del = get_heredoc_del(token, index);
+	del = ft_strjoin(".heredoc_\7", token);
 	descriptor = open(del, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (type == _EXTERNAL)
 		run_heredoc_external(env, token, descriptor);
 	else
 		run_heredoc_expansion(token, descriptor);
-	if (index > addres->input_index)
-	{
-		addres->input_index = index;
-		addres->input_filename = ft_strdup(del);
-	}
-	close(addres->descriptor_input);
-	// close(descriptor);
-	// descriptor = open(del, O_RDONLY, 0644);
-	// addres->descriptor_input = descriptor;
-	// dup2(descriptor, 0);
-	// close(descriptor);
-	// unlink(del);
-	free(del);
+	addres->descriptor = descriptor;
+	dup2(0, descriptor);
+	close(descriptor);
+	unlink(del);
 }
 
 int	heredoc(t_addres *addres)
@@ -128,17 +125,17 @@ int	heredoc(t_addres *addres)
 		{
 			index = tmp->index;
 			tmp = tmp->next;
-			remove_node_from_token(&(addres->token), index);
+			remove_node_from_token(&ptr, index);
 			if (tmp && tmp->type == _SPACE)
 			{
 				index = tmp->index;
 				tmp = tmp->next;
-				remove_node_from_token(&(addres->token), index);
-			}
-			run_heredoc(addres, tmp->token, tmp->type, tmp->index);
+				remove_node_from_token(&ptr, index);
+			}	
+			run_heredoc(addres, tmp->token, tmp->type);
 			index = tmp->index;
 			tmp = tmp->next;
-			remove_node_from_token(&(addres->token), index);
+			remove_node_from_token(&ptr, index);
 		}
 		else
 			tmp = tmp->next;

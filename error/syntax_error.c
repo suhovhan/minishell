@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:59 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/29 20:06:22 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:56:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ int	check_redirections(t_token *token)
 			token->type == _APPEND)
 		{
 			token = token->next;
-			if (token && token->type == _SPACE)
-				token = token->next;
-			if (token == NULL || (token->type != _EXTERNAL && \
+			// while (token && token->type == _SPACE)
+			// 	token = token->next;
+			if (token == NULL || (token->type != _EXTERNAL && token->type != _EXPRESSION && \
 			token->type != _EXPANSION_DUBLE && token->type != _EXPANSION_SINGLE))
 			{
 				print_syntax_error(1);
@@ -112,7 +112,8 @@ int	check_heredoc(t_addres *addres)
 			while (tmp != NULL && tmp->type == _SPACE)
 				tmp = tmp->next;
 			if (tmp == NULL || (tmp->type != _EXTERNAL && \
-			tmp->type != _EXPANSION_DUBLE && tmp->type != _EXPANSION_SINGLE))
+			tmp->type != _EXPANSION_DUBLE && tmp->type != _EXPANSION_SINGLE && \
+			tmp->type != _EXPRESSION))
 			{
 				print_syntax_error(1);
 				return (-1);

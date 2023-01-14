@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ergrigor < ergrigor@student.42yerevan.am > +#+  +:+       +#+        */
+/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 16:16:08 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/10 18:50:30 by ergrigor         ###   ########.fr       */
+/*   Updated: 2022/12/21 22:34:11 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	pwd(char *cmd)
+void	pwd(char	*cmd)
 {
 	char	cwd[256];
 

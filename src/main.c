@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ergrigor < ergrigor@student.42yerevan.am > +#+  +:+       +#+        */
+/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/10 23:13:08 by ergrigor         ###   ########.fr       */
+/*   Updated: 2022/12/18 00:54:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,99 +14,130 @@
 
 void	p_mtx(char **mtx)
 {
-	int		i = -1;
-	int		j;
+	int	i = -1;
+	int	j;
+	char	**sp;
 	while (mtx[++i])
 	{
 		j = -1;
-		printf("%d = %s\n",i, mtx[i]);
+		sp = ft_split(mtx[i], '=');
+		while (sp[++j])
+			printf("%s\n", sp[j]);
 	}
+}
+/*
+int ft_export(t_addres *addres, char **argv)
+{
+
+}*/
+
+int ft_env(char *line, t_env *env, t_addres cmd)
+{
+	t_env	*temp;
+	//char	**get_line;
+
+	temp = env;
+	//get_line = ft_split(line, ' ');
+	//if (temp)
+	//{
+		while (temp)
+		{
+			printf("%s=%s\n", temp->key, temp->value);
+			temp = temp->next;
+		//	cmd.exit_status = 0;
+		}
+	}
+	// else
+	// {
+	// 	printf("env: %s: No such file or directory\n", get_line[1]);
+	// 	cmd.exit_status = 127;
+	// }
+	return (0);
+}
+
+
+int ft_env(char *line, t_addres cmd)
+{
+	t_env	*temp;
+	char	**get_line;
+	int		i;
+
+	temp = cmd.env;
+	get_line = ft_split(line, ' ');
+	i = -1;
+	temp = cmd.env;
+	while (temp)
+	{
+		if (ft_strcmp(get_line[++i], "env") == 0 && ft_strcmp(get_line[1], "env") != 0)
+		{
+			printf("env: %s: No such file or directory\n", get_line[1]);
+			cmd.exit_status = 127;
+		}
+		while (ft_strcmp(get_line[++i], "env") == 0)
+		{
+			printf("%s=%s\n", temp->key, temp->value);
+			cmd.exit_status = 0;
+		}
+		temp = temp->next;
+	}
+	return (0);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
+
 	t_addres	addres;
 	char		*get_line;
 	char		*get_line_tmp;
 
-	int std_out_copy = dup(1);
-	int std_input_copy = dup(0);
-	// int	pid;
-	while (1)
+	set_env(&(addres.env), env);
+	t_env	*env_tmp = addres.env;
+	while (env_tmp)
 	{
-		get_line = readline("minishell-$ ");
-		get_line_tmp = get_line;
-		if (get_line && *get_line)
-			add_history(get_line);
-		else
-			continue;
-		if (check_quotes(get_line))
-			continue;
-		char **per_line = ft_smart_split(get_line_tmp, -1, -1);
-		addres.pipe_count = get_wordcount_smartsplit(get_line_tmp);
-		int i = -1;
-		int j = -1;
-		int	*process_ids;
-		process_ids = (int*)malloc(sizeof(int) * (addres.pipe_count + 2));
-		process_ids[addres.pipe_count + 1] = -1;
-		while (++i <= addres.pipe_count)
-		{
-			process_ids[i] = fork();
-			if (process_ids[i] == 0)
-				break ;
-		}
-		i = -1;
-		while (process_ids[++i] > -1)
-		{
-			if (process_ids[i])
-				wait(&process_ids[i]);
-			else
-				append_addres(&addres, &(per_line[++j]), env);
-		}
-		// t_token *tmp = addres.token;
-		// while (tmp)
-		// {
-		// 	printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
-		// 	tmp = tmp->next;
-		// }
-		if (check_heredoc(&addres) == -1)	
-		{
-			free_token(&(addres.token));
-			continue;
-		}
-		heredoc(&addres);
-		if (check_syntax(addres.token) == -1)
-		{
-			free_token(&(addres.token));
-			continue;
-		}
-		pars_expression(&addres);
-		redirect_input(&addres);
-		run_redirections(&addres);
-		clean_space_from_token(&(addres.token));
-		addres.cmd_line = get_cmdline(&addres);
-		addres.descriptor_input = open(addres.input_filename, O_RDONLY);
-		dup2(addres.descriptor_input, 0);
-		close(addres.descriptor_input);
-		if (isbuiltin(addres.cmd_line) == -1)
-		{
-			// pid = fork();
-			// if (pid)
-			// 	wait(&pid);
-			// else
-			// {
-				execve(addres.cmd_line[0], addres.cmd_line, env);
-				return (127);
-			// }
-		}
-		dup2(std_out_copy, 1);
-		dup2(std_input_copy, 0);
-		free(get_line);
-		free_mtx((addres.cmd_line));
-		free_token(&(addres.token));
+		if (!ft_strncmp(env_tmp->key, "SHLVL", 5))
+			addres.shlvl = ft_atoi(env_tmp->value);
+		env_tmp = env_tmp->next;
 	}
-	free_env(&(addres.env));
+	while (1)
+		while (1)
+		{
+			get_line = readline("minishell-$ ");
+			// if (get_line && *get_line)
+			// 	add_history(get_line);
+			// if (!ft_strncmp(get_line, "exit", 4))
+			// {
+			// 	free(get_line);
+			// 	exit(0);
+			// }
+			// if (check_quotes(get_line))	
+			// 		break ;
+			// get_line_tmp = get_line;
+			// set_token(&get_line, &(addres.token));
+			// free(get_line);
+			// if (check_heredoc(&addres) == -1)	
+			// {
+			// 	free_token(&(addres.token));
+			// 	break ;
+			// }
+			// heredoc(&addres);
+			// pars_expression(&addres);
+			// t_env *tmp = addres.env;
+			// while (tmp)
+			// {
+			// 	printf("key = %s\tvalue = %s\n", tmp->key, tmp->value);
+			// 	tmp = tmp->next;
+			// }
+			// // run_redirections(&addres);
+			// if (check_syntax(addres.token) == -1)	
+			// {
+			// 	free_token(&(addres.token));
+			// 	break ;
+			// }
+			 if (!strcmp(get_line, "env"))
+			 	ft_env(get_line_tmp, env_tmp, addres);	
+			 free_token(&(addres.token));
+		}
 	return (0);
 }
