@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/29 20:47:25 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/15 15:20:09 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,11 @@ int		open_red_append(char *filename);
 //bulitines functions
 
 
-int		isbuiltin(char **cmd_line);
+int	isbuiltin(char **cmd_line, t_addres *status);
 int		no_newline(char *s);
 void	echo(char **cmd);
-int		is_digit(int ac, char **av);
-int		ft_exit(char *line);
+int		is_digit(char **str);
+int		ft_exit(char *line, t_addres cmd);
 void	pwd(char	*cmd);
 
 
@@ -111,8 +111,8 @@ char	*execute_expression(char **heredoc);
 
 void	p_mtx(char **str);
 void	jogenq_incha(t_env *env, char *heredoc);
-
-
+int		is_alpha(char *str);
+void	cd(char *line, t_env *env);
 //
 
 

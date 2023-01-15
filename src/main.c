@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 14:49:43 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/15 15:20:30 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	main(int ac, char **av, char **env)
 		addres.descriptor_input = open(addres.input_filename, O_RDONLY);
 		dup2(addres.descriptor_input, 0);
 		close(addres.descriptor_input);
-		if (isbuiltin(addres.cmd_line) == -1)
+		if (isbuiltin(addres.cmd_line, &addres) == -1)
 		{
 			pid = fork();
 			if (pid)
