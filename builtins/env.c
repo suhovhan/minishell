@@ -10,89 +10,97 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+ #include "../includes/minishell.h"
 
-int ft_env(t_addres *addres)
+int	list_size(t_env *env)
+{
+	int	count;
+
+	count = 0;
+	if (!env)
+		return (0);
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
+}
+
+
+char	**list_to_char(t_addres *address)
 {
 	t_env	*temp;
+	char	**envp;
+	int		i;
+	char	*ptr;
 
-	temp = addres->env;
+	envp = malloc(sizeof(char **) * (list_size(address->env) + 1));
+	i = 0;
+	temp = address->env;
 	while (temp)
 	{
-		printf("%s=%s\n", temp->key, temp->value);
+		envp[i] = ft_strjoin(temp->key, "=");
+		ptr = envp[i];
+		envp[i] = ft_strjoin(envp[i], temp->value);
+		free(ptr);
+		i++;
 		temp = temp->next;
+	}
+	envp[++i] = 0;
+	return (envp);
+}
+
+int	env_handling(char **s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (ft_strcmp(s[i], "env") != 0)
+			return (1);
+		else
+			break;
+		i++;
 	}
 	return (0);
 }
-/*
-int ft_env(char *line, t_addres cmd)
+
+void	shlvl(t_env *env)
 {
 	t_env	*temp;
-	char	**get_line;
-	int		i;
-
-	temp = cmd.env;
-	get_line = ft_split(line, ' ');
-	i = -1;
-	temp = cmd.env;
-	while (temp)
-	{
-		if (ft_strcmp(get_line[++i], "env") == 0 && ft_strcmp(get_line[1], "env") != 0)
-		{
-			printf("env: %s: No such file or directory\n", get_line[1]);
-			cmd.exit_status = 127;
-		}
-		while (ft_strcmp(get_line[++i], "env") == 0)
-		{
-			printf("%s=%s\n", temp->key, temp->value);
-			cmd.exit_status = 0;
-		}
-		temp = temp->next;
-	}
-	return (0);
-}
-*/
-/*
-int	main()
-{
-	char		*get_line;
-	t_addres	exit_status;
-
-	while (1)
-	{
-		get_line = readline("minishell-$ ");
-		if (!get_line)
-			return (0);
-		ft_env(get_line, exit_status);
-		printf("XX\n");
-		add_history(get_line);
-	}
-	return (0);
-}*/
-
-/*
-void	env(char *line, t_addres cmd, t_env *env)
-{
-	t_env	*temp;
-	char	**get_line;
-	int		i;
 
 	temp = env;
-	get_line = ft_split(line, ' ');
-	i = 0;
 	while (temp)
 	{
-		if (ft_strcmp(get_line[i], "env") == 0)
+		if (ft_strcmp(temp->key, "SHLVL") == 0)
+			temp->value++;
+		temp = temp->next;
+	}
+}
+
+void ft_env(char *line, t_addres *cmd)
+{
+	int		i;
+	t_env	*temp;
+	char	**get_line;
+
+	i = 0;
+	temp = cmd->env;
+	get_line = ft_split(line, ' ');
+	while (temp)
+	{
+		if (env_handling(get_line) == 1)
 		{
-			printf("%s=%s\n", temp->key, temp->value);
-			cmd.exit_status = 0;
+			printf("env: %s: No such file or directory\n", get_line[i]);
+			cmd->exit_status = 127;
 		}
-		else
-		{
-			printf("env: %s: No such file or directory\n", get_line[1]);
-			cmd.exit_status = 127;
+		if (env_handling(get_line) == 0)
+		{	
+			printf("%s\n", list_to_char(cmd)[++i]);
+			cmd->exit_status = 0;
 		}
 		temp = temp->next;
 	}
 }
-*/

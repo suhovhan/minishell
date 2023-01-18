@@ -28,8 +28,8 @@ int	isbuiltin(char **cmd_line, t_addres *status)
 	// 	unset(cmd_line[1]);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "exit"))
 		ft_exit(cmd_line[1], *status);
-	// else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "env"))
-	// 	env(cmd_line[1]);
+	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "/usr/bin/env"))
+		ft_env(cmd_line[1], status);
 	else
 		return (-1);
 	return (0);

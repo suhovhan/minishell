@@ -47,7 +47,7 @@ void	echo(char **cmd)
 	get_line = cmd;
 	if (!get_line[1])
 		printf("\n");
-	if (get_line[1][0] == '-' && new_line(get_line, &i) == 0)
+	if (get_line[1] && get_line[1][0] == '-' && new_line(get_line, &i) == 0)
 	{
 		while (get_line[++i])
 		{

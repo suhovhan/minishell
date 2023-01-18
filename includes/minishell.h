@@ -75,12 +75,13 @@ int		open_red_append(char *filename);
 //bulitines functions
 
 
-int	isbuiltin(char **cmd_line, t_addres *status);
+int		isbuiltin(char **cmd_line, t_addres *status);
 int		no_newline(char *s);
 void	echo(char **cmd);
 int		is_digit(char **str);
-int		ft_exit(char *line, t_addres cmd);
+void	ft_exit(char *line, t_addres cmd);
 void	pwd(char	*cmd);
+void 	ft_env(char *line, t_addres *cmd);
 
 
 //utils functions
@@ -113,6 +114,8 @@ void	p_mtx(char **str);
 void	jogenq_incha(t_env *env, char *heredoc);
 int		is_alpha(char *str);
 void	cd(char *line, t_env *env);
+char	**list_to_char(t_addres *address);
+int		list_size(t_env *env);
 //
 
 

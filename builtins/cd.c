@@ -56,7 +56,7 @@ void	cd(char *line, t_env *env)
 	else if (get_line[0])
 	{
 		if (chdir(get_line[0]) == -1)
-			printf("minishell: cd: %s: No such file or directory\n", get_line[1]);
+			printf("minishell: cd: %s: No such file or directory\n", get_line[0]);
 		else
 			go_to(ft_strdup("usr/bin/cd"), get_line[0]);
 	}

@@ -11,23 +11,3 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-
-
-void	ankap(t_env *env)
-{
-	t_env	*temp;
-
-	temp = env;
-	while (temp)
-	{
-		
-		printf("declare -x %s %s\n", temp->key, temp->value);
-		temp = temp->next;
-	}
-}
-
-void	alph()
-{
-
-}
