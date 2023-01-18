@@ -6,24 +6,12 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 22:34:38 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/15 14:20:04 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <string.h>
-
-void	jogenq_incha(t_env *env, char *heredoc)
-{
-	char *expression;
-
-	if (heredoc && *heredoc && *heredoc == '$')
-	{
-		expression = execute_expression(&heredoc);
-		expression = find_value_env(env, expression);
-		free(expression);
-	}
-}
 
 char	*open_expression_in_line(t_env *env, char *str)
 {
@@ -32,26 +20,34 @@ char	*open_expression_in_line(t_env *env, char *str)
 	char	*expressed_line;
 	char	*ret;
 
-	new_line = NULL;
+	new_line = ft_strdup("\0");
 	while(str && *str)
 		if (str && *str && *str == '$')
 		{
 			expressed_line = execute_expression(&str);
-			if (ft_strlen(expressed_line) == 0)
-				expressed_line = ft_strdup("$");
-			else
-				expressed_line = find_value_env(env, expressed_line);
-			ptr = new_line;
-			if (expressed_line && *expressed_line)
+			ptr = expressed_line;
+			if (ft_strcmp(expressed_line, "(null)") != 0)
 			{
-				if (!new_line || !*new_line)
-					new_line = ft_strdup(expressed_line);
+				if (ft_strlen(expressed_line) == 0)
+					expressed_line = ft_strdup("$");
 				else
-					new_line = ft_strjoin(new_line, expressed_line);
-				free(expressed_line);
+					expressed_line = find_value_env(env, ptr);
+				if (ptr && *ptr)
+					free(ptr);
+				ptr = new_line;
+				if (expressed_line && *expressed_line)
+				{
+					if (!new_line || !*new_line)
+						new_line = ft_strdup(expressed_line);
+					else
+						new_line = ft_strjoin(new_line, expressed_line);
+					free(expressed_line);
+				}
+				if (ptr && *ptr)
+					free(ptr);	
 			}
-			if (ptr && *ptr)
-				free(ptr);
+			else
+				str++;
 		}
 		else
 		{
@@ -68,7 +64,7 @@ char	*open_expression_in_line(t_env *env, char *str)
 				free(ptr);
 			free(ret);
 			str++;
-	}
+		}
 	return (new_line);
 }
 
@@ -80,15 +76,15 @@ void	pars_expression(t_addres *addres)
 	tmp = addres->token;
 	while (tmp)
 	{
-		if (tmp->type == _EXPRESSION || tmp->type == _EXPANSION_DUBLE)
+		if (tmp->type == _EXTERNAL || tmp->type == _EXPANSION_DUBLE)
 		{
 			ptr = tmp->token;
-			tmp->token = open_expression_in_line(addres->env, tmp->token);
+			tmp->token = open_expression_in_line(addres->env, ptr);
 			tmp->type = _EXTERNAL;
 			free(ptr);
 			ptr = NULL;
 		}
-		if (tmp->type == _EXPANSION_SINGLE)
+		else if (tmp->type == _EXPANSION_SINGLE)
 			tmp->type = _EXTERNAL;
 		tmp = tmp->next;
 	}

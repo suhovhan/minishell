@@ -1,30 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirections.c                                     :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mpetrosy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/17 17:29:45 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 23:20:30 by suhovhan         ###   ########.fr       */
+/*   Created: 2023/01/10 17:40:29 by mpetrosy          #+#    #+#             */
+/*   Updated: 2023/01/10 17:40:31 by mpetrosy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	print_no_such_file_or_directory()
-{
-	printf("no such file or directory\n");
-}
-
-int	open_red_in(char *filename)
-{
-	int	fd;
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		print_no_such_file_or_directory();
-	else
-		dup2(1, fd);
-	close(fd);
-	return (fd);
-}

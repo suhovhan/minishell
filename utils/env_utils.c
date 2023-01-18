@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 21:03:31 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/13 21:07:56 by suhovhan         ###   ########.fr       */
+/*   Updated: 2022/12/20 00:45:24 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,17 @@ char	**get_env(char	*env)
 void	set_env(t_env **env, char **envp)
 {
 	int		i;
+	int		j;
 	char	**split_env;
 
 	i = -1;
 	while (envp[++i])
 	{
+		j = -1;
 		split_env = get_env(envp[i]);
-		append_env(env, split_env[0], split_env[1]);
+		append_env(env, ft_strdup(split_env[0]), ft_strdup(split_env[1]));
+		while (split_env[++j])
+			free(split_env[j]);
+		free(split_env);
 	}
 }

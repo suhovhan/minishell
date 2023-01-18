@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 02:06:30 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/15 14:34:28 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,11 @@ typedef enum s_types
 	_RED_IN = 2, // < redirection input
 	_RED_OUT = 3, // > redirection output
 	_PIPE = 4, // | pipe
-	_EXPRESSION = 5, // $ expression
-	_SINGLE_QUOTE = 6, // ' quote
-	_DUBLE_QUOTE = 7, // " double qoute
-	_HEREDOC = 8, // << heredoc
-	_APPEND = 9, // >> append
-	_UNDEFINED = 10, // ; ` doesn't handle
-	_CMD = 11, // comands
-	_EXPANSION_SINGLE = 12, // [ '...' ]
-	_EXPANSION_DUBLE = 13, // [ "..." ]
-	_DELIMITER = 14, // redirection filename
+	_HEREDOC = 5, // << heredoc
+	_APPEND = 6, // >> append
+	_EXPANSION_SINGLE = 7, // [ '...' ]
+	_EXPANSION_DUBLE = 8, // [ "..." ]
+	_DELIMITER = 9, // redirection filename
 }			t_types;
 
 typedef	struct s_token
@@ -51,9 +46,13 @@ typedef struct	s_env
 typedef struct	s_addres
 {
 	int				exit_status;
-	int				descriptor;
+	int				input_index;
+	int				descriptor_input;
+	int				descriptor_output;
 	int				pipe_count;
 	int				shlvl;
+	char			*input_filename;
+	char			**cmd_line;
 	t_env			*env;
 	t_token			*token;
 }				t_addres;

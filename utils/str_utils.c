@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/17 18:06:48 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/15 14:14:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ char	*fill_word(char **get_line, char ch, int flag)
 	res = (char*)malloc(sizeof(char) * (word_len(*get_line, ch) + 2));
 	if (flag == 0)
 	{
-		(*get_line)++;
 		while (**get_line != ch)
 		{
 			res[++i] = **get_line;
 			(*get_line)++;
 		}
+		res[++i] = '\0';
 	}
 	else
 		while (**get_line && *get_line && get_line && **get_line != '\0' \
@@ -115,6 +115,8 @@ int	get_wordlen_expression(char **heredoc)
 
 	i = 0;
 	heredoc_line = *heredoc;
+	if (heredoc_line && *heredoc_line && *heredoc_line >= '0' && *heredoc_line <= '9')
+		return (-1);
 	while (heredoc_line && *heredoc_line && \
 	((*heredoc_line >= 'a' && *heredoc_line <= 'z') || \
 	(*heredoc_line >= 'A' && *heredoc_line <= 'Z') || \
@@ -138,6 +140,8 @@ char	*execute_expression(char **heredoc)
 	{
 		(*heredoc)++;
 		len = get_wordlen_expression(heredoc);
+		if (len == -1)
+			return ("(null)");
 		res = malloc(sizeof(char) * len + 1);
 	}
 	while (heredoc && *heredoc && **heredoc &&\

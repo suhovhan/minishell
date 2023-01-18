@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suhovhan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/14 19:12:56 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/04/14 19:14:10 by suhovhan         ###   ########.fr       */
+/*   Created: 2022/12/09 16:16:08 by mpetrosy          #+#    #+#             */
+/*   Updated: 2022/12/21 22:34:11 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-int	ft_tolower(int c)
+void	pwd(char	*cmd)
 {
-	if (c >= 65 && c <= 90)
-		c += 32;
-	return (c);
+	char	cwd[256];
+
+	if (cmd && cmd[0] && getcwd(cwd, sizeof(cwd)) != NULL)
+		write(1, cwd, ft_strlen(cwd));
+	else
+		write(1, "Failed to find current directory", 32);
+	write(1, "\n", 1);
 }

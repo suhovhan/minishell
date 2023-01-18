@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   directory_error.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: suhovhan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/14 19:12:56 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/04/14 19:14:10 by suhovhan         ###   ########.fr       */
+/*   Created: 2022/12/20 01:53:43 by suhovhan          #+#    #+#             */
+/*   Updated: 2022/12/20 01:54:04 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-int	ft_tolower(int c)
+void	print_no_such_file_or_directory()
 {
-	if (c >= 65 && c <= 90)
-		c += 32;
-	return (c);
+	printf("no such file or directory\n");
 }
