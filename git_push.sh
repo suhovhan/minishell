@@ -1,1 +1,0 @@
-git add . && git commit -m "Mar_$1" && git push
