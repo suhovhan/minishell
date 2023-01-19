@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/19 18:21:17 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/19 21:16:29 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,19 @@ void	p_mtx(char **mtx)
 		printf("%d = [%s]\n",i, mtx[i]);
 	}
 }
+
+// int ft_env(t_addres *addres)
+// {
+// 	t_env	*temp;
+
+// 	temp = addres->env;
+// 	while (temp)
+// 	{
+// 		printf("%s=%s\n", temp->key, temp->value);
+// 		temp = temp->next;
+// 	}
+// 	return (0);
+// }
 
 int	main(int ac, char **av, char **env)
 {

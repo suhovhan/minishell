@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 16:32:49 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/15 15:21:33 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/18 16:25:51 by mpetrosy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	is_digit(char **str)
 {
 	int	i;
 	int	j;
-	
+
 	i = 0;
 	if ((str[i][0] != 43 && str[i][0] != 45)
 		&& (!(str[i][0] >= 48 && str[i][0] <= 57)))
@@ -34,38 +34,20 @@ int	is_digit(char **str)
 	return (0);
 }
 
-int	ft_exit(char *line, t_addres cmd)
+void	num_req(char *line, t_addres cmd)
 {
 	char			**get_line;
 	long double		max;
 
-	max = 9223372036854775807;
 	get_line = ft_split(line, ' ');
-	if (!get_line[0])
-		return (0);
-	else if (!get_line[1])
-	{
-		printf("exit\n");
-		cmd.exit_status = 0;
-		exit (cmd.exit_status);
-	}
-	else if ((ft_atoi(get_line[1]) > max || ft_atoi(get_line[1]) < (max * (-1) - 1)))
+	max = 9223372036854775807;
+	if ((ft_atoi(get_line[1]) > max
+			|| ft_atoi(get_line[1]) < (max * (-1) - 1)))
 	{
 		printf("exit\n");
 		printf("minishell: exit: %s: numeric argument required\n", get_line[1]);
 		cmd.exit_status = 255;
 		exit (cmd.exit_status);
-	}
-	else if (is_digit(&get_line[1]) == 0 && !get_line[2])
-	{
-		printf("exit\n");
-		exit (ft_atoi(get_line[1]));
-	}
-	else if (is_digit(&get_line[1]) == 0 && get_line[2])
-	{
-		printf("exit\n");
-		printf("minishell: exit: too many arguments\n");
-		cmd.exit_status = 1;
 	}
 	else if (is_digit(&get_line[1]) == -1)
 	{
@@ -74,7 +56,48 @@ int	ft_exit(char *line, t_addres cmd)
 		cmd.exit_status = 255;
 		exit (cmd.exit_status);
 	}
-	free_mtx(&line);
-	return (0);
+	//free_mtx(&line);
 }
 
+void	many_args(char *line, t_addres cmd)
+{
+	char			**get_line;
+
+	get_line = ft_split(line, ' ');
+	if (is_digit(&get_line[1]) == 0 && get_line[2])
+	{
+		printf("exit\n");
+		printf("minishell: exit: too many arguments\n");
+		cmd.exit_status = 1;
+	}
+	//free_mtx(&line);
+}
+
+void	ft_exit(char *line, t_addres cmd)
+{
+	char			**get_line;
+
+	get_line = ft_split(line, ' ');
+	if (!get_line[0])
+		return ;
+	else if (!get_line[1])
+	{
+		printf("exit\n");
+		cmd.exit_status = 0;
+		exit (cmd.exit_status);
+	}
+	else if (is_digit(&get_line[1]) == 0 && !get_line[2])
+	{
+		printf("exit\n");
+		exit (ft_atoi(get_line[1]));
+	}
+	else if (is_digit(&get_line[1]) == 0)
+	{
+		printf("exit\n");
+		cmd.exit_status = ft_atoi(get_line[1]) % 256;
+		exit (cmd.exit_status);
+	}
+	num_req(line, cmd);
+	many_args(line, cmd);
+	//free_mtx(&line);
+}

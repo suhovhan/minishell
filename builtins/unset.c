@@ -29,20 +29,6 @@ int	unset_handling(char *s)
 	return (0);
 }
 
-/*
-int	main()
-{
-	char	*s;
-
-	// s = "sss5A./5gc";
-	// s = "/_Agc";
-	 s = "..";
-	// s = "ABC";
-	printf("%d\n", unset_handling(s));
-	return (0);
-}
-*/
-
 void	remove_node(t_env *list, char *key)
 {
 	t_env	*temp;
