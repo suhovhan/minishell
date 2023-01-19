@@ -89,11 +89,6 @@ void	ft_exit(char *line, t_addres cmd)
 	else if (is_digit(&get_line[1]) == 0 && !get_line[2])
 	{
 		printf("exit\n");
-		exit (ft_atoi(get_line[1]));
-	}
-	else if (is_digit(&get_line[1]) == 0)
-	{
-		printf("exit\n");
 		cmd.exit_status = ft_atoi(get_line[1]) % 256;
 		exit (cmd.exit_status);
 	}

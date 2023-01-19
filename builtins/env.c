@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "../includes/minishell.h"
+#include "../includes/minishell.h"
 
 int	list_size(t_env *env)
 {
@@ -55,16 +55,13 @@ int	env_handling(char **s)
 {
 	int	i;
 
-	i = 0;
-	while (s[i])
+	i = -1;
+	while (s[++i])
 	{
 		if (ft_strcmp(s[i], "env") != 0)
-			return (1);
-		else
-			break;
-		i++;
+			return (i);
 	}
-	return (0);
+	return (1);
 }
 
 void	shlvl(t_env *env)
@@ -89,16 +86,16 @@ void ft_env(char *line, t_addres *cmd)
 	i = 0;
 	temp = cmd->env;
 	get_line = ft_split(line, ' ');
+	if (env_handling(get_line) != 1)
+	{
+		printf("env: %s: No such file or directory\n", get_line[env_handling(get_line)]);
+		cmd->exit_status = 127;
+	}
 	while (temp)
 	{
 		if (env_handling(get_line) == 1)
-		{
-			printf("env: %s: No such file or directory\n", get_line[i]);
-			cmd->exit_status = 127;
-		}
-		if (env_handling(get_line) == 0)
 		{	
-			printf("%s\n", list_to_char(cmd)[++i]);
+			printf("%s\n", list_to_char(cmd)[i++]);
 			cmd->exit_status = 0;
 		}
 		temp = temp->next;

@@ -46,7 +46,7 @@ int	main(int ac, char **av, char **env)
 
 	int std_out_copy = dup(1);
 	int std_input_copy = dup(0);
-	// int	pid;
+	int	pid;
 	while (1)
 	{
 		get_line = readline("minishell-$ ");
@@ -58,7 +58,7 @@ int	main(int ac, char **av, char **env)
 		if (check_quotes(get_line))
 			continue;
 		append_addres(&addres, &get_line_tmp, env);
-		ft_env(get_line, &addres);
+	//	ft_env(get_line, &addres);
 	//	ft_exit(get_line, addres);
 		//p_mtx(list_to_char(&addres));                   
 // add child process here
@@ -86,17 +86,17 @@ int	main(int ac, char **av, char **env)
 		addres.descriptor_input = open(addres.input_filename, O_RDONLY);
 		dup2(addres.descriptor_input, 0);
 		close(addres.descriptor_input);
-		// if (isbuiltin(addres.cmd_line, &addres) == -1)
-		// {
-		// 	pid = fork();
-		// 	if (pid)
-		// 		wait(&pid);
-		// 	else
-		// 	{
-		// 		execve(addres.cmd_line[0], addres.cmd_line, env);
-		// 		return (127);
-		// 	}
-		// }
+		if (isbuiltin(addres.cmd_line, &addres) == -1)
+		{
+			pid = fork();
+			if (pid)
+				wait(&pid);
+			else
+			{
+				execve(addres.cmd_line[0], addres.cmd_line, env);
+				return (127);
+			}
+		}
 		dup2(std_out_copy, 1);
 		dup2(std_input_copy, 0);
 		free(get_line);

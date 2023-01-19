@@ -29,32 +29,43 @@ int	unset_handling(char *s)
 	return (0);
 }
 
-void	remove_node(t_env *list, char *key)
-{
-	t_env	*temp;
+// void	remove_node(t_env **env, char *key)
+// {
+// 	t_env	*temp;
 
-	temp = list;
-	while (temp->next)
-	{
-		temp->key = NULL;
-		temp->value = NULL;
-		if (ft_strcmp(temp->next->key, key) == 0)
-			temp->next = temp->next->next;
-	}
-}
+// 	temp = *env;
+// 	while (temp->next)
+// 	{
+// 		temp->key = NULL;
+// 		temp->value = NULL;
+// 		if (ft_strcmp(temp->next->key, key) == 0)
+// 		{
+// 			temp->next = temp->next->next;
+// 			free(temp->key);
+// 			free(temp->value);
+// 		}
+// 	}
+// }
 
-// void	unset(char *cmd)
+// void	unset(char *line, t_addres cmd)
 // {
 // 	char	**get_line;
-// 	t_env	*arg;
+// 	t_env	**arg;
 
-// 	get_line = ft_split(cmd, ' ');
+// 	get_line = ft_split(line, ' ');
 // 	while(arg)
 // 	{
-// 		if (ft_strcmp(//get_line[0], "unset") == 0 && //unset_handling(get_line[1] == 1))
-// 			remove_node(/*(t_env *)get_line[1]*/arg, get_line[1]);
+// 		if (ft_strcmp(get_line[0], "unset") == 0 && unset_handling(get_line[1] == 1))
+// 		{
+// 			remove_node(arg, get_line[1]);
+// 			cmd.exit_status = 0;
+// 		}
 // 		else
-// 			printf("minishell: unset: `%s': not a valid identifier", get_line[1]);	
+// 		{
+// 			printf("minishell: unset: `%s': not a valid identifier", get_line[1]);
+// 			cmd.exit_status = 1;
+// 		}
+
 // 	}	
 
 // }

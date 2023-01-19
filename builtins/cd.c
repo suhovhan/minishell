@@ -21,6 +21,8 @@ void	go_home(t_env *env)
 	{
 		if (ft_strcmp(temp->key, "HOME") == 0)
 			chdir(temp->value);
+		else if (!ft_strcmp(temp->key, "HOME"))
+			printf("minishell: cd: HOME not set");   // check when unset is ready
 		temp = temp->next;
 	}
 }
@@ -43,7 +45,7 @@ void	go_to(char *cmd, char *cur_path)
 	}
 }
 
-void	cd(char *line, t_env *env)
+void	cd(char *line, t_env *env/*, t_addres cmd*/)
 {
 	char	**get_line;
 	char	path[1024];
@@ -51,8 +53,11 @@ void	cd(char *line, t_env *env)
 
 	get_line = ft_split(line, ' ');
 	old_pwd = getcwd(path, sizeof(path));
-	if (!get_line || !get_line[0])
+	if (!get_line || !get_line[0] || ft_strcmp(get_line[0], "~") == 0)
+	{
 		go_home(env);
+	//	cmd.exit_status = 0;
+	}
 	else if (get_line[0])
 	{
 		if (chdir(get_line[0]) == -1)
