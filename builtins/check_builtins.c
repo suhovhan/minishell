@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 02:58:10 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 15:49:56 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/19 15:07:52 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ int	isbuiltin(char **cmd_line, t_addres *status)
 {
 	if (!cmd_line)
 		return (0);
-	if (cmd_line[0] && !ft_strcmp(cmd_line[0], "/bin/echo"))
+	if (cmd_line[0] && !ft_strcmp(cmd_line[0], "echo"))
 		echo(cmd_line);
-	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "/bin/pwd"))
+	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "pwd"))
 		pwd(*cmd_line);
-	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "/usr/bin/cd"))
+	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "cd"))
 		cd(cmd_line[1], status->env);
 	// else if (cmd_line[0] && !ft_strmp(cmd_line[0], "export"))
 	// 	export(cmd_line[1]);

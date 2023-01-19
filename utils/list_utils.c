@@ -31,6 +31,37 @@ int	append_token(t_token **token, int type, char *str)
 	return (0);
 }
 
+int	append_filename(t_filename **head, char *str, int input_index)
+{
+	static int	index = -1;
+	t_filename	*new_node;
+	t_filename 	*last_node;
+
+	if (*str == '\0')
+		return (0);
+	new_node = malloc(sizeof(t_filename));
+	new_node->index = ++index;
+	new_node->input_index = input_index;
+	new_node->filename = str;
+	new_node->next = NULL;
+	new_node->prev = NULL;
+	if (*head == NULL)
+	{
+		index = -1;
+		new_node->index = ++index;
+		*head = new_node;
+	}
+	else
+	{
+		last_node = *head;
+		while (last_node->next != NULL)
+			last_node = last_node->next;
+		new_node->prev = last_node;
+		last_node->next = new_node;
+	}
+	return (0);
+}
+
 int	append_env(t_env **env, char *key, char *value)
 {
 	t_env	*new_node;

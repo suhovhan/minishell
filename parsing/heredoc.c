@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 14:49:07 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/19 18:13:02 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	run_heredoc_expansion(char *token, int descriptor)
 	return (0);
 }
 
-void	run_heredoc(t_addres *addres, char *token, int type, int index)
+char	*run_heredoc(t_addres *addres, char *token, int type, int index)
 {
 	t_env	*env;
 	char	*del;
@@ -99,13 +99,30 @@ void	run_heredoc(t_addres *addres, char *token, int type, int index)
 		run_heredoc_external(env, token, descriptor);
 	else
 		run_heredoc_expansion(token, descriptor);
-	if (index > addres->input_index)
-	{
-		addres->input_index = index;
-		addres->input_filename = ft_strdup(del);
-	}
 	close(addres->descriptor_input);
-	free(del);
+	return (del);
+}
+
+void	add_infile(t_addres *addres, char *filename, int index, int input_index)
+{
+	t_filename	*tmp;
+
+	tmp = addres->infile;
+	if (!tmp)
+		append_filename(&addres->infile, filename, input_index);
+	else
+	{
+		while (tmp->index < index && tmp->next)
+			tmp = tmp->next;
+		if (tmp->index == index && tmp->input_index < input_index)
+		{
+			free(tmp->filename);
+			tmp->input_index = input_index;
+			tmp->filename = filename;
+		}
+		else if (tmp->input_index < input_index)
+			append_filename(&addres->infile, filename, input_index);
+	}
 }
 
 int	heredoc(t_addres *addres)
@@ -113,11 +130,16 @@ int	heredoc(t_addres *addres)
 	t_token	*ptr;
 	t_token	*tmp;
 	int		index;
-	
+	char	*input_fd;
+	int		pipe_index;
+
+	pipe_index = 0;
 	tmp = addres->token;
 	ptr = addres->token;
-	while (tmp && tmp->type != _PIPE)
+	while (tmp)
 	{
+		if (tmp->type == _PIPE)
+			pipe_index++;
 		if (tmp && tmp->type == _HEREDOC)
 		{
 			index = tmp->index;
@@ -135,7 +157,8 @@ int	heredoc(t_addres *addres)
 				print_syntax_error(1);
 				return (-1);
 			}
-			run_heredoc(addres, tmp->token, tmp->type, tmp->index);
+			input_fd = run_heredoc(addres, tmp->token, tmp->type, tmp->index);
+			add_infile(addres, input_fd, pipe_index, tmp->index);
 			index = tmp->index;
 			tmp = tmp->next;
 			remove_node_from_token(&(addres->token), index);

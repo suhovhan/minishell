@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 15:20:09 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/19 18:00:29 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	append_addres(t_addres *addres, char **get_line, char **env);
 int		print_syntax_error(int c);
 void	exit_shell(t_addres *addres, int	exit_code);
 int		free_token(t_token **token);
+int		free_filename(t_filename **filename);
 int		free_env(t_env **env);
 void	free_mtx(char **mtx);
 int		check_single_quotes(char **get_line);
@@ -56,12 +57,16 @@ void	print_no_such_file_or_directory();
 //parsing functions
 
 
-char	*get_pathname(t_token **token, t_env *env);
-char	*get_cmdargs(t_token **token);
-char	**get_cmdline(t_addres *addres);
+char	*get_arg(t_token **token);
+// char	*cmd_args(t_token **token);
+char	**cmd_line(t_token *token);
+char	**env_path(t_env *env);
+char	*check_path(char *str, char **env_path);
 char	*get_heredoc_del(char *name, int index);
+void	add_infile(t_addres *addres, char *filename, int index, int input_index);
+void	add_outfile(t_addres *addres, char *filename, int index, int input_index);
 int		heredoc(t_addres *addres);
-void	run_heredoc(t_addres *addres, char *token, int type, int index);
+char	*run_heredoc(t_addres *addres, char *token, int type, int index);
 int		run_heredoc_external(t_env *env, char *token, int descriptor);
 int		run_heredoc_expansion(char *token, int descriptor);
 char	*open_expression_in_line(t_env *env, char *str);
@@ -88,6 +93,7 @@ void	pwd(char	*cmd);
 
 int		append_token(t_token **token, int type, char *str);
 int		append_env(t_env **env, char *key, char *value);
+int		append_filename(t_filename **head, char *str, int input_index);
 void	remove_node_from_token(t_token **token, int index);
 void	clean_space_from_token(t_token	**token);
 void	set_env(t_env **env, char **envp);
@@ -99,7 +105,7 @@ char	**ft_smart_split(char *s);
 char	*fillword(char *s, int start_index, int len);
 int		getwordcount(char *s, char c);
 char	*epur_str(char *str);
-char	*env_path(char **env, char *pathname);
+// char	*env_path(char **env, char *pathname);
 char	**get_env(char	*env);
 int		get_wordlen_expression(char **heredoc);
 int		get_wordlen_expression(char **heredoc);
@@ -108,7 +114,7 @@ char	*execute_expression(char **heredoc);
 
 //
 
-
+void	execution(t_addres *addres, char **env);
 void	p_mtx(char **str);
 void	jogenq_incha(t_env *env, char *heredoc);
 int		is_alpha(char *str);

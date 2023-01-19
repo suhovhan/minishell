@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 14:34:28 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/19 18:12:25 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,27 @@ typedef struct	s_env
 	struct s_env	*next;
 }				t_env;
 
+typedef	struct s_filename
+{
+	int					index;
+	int					input_index;
+	char				*filename;
+	struct s_filename	*next;
+	struct s_filename	*prev;
+}				t_filename;
+
 typedef struct	s_addres
 {
 	int				exit_status;
-	int				input_index;
 	int				descriptor_input;
-	int				descriptor_output;
+	int				std_out_copy;
+	int 			std_input_copy;
+	int				*descriptor_output;
 	int				pipe_count;
 	int				shlvl;
-	char			*input_filename;
 	char			**cmd_line;
+	// t_filename		*outfile;
+	t_filename		*infile;
 	t_env			*env;
 	t_token			*token;
 }				t_addres;

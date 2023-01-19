@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 15:20:30 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/19 18:21:17 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	p_mtx(char **mtx)
 	while (mtx[++i])
 	{
 		j = -1;
-		printf("%d = %s\n",i, mtx[i]);
+		printf("%d = [%s]\n",i, mtx[i]);
 	}
 }
 
@@ -30,10 +30,8 @@ int	main(int ac, char **av, char **env)
 	t_addres	addres;
 	char		*get_line;
 	char		*get_line_tmp;
-
-	int std_out_copy = dup(1);
-	int std_input_copy = dup(0);
-	int	pid;
+	addres.std_out_copy = dup(1);
+	addres.std_input_copy = dup(0);
 	while (1)
 	{
 		get_line = readline("minishell-$ ");
@@ -45,19 +43,8 @@ int	main(int ac, char **av, char **env)
 		if (check_quotes(get_line))
 			continue;
 		append_addres(&addres, &get_line_tmp, env);
-// add child process here
-		// t_token *tmp = addres.token;
-		// while (tmp)
-		// {
-		// 	printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
-		// 	tmp = tmp->next;
-		// }
-		if (heredoc(&addres) == -1)
-		{
-			free_token(&(addres.token));
-			continue;
-		}
-		if (check_syntax(addres.token) == -1)
+
+		if (check_pipe(addres.token) == -1 || heredoc(&addres) == -1 || check_redirections(addres.token) == -1)
 		{
 			free_token(&(addres.token));
 			continue;
@@ -66,26 +53,18 @@ int	main(int ac, char **av, char **env)
 		redirect_input(&addres);
 		run_redirections(&addres);
 		clean_space_from_token(&(addres.token));
-		addres.cmd_line = get_cmdline(&addres);
-		addres.descriptor_input = open(addres.input_filename, O_RDONLY);
-		dup2(addres.descriptor_input, 0);
-		close(addres.descriptor_input);
-		if (isbuiltin(addres.cmd_line, &addres) == -1)
-		{
-			pid = fork();
-			if (pid)
-				wait(&pid);
-			else
-			{
-				execve(addres.cmd_line[0], addres.cmd_line, env);
-				return (127);
-			}
-		}
-		dup2(std_out_copy, 1);
-		dup2(std_input_copy, 0);
+
+		// t_filename *tmp = addres.infile;
+		// while (tmp)
+		// {
+		// 	printf("index = %d\tinp_index = %d\ttoken = %s\n", tmp->index, tmp->input_index, tmp->filename);
+		// 	tmp = tmp->next;
+		// }
+
+		execution(&addres, env);
 		free(get_line);
-		free_mtx((addres.cmd_line));
 		free_token(&(addres.token));
+		free_filename(&(addres.infile));
 	}
 	free_env(&(addres.env));
 	return (0);

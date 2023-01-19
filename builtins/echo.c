@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 19:05:23 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/15 15:22:02 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/15 16:29:20 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	echo(char **cmd)
 	get_line = cmd;
 	if (!get_line[1])
 		printf("\n");
-	if (get_line[1][0] == '-' && new_line(get_line, &i) == 0)
+	if (get_line[1] && get_line[1][0] == '-' && new_line(get_line, &i) == 0)
 	{
 		while (get_line[++i])
 		{

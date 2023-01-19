@@ -6,116 +6,109 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 05:14:07 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/29 22:38:33 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/19 19:47:04 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*check_path(char *path, t_env *env)
+char	*get_arg(t_token **token)
+{
+	char	*path;
+	char	*ptr;
+
+	while (*token && (*token)->type == _SPACE)
+		*token = (*token)->next;
+	if (*token && (*token)->type == _EXTERNAL)
+	{
+		path = ft_strdup((*token)->token);
+		*token = (*token)->next;
+	}
+	while (*token && (*token)->type == _EXTERNAL)
+	{
+		ptr = path;
+		path = ft_strjoin(ptr, (*token)->token);
+		free(ptr);
+		*token = (*token)->next;
+	}
+	return (path);
+}
+
+char	**cmd_line(t_token *token)
+{
+	int		count;
+	int		i;
+	char	**cmd_line;
+	t_token *tmp;
+
+	tmp = token;
+	count = 0;
+	i = -1;
+	while (token && token->type != _PIPE)
+	{
+		if (token && token->type == _EXTERNAL)
+		{
+			while (token && token->type == _EXTERNAL)
+				token = token->next;
+			count++;
+		}
+		if (token)
+			token = token->next;
+	}
+	cmd_line = (char**)malloc(sizeof(char*) * (count + 1));
+	while (++i < count)
+		cmd_line[i] = get_arg(&tmp);
+	cmd_line[i] = 0;
+	return (cmd_line);
+}
+
+char	**env_path(t_env *env)
 {
 	char	**env_path;
-	char	*file_path;
+	char	*ptr;
 	int		i;
 
 	i = -1;
-	if (!access(path, F_OK))
-		return (ft_strdup(path));
-	path = ft_strjoin("/", path);
+	env_path = NULL;
 	while (env)
 	{
 		if (!ft_strcmp(env->key, "PATH"))
+		{
 			env_path = ft_split(env->value, ':');
+			while (env_path[++i])
+			{
+				ptr = env_path[i];
+				env_path[i] = ft_strjoin(env_path[i], "/");
+				free(ptr);
+			}
+			break;
+		}
 		env = env->next;
 	}
-	while(env_path && env_path[++i])
-	{
-		file_path = ft_strjoin(env_path[i], path);
-		if (!access(file_path, F_OK))
-			return (file_path);
-		free(file_path);
-	}
-	printf("minishell-1.1$: %s: command not found\n", path);
-	//exit_child();
-	return ("\0");
+	return (env_path);
 }
 
-char	*get_pathname(t_token **token, t_env *env)
+char	*check_path(char *str, char **env_path)
 {
-	char	*path;
-	char	*str1;
-	char	*ptr;
-	int		index;
-	t_token	*tmp;
-
-	tmp = *token;
-	path = "\0";
-	while (tmp && tmp->type != _SPACE)
-	{
-		ptr = path;
-		str1 = ft_strdup(tmp->token);
-		path = ft_strjoin(path, str1);
-		free(str1);
-		if (*ptr)
-			free(ptr);
-		index = tmp->index;
-		tmp = tmp->next;
-		remove_node_from_token(token, index);
-	}
-	ptr = check_path(path, env);
-	if (path && *path)
-		free(path);
-	return (ptr);
-}
-
-char	*get_cmdargs(t_token **token)
-{
-	t_token	*tmp;
-	int		index;
-	char	*cmd_args;
-	char	*ptr;
-	
-	tmp = *token;
-	cmd_args = "\0";
-	while (tmp && tmp->type == _SPACE)
-		tmp = tmp->next;
-	while (tmp && tmp->type != _SPACE)
-	{
-		ptr = cmd_args;
-		cmd_args = ft_strjoin(cmd_args, tmp->token);
-		if (*ptr)
-			free(ptr);
-		index = tmp->index;
-		tmp = tmp->next;
-		remove_node_from_token(token, index);
-	}
-	if (!cmd_args || !*cmd_args)
-		return (NULL);
-	return (cmd_args);
-}
-
-char	**get_cmdline(t_addres *addres)
-{
-	int		arg_count;
 	int		i;
-	char	**cmd_line;
-	t_token	*tmp;	
+	char	*path;
 
-	tmp = addres->token;
-	if (!tmp)
-		return (NULL);
-	arg_count = 1;
-	i = 0;
-	while (tmp)
+	path = str;
+	i = -1;
+	if (!access(str, F_OK))
+		return (str);
+	while (env_path[++i])
 	{
-		if (tmp->type == _SPACE)
-			arg_count++;
-		tmp = tmp->next;
+		str = ft_strjoin(env_path[i], path);
+		if (!access(str, F_OK))
+		{
+			free(path);
+			return (str);
+		}
+		else
+			free(str);
 	}
-	cmd_line = (char**)malloc(sizeof(char*) * (arg_count + 1));
-	cmd_line[i] = get_pathname(&(addres->token), addres->env);
-	while (++i < arg_count)
-		cmd_line[i] = get_cmdargs(&(addres->token));
-	cmd_line[i] = 0;
-	return (cmd_line);
+	// there would be a function that have to kill process
+	printf("minishell: %s: command not found\n", path);
+	return (NULL);
 }

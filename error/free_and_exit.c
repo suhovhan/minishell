@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/26 07:25:39 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/16 14:07:14 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,22 @@ int	free_token(t_token **token)
 		tmp = *token;
 		(*token) = (*token)->next;
 		free(tmp->token);
+		free(tmp);
+	}
+	return (0);
+}
+
+int	free_filename(t_filename **filename)
+{
+	t_filename *tmp;
+
+	if (!filename || !*filename)
+		return (0);
+	while (*filename)
+	{
+		tmp = *filename;
+		(*filename) = (*filename)->next;
+		free(tmp->filename);
 		free(tmp);
 	}
 	return (0);
