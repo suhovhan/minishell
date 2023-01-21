@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 16:14:07 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 17:15:54 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_addres(t_addres *addres)
 {
-	free_token(&addres->token);	
+	free_token(&addres->token);
 	free_filename(&addres->infile);	
 	free_pipeexec(&addres->pipe_list);
 	free(addres->descriptor_output);
@@ -24,7 +24,7 @@ int	free_token(t_token **token)
 {
 	t_token *tmp;
 
-	if (!token)
+	if (!token || !*token)
 		return (0);
 	while (*token)
 	{

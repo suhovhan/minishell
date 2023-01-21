@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 15:43:52 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 17:49:49 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@ char	*open_expression_in_line(t_env *env, char *str)
 					expressed_line = ft_strdup("$");
 				else
 					expressed_line = find_value_env(env, ptr);
-				if (ptr && *ptr)
+				if (ptr)
 					free(ptr);
 				ptr = new_line;
-				if (expressed_line && *expressed_line)
-				{
+				// if (expressed_line && *expressed_line)
+				// {
 					if (!new_line || !*new_line)
 						new_line = ft_strdup(expressed_line);
 					else
 						new_line = ft_strjoin(new_line, expressed_line);
 					free(expressed_line);
-				}
+				// }
 				if (ptr)
 					free(ptr);	
 			}
@@ -72,7 +72,7 @@ void	pars_expression(t_addres *addres)
 {
 	t_token	*tmp;
 	char	*ptr;
-	
+
 	tmp = addres->token;
 	while (tmp)
 	{
