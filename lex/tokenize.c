@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 14:47:12 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 15:57:36 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	set_token(t_token **token, char **get_line)
 		if (**get_line == ' ')
 			fill_spaces(get_line, token);
 		else if (**get_line == '|')
-			append_token(token, _PIPE, ft_strdup("|\0"));
+			append_token(token, _PIPE, ft_strdup("|"));
 		else if (**get_line == 39)
 			fill_quotes_external(get_line, token, 39);
 		else if (**get_line == '"')

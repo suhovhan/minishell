@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 14:20:04 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 15:43:52 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*open_expression_in_line(t_env *env, char *str)
 	char	*expressed_line;
 	char	*ret;
 
-	new_line = ft_strdup("\0");
+	new_line = ft_strdup("");
 	while(str && *str)
 		if (str && *str && *str == '$')
 		{
@@ -43,7 +43,7 @@ char	*open_expression_in_line(t_env *env, char *str)
 						new_line = ft_strjoin(new_line, expressed_line);
 					free(expressed_line);
 				}
-				if (ptr && *ptr)
+				if (ptr)
 					free(ptr);	
 			}
 			else
@@ -60,7 +60,7 @@ char	*open_expression_in_line(t_env *env, char *str)
 				new_line = ft_strdup(ret);
 			else
 				new_line = ft_strjoin(new_line, ret);
-			if (ptr && *ptr)
+			if (ptr)
 				free(ptr);
 			free(ret);
 			str++;

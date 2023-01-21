@@ -31,26 +31,41 @@ int	append_token(t_token **token, int type, char *str)
 	return (0);
 }
 
-int	append_filename(t_filename **head, char *str, int input_index)
+int	append_pipeexec(t_pipe_exec **pipe_list, char **cmd_line, char *infile, int out)
 {
-	static int	index = -1;
+	t_pipe_exec		*new_node;
+	t_pipe_exec 	*last_node;
+
+	new_node = malloc(sizeof(t_pipe_exec));
+	new_node->infile = infile;
+	new_node->output = out;
+	new_node->cmd_line = cmd_line;
+	new_node->next = NULL;
+	if (*pipe_list == NULL)
+		*pipe_list = new_node;
+	else
+	{
+		last_node = *pipe_list;
+		while (last_node->next != NULL)
+			last_node = last_node->next;
+		last_node->next = new_node;
+	}
+	return (0);
+}
+
+int	append_filename(t_filename **head, char *str, int pipe_index, int input_index)
+{
 	t_filename	*new_node;
 	t_filename 	*last_node;
 
-	if (*str == '\0')
-		return (0);
 	new_node = malloc(sizeof(t_filename));
-	new_node->index = ++index;
 	new_node->input_index = input_index;
+	new_node->pipe_index = pipe_index;
 	new_node->filename = str;
 	new_node->next = NULL;
 	new_node->prev = NULL;
 	if (*head == NULL)
-	{
-		index = -1;
-		new_node->index = ++index;
 		*head = new_node;
-	}
 	else
 	{
 		last_node = *head;

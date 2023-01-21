@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 05:14:07 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/19 19:47:04 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 15:28:45 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	**cmd_line(t_token *token)
 				token = token->next;
 			count++;
 		}
-		if (token)
+		if (token && token->type != _PIPE)
 			token = token->next;
 	}
 	cmd_line = (char**)malloc(sizeof(char*) * (count + 1));

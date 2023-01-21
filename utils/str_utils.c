@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 14:14:00 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/20 14:57:46 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ char	*execute_expression(char **heredoc)
 		res = malloc(sizeof(char) * len + 1);
 	}
 	while (heredoc && *heredoc && **heredoc &&\
-	((**heredoc >= 'a' && **heredoc <= 'z') || \
+	((**heredoc >= 'a' && **heredoc <= 'z') ||\
 	(**heredoc >= 'A' && **heredoc <= 'Z') || \
 	(**heredoc >= '0' && **heredoc <= '9') || \
 	**heredoc == '-' || **heredoc == '_'))

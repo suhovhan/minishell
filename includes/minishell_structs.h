@@ -6,12 +6,14 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/19 18:12:25 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/20 16:19:35 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_STRUCTS_H
 # define MINISHELL_STRUCTS_H
+
+typedef struct s_pipe_execution_structure t_pipe_execution_structure;
 
 typedef enum s_types
 {
@@ -45,12 +47,21 @@ typedef struct	s_env
 
 typedef	struct s_filename
 {
-	int					index;
 	int					input_index;
+	int					pipe_index;
 	char				*filename;
 	struct s_filename	*next;
 	struct s_filename	*prev;
 }				t_filename;
+
+typedef struct s_pipe_exec
+{
+	char	**cmd_line;
+	char	*infile;
+	int		fd_infile;
+	int		output;
+	struct s_pipe_exec	*next;
+}	t_pipe_exec;
 
 typedef struct	s_addres
 {
@@ -62,10 +73,11 @@ typedef struct	s_addres
 	int				pipe_count;
 	int				shlvl;
 	char			**cmd_line;
-	// t_filename		*outfile;
+	t_pipe_exec		*pipe_list;
 	t_filename		*infile;
 	t_env			*env;
 	t_token			*token;
 }				t_addres;
+
 
 #endif

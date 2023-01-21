@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/19 18:13:02 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/20 12:25:50 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,25 +103,19 @@ char	*run_heredoc(t_addres *addres, char *token, int type, int index)
 	return (del);
 }
 
-void	add_infile(t_addres *addres, char *filename, int index, int input_index)
+void	add_infile(t_addres *addres, char *filename, int pipe_index, int input_index)
 {
 	t_filename	*tmp;
 
 	tmp = addres->infile;
-	if (!tmp)
-		append_filename(&addres->infile, filename, input_index);
-	else
+	while (tmp)
 	{
-		while (tmp->index < index && tmp->next)
-			tmp = tmp->next;
-		if (tmp->index == index && tmp->input_index < input_index)
+		if (tmp->pipe_index == pipe_index && tmp->input_index < input_index)
 		{
-			free(tmp->filename);
-			tmp->input_index = input_index;
 			tmp->filename = filename;
+			tmp->input_index = input_index;
 		}
-		else if (tmp->input_index < input_index)
-			append_filename(&addres->infile, filename, input_index);
+		tmp = tmp->next;
 	}
 }
 
@@ -130,7 +124,7 @@ int	heredoc(t_addres *addres)
 	t_token	*ptr;
 	t_token	*tmp;
 	int		index;
-	char	*input_fd;
+	char	*del;
 	int		pipe_index;
 
 	pipe_index = 0;
@@ -157,8 +151,8 @@ int	heredoc(t_addres *addres)
 				print_syntax_error(1);
 				return (-1);
 			}
-			input_fd = run_heredoc(addres, tmp->token, tmp->type, tmp->index);
-			add_infile(addres, input_fd, pipe_index, tmp->index);
+			del = run_heredoc(addres, tmp->token, tmp->type, tmp->index);
+			add_infile(addres, del, pipe_index, tmp->index);
 			index = tmp->index;
 			tmp = tmp->next;
 			remove_node_from_token(&(addres->token), index);

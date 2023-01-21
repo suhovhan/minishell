@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/19 21:16:29 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:13:56 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,6 @@ void	p_mtx(char **mtx)
 	}
 }
 
-// int ft_env(t_addres *addres)
-// {
-// 	t_env	*temp;
-
-// 	temp = addres->env;
-// 	while (temp)
-// 	{
-// 		printf("%s=%s\n", temp->key, temp->value);
-// 		temp = temp->next;
-// 	}
-// 	return (0);
-// }
-
 int	main(int ac, char **av, char **env)
 {
 	(void)ac;
@@ -45,6 +32,7 @@ int	main(int ac, char **av, char **env)
 	char		*get_line_tmp;
 	addres.std_out_copy = dup(1);
 	addres.std_input_copy = dup(0);
+	set_env(&(addres.env), env);
 	while (1)
 	{
 		get_line = readline("minishell-$ ");
@@ -55,8 +43,7 @@ int	main(int ac, char **av, char **env)
 			continue;
 		if (check_quotes(get_line))
 			continue;
-		append_addres(&addres, &get_line_tmp, env);
-
+		append_addres(&addres, &get_line_tmp);
 		if (check_pipe(addres.token) == -1 || heredoc(&addres) == -1 || check_redirections(addres.token) == -1)
 		{
 			free_token(&(addres.token));
@@ -66,18 +53,9 @@ int	main(int ac, char **av, char **env)
 		redirect_input(&addres);
 		run_redirections(&addres);
 		clean_space_from_token(&(addres.token));
-
-		// t_filename *tmp = addres.infile;
-		// while (tmp)
-		// {
-		// 	printf("index = %d\tinp_index = %d\ttoken = %s\n", tmp->index, tmp->input_index, tmp->filename);
-		// 	tmp = tmp->next;
-		// }
-
 		execution(&addres, env);
 		free(get_line);
-		free_token(&(addres.token));
-		free_filename(&(addres.infile));
+		free_addres(&addres);
 	}
 	free_env(&(addres.env));
 	return (0);

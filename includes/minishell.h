@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/19 18:00:29 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:07:17 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,20 @@ int		fill_redirections(char **get_line, t_token **token);
 void	fill_external(char **get_line, t_token **token);
 int		fill_quotes_external(char **get_line, t_token **token, int quote);
 void	fill_expression(char **get_line, t_token **token);
-void	append_addres(t_addres *addres, char **get_line, char **env);
-
+void	append_addres(t_addres *addres, char **get_line);
+char	*search_infile(t_filename *head, int pipe_index);
+void	set_pipelist(t_addres *addres);
+void	open_infile(t_pipe_exec **pipelist);
 
 //error functions
 
 
 int		print_syntax_error(int c);
 void	exit_shell(t_addres *addres, int	exit_code);
+void	free_addres(t_addres *addres);
 int		free_token(t_token **token);
 int		free_filename(t_filename **filename);
+int		free_pipeexec(t_pipe_exec **pipelist);
 int		free_env(t_env **env);
 void	free_mtx(char **mtx);
 int		check_single_quotes(char **get_line);
@@ -94,7 +98,8 @@ void 	ft_env(char *line, t_addres *cmd);
 
 int		append_token(t_token **token, int type, char *str);
 int		append_env(t_env **env, char *key, char *value);
-int		append_filename(t_filename **head, char *str, int input_index);
+int		append_filename(t_filename **head, char *str, int pipe_index, int input_index);
+int		append_pipeexec(t_pipe_exec **pipe_list, char **cmd_line, char *infile, int out);
 void	remove_node_from_token(t_token **token, int index);
 void	clean_space_from_token(t_token	**token);
 void	set_env(t_env **env, char **envp);
@@ -114,7 +119,7 @@ char	*execute_expression(char **heredoc);
 
 
 //
-
+void	pipe_execution(t_addres *addres, char **env);
 void	execution(t_addres *addres, char **env);
 void	p_mtx(char **str);
 void	jogenq_incha(t_env *env, char *heredoc);
