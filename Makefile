@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -I./includes #-fsanitize=address -g
 LINK = -lreadline -lcurses
 HD = /var/tmp/hd_files
 

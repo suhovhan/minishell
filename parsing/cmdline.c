@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 05:14:07 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 15:28:45 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/24 14:47:28 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	*get_arg(t_token **token)
 		ptr = path;
 		path = ft_strjoin(ptr, (*token)->token);
 		free(ptr);
+		ptr = NULL;
 		*token = (*token)->next;
 	}
 	return (path);
@@ -80,6 +81,7 @@ char	**env_path(t_env *env)
 				ptr = env_path[i];
 				env_path[i] = ft_strjoin(env_path[i], "/");
 				free(ptr);
+				ptr = NULL;
 			}
 			break;
 		}
@@ -103,12 +105,16 @@ char	*check_path(char *str, char **env_path)
 		if (!access(str, F_OK))
 		{
 			free(path);
+			path = NULL;
 			return (str);
 		}
 		else
+		{
 			free(str);
+			str = NULL;
+		}
 	}
-	// there would be a function that have to kill process
 	printf("minishell: %s: command not found\n", path);
+	// there would be a function that have to kill process
 	return (NULL);
 }

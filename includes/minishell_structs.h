@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/20 16:19:35 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/24 16:04:19 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_pipe_exec
 	int		fd_infile;
 	int		output;
 	struct s_pipe_exec	*next;
-}	t_pipe_exec;
+}				t_pipe_exec;
 
 typedef struct	s_addres
 {

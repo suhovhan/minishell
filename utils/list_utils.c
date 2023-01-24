@@ -8,7 +8,7 @@ int	append_token(t_token **token, int type, char *str)
 
 	if (*str == '\0')
 		return (0);
-	new_node = malloc(sizeof(t_token));
+	new_node = (t_token *)malloc(sizeof(t_token));
 	new_node->type = type;
 	new_node->index = ++index;
 	new_node->token = str;
@@ -112,7 +112,6 @@ void	remove_node_from_token(t_token **token, int index)
 	{
 		free((*token)->token);
 		free((*token));
-		*token = NULL;
 	}
 	else if ((*token)->index == index)
 	{
@@ -121,7 +120,7 @@ void	remove_node_from_token(t_token **token, int index)
 		if ((*token)->next)
 			(*token)->next->prev = (*token)->prev;
 		free((*token)->token);
-		free((*token));
+		free(token);
 	}
 	*token = tmp;
 }

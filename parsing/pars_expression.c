@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 17:49:49 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/24 18:40:32 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	*open_expression_in_line(t_env *env, char *str)
 					expressed_line = find_value_env(env, ptr);
 				if (ptr)
 					free(ptr);
+					ptr = NULL;
 				ptr = new_line;
 				// if (expressed_line && *expressed_line)
 				// {
@@ -42,9 +43,13 @@ char	*open_expression_in_line(t_env *env, char *str)
 					else
 						new_line = ft_strjoin(new_line, expressed_line);
 					free(expressed_line);
+					expressed_line = NULL;
 				// }
 				if (ptr)
+				{
 					free(ptr);	
+					ptr = NULL;
+				}
 			}
 			else
 				str++;
@@ -61,8 +66,12 @@ char	*open_expression_in_line(t_env *env, char *str)
 			else
 				new_line = ft_strjoin(new_line, ret);
 			if (ptr)
+			{
 				free(ptr);
+				ptr = NULL;
+			}
 			free(ret);
+			ret = NULL;
 			str++;
 		}
 	return (new_line);

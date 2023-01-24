@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 21:03:31 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/20 00:45:24 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 19:56:38 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,11 @@ void	set_env(t_env **env, char **envp)
 		split_env = get_env(envp[i]);
 		append_env(env, ft_strdup(split_env[0]), ft_strdup(split_env[1]));
 		while (split_env[++j])
+		{
 			free(split_env[j]);
+			split_env[j] = NULL;
+		}
 		free(split_env);
+		split_env = NULL;
 	}
 }

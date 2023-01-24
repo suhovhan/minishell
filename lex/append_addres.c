@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 01:57:26 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 16:05:38 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 20:15:52 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	append_addres(t_addres *addres, char **get_line)
 			addres->pipe_count++;	
 		token_tmp = token_tmp->next;	
 	}
-	addres->descriptor_output = (int*)malloc(sizeof(int) * addres->pipe_count + 1);
+	addres->descriptor_output = (int*)malloc(sizeof(int) * (addres->pipe_count + 1));
 	int i = -1;
 	while (++i <= addres->pipe_count)
 	{

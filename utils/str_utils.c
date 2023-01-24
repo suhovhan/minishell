@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/20 14:57:46 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/24 18:35:34 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*fill_word(char **get_line, char ch, int flag)
 	int		i;
 
 	i = -1;
-	res = (char*)malloc(sizeof(char) * (word_len(*get_line, ch) + 2));
+	res = (char*)malloc(sizeof(char) * (word_len(*get_line, ch) + 1));
 	if (flag == 0)
 	{
 		while (**get_line != ch)
@@ -82,6 +82,7 @@ char	*epur_str(char *str)
 	end = (char *)malloc(sizeof(char) * ft_strlen(res));
 	ft_strlcpy(end, res, ft_strlen(res) + 1);
 	free(res);
+	res = NULL;
 	return (end);
 }
 
@@ -103,6 +104,7 @@ char	*ft_cleanline(char *get_line)
 	end = (char*)malloc(sizeof(char) * ft_strlen(res));
 	ft_strlcpy(end, res, ft_strlen(res) + 1);
 	free(res);
+	res = NULL;
 	return (end);
 }
 

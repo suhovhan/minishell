@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 17:17:42 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 19:55:50 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	main(int ac, char **av, char **env)
 		clean_space_from_token(&(addres.token));
 		execution(&addres, env);
 		free(get_line);
+		get_line = NULL;
 		free_addres(&addres);
 	}
 	free_env(&(addres.env));

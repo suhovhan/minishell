@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 16:07:17 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/24 18:11:50 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		isbuiltin(char **cmd_line, t_addres *status);
 int		no_newline(char *s);
 void	echo(char **cmd);
 int		is_digit(char **str);
-void	ft_exit(char *line, t_addres cmd);
+void	ft_exit(char **line, t_addres cmd);
 void	pwd(char	*cmd);
 void 	ft_env(char *line, t_addres *cmd);
 
@@ -121,6 +121,7 @@ char	*execute_expression(char **heredoc);
 //
 void	pipe_execution(t_addres *addres, char **env);
 void	execution(t_addres *addres, char **env);
+void	exec_cmd(t_addres *addres);
 void	p_mtx(char **str);
 void	jogenq_incha(t_env *env, char *heredoc);
 int		is_alpha(char *str);

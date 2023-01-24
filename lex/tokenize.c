@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 15:57:36 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 20:14:53 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	fill_external(char **get_line, t_token **token)
 	int		i;
 
 	i = -1;
-	res = malloc(sizeof(char) * ft_strlen(*get_line));
+	res = malloc(sizeof(char) * (ft_strlen(*get_line) + 1));
 	while (**get_line == ' ')
 		res[++i] = ' ';
 		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
@@ -80,44 +80,16 @@ void	fill_external(char **get_line, t_token **token)
 			(*get_line)++;
 		}
 	res[++i] = '\0';
-	line = (char*)malloc(sizeof(char) * ft_strlen(res));
+	line = (char*)malloc(sizeof(char) * (ft_strlen(res) + 1));
 	i = -1;
 	while (res[++i])
 		line[i] = res[i];
-	line[i] = res[i];
+	line[i] = '\0';
 	free(res);
+	res = NULL;
 	(*get_line)--;
 	append_token(token, _EXTERNAL, line);
 }
-
-// void	fill_expression(char **get_line, t_token **token)
-// {
-// 	char	*res;
-// 	char	*line;
-// 	int		i;
-
-// 	i = -1;
-// 	res = (char*)malloc(sizeof(char) * ft_strlen(*get_line));
-// 	res[++i] = **get_line;
-// 	(*get_line)++;
-// 		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
-// 			&& **get_line != '>' && **get_line != '|' && **get_line != '$' \
-// 			&& **get_line != 39 && **get_line != '"') && res)
-// 		{
-// 			res[++i] = **get_line;
-// 			(*get_line)++;
-// 		}
-// 	res[++i] = '\0';
-// 	line = (char*)malloc(sizeof(char) * ft_strlen(res));
-// 	i = -1;
-// 	while (res[++i])
-// 		line[i] = res[i];
-// 	line[i] = '\0';
-// 	(*get_line)--;
-// 	free(res);
-// 	append_token(token, _EXPRESSION, ft_strdup(line));
-// 	free(line);
-// }
 
 void	set_token(t_token **token, char **get_line)
 {

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/20 12:25:50 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/21 19:54:23 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ char	*get_heredoc_del(char *name, int index)
 	str = ft_itoa(index);
 	del = ft_strjoin("/var/tmp/hd_files/.heredoc_", str);
 	free(str);
+	str = NULL;
 	str = ft_strjoin(del, name);
 	free(del);
+	del = NULL;
 	return (str);
 }
 
@@ -40,6 +42,7 @@ int	run_heredoc_external(t_env *env, char *token, int descriptor)
 		!ft_strncmp(heredoc_tmp, token, ft_strlen(token)))
 		{
 			free(heredoc);
+			heredoc = NULL;
 			return (0);
 		}
 		while (heredoc_tmp && *heredoc_tmp)
@@ -53,6 +56,7 @@ int	run_heredoc_external(t_env *env, char *token, int descriptor)
 				if (expression && *expression)
 					write(descriptor, expression, ft_strlen(expression));
 				free(expression);
+				expression = NULL;
 			}
 			else
 			{
@@ -62,6 +66,7 @@ int	run_heredoc_external(t_env *env, char *token, int descriptor)
 		}
 		write(descriptor, "\n", 1);
 		free(heredoc);
+		heredoc = NULL;
 	}
 	return (0);
 }
@@ -77,11 +82,13 @@ int	run_heredoc_expansion(char *token, int descriptor)
 		!ft_strncmp(heredoc, token, ft_strlen(token)))
 		{
 			free(heredoc);
+			heredoc = NULL;
 			return (0);
 		}
 		write(descriptor, heredoc, ft_strlen(heredoc));
 		write(descriptor, "\n", 1);
 		free(heredoc);
+		heredoc = NULL;
 	}
 	return (0);
 }

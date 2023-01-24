@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:47:29 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/15 15:39:48 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/24 19:20:59 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@ void	go_home(t_env *env)
 
 void	go_to(char *cmd, char *cur_path)
 {
+	(void)cmd;
 	char	*go_to_path;
 	t_env	*temp;
 	t_env	*env = NULL;
 
-	go_to_path = getcwd(&cmd[0], 1000);
+	go_to_path = NULL;
+	getcwd(go_to_path, 256);
 	temp = env;
 	while (temp)
 	{
@@ -41,6 +43,7 @@ void	go_to(char *cmd, char *cur_path)
 			temp->value = cur_path;
 		temp = temp->next;
 	}
+	free(go_to_path);
 }
 
 void	cd(char *line, t_env *env)
@@ -48,6 +51,7 @@ void	cd(char *line, t_env *env)
 	char	**get_line;
 	char	path[1024];
 	char	*old_pwd;
+	char	*ptr;
 
 	get_line = ft_split(line, ' ');
 	old_pwd = getcwd(path, sizeof(path));
@@ -55,9 +59,12 @@ void	cd(char *line, t_env *env)
 		go_home(env);
 	else if (get_line[0])
 	{
+		ptr = ft_strdup("usr/bin/cd");
 		if (chdir(get_line[0]) == -1)
 			printf("minishell: cd: %s: No such file or directory\n", get_line[0]);
 		else
-			go_to(ft_strdup("usr/bin/cd"), get_line[0]);
+			go_to(ptr, get_line[0]);
+		free(ptr);
 	}
+	free_mtx(get_line);
 }
