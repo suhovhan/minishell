@@ -162,6 +162,8 @@ void	clean_backslash(t_token	**token)
 				if (tmp && tmp->type != _SPACE && tmp->type != _PIPE)
 					remove_node_from_token(token, index);
 			}
+			else
+				tmp = tmp->next;
 		}
 		else
 			tmp = tmp->next;

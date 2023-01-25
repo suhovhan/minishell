@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/25 19:29:32 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:33:07 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ int	main(int ac, char **av, char **env)
 		}
 		append_addres(&addres, &get_line_tmp);
 		clean_backslash(&addres.token);
-		// t_token	*tmp = addres.token;
-		// while (tmp)
-		// {
-		// 	printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
-		// 	tmp = tmp->next;
-		// }
+		t_token	*tmp = addres.token;
+		while (tmp)
+		{
+			printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
+			tmp = tmp->next;
+		}
 		if (check_pipe(addres.token) == -1 || heredoc(&addres) == -1 || check_redirections(addres.token) == -1)
 		{
 			free(get_line);
