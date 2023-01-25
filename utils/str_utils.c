@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/24 18:35:34 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:07:36 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*fill_word(char **get_line, char ch, int flag)
 			res[++i] = **get_line;
 			(*get_line)++;
 		}
-		res[++i] = '\0';
+		// res[++i] = '\0';
 	}
 	else
 		while (**get_line && *get_line && get_line && **get_line != '\0' \

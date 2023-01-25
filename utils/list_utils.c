@@ -6,8 +6,8 @@ int	append_token(t_token **token, int type, char *str)
 	t_token		*new_node;
 	t_token 	*last_node;
 
-	if (*str == '\0')
-		return (0);
+	// if (*str == '\0')
+	// 	return (0);
 	new_node = (t_token *)malloc(sizeof(t_token));
 	new_node->type = type;
 	new_node->index = ++index;
@@ -120,7 +120,7 @@ void	remove_node_from_token(t_token **token, int index)
 		if ((*token)->next)
 			(*token)->next->prev = (*token)->prev;
 		free((*token)->token);
-		free(token);
+		free((*token));
 	}
 	*token = tmp;
 }
@@ -139,6 +139,29 @@ void	clean_space_from_token(t_token	**token)
 			tmp = tmp->next;
 			if (tmp && tmp->type == _SPACE)
 				remove_node_from_token(token, index);
+		}
+		else
+			tmp = tmp->next;
+	}
+}
+
+void	clean_backslash(t_token	**token)
+{
+	t_token	*tmp;
+	int		index;
+
+	tmp = *token;
+	while (tmp)
+	{
+		if (tmp->type == _EXPANSION_SINGLE || tmp->type == _EXPANSION_DUBLE)
+		{
+			if (!tmp->token || !(*tmp->token))
+			{
+				index = tmp->index;
+				tmp = tmp->next;
+				if (tmp && tmp->type != _SPACE && tmp->type != _PIPE)
+					remove_node_from_token(token, index);
+			}
 		}
 		else
 			tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:45 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 15:28:51 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/25 18:06:30 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*search_infile(t_filename *head, int pipe_index)
 	while (head)
 	{
 		if (head->pipe_index == pipe_index)
-			return (head->filename);
+			return (ft_strdup(head->filename));
 		head = head->next;
 	}
 	return (NULL);

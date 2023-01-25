@@ -4,6 +4,11 @@ CFLAGS = -Wall -Wextra -Werror -I./includes #-fsanitize=address -g
 LINK = -lreadline -lcurses
 HD = /var/tmp/hd_files
 
+
+#PREFIX = $(shell find -name ./ashhov_readline 2>/dev/null)
+#INCLUDES = -I./ashhov_readline/include
+#LINKERS	= -L./ashhov_readline/lib -lreadline
+
 OBJ_SRC_DIR = obj_src
 SRC_SRC = $(wildcard src/*.c)
 OBJ_SRC = $(patsubst src/%.c, $(OBJ_SRC_DIR)/%.o, $(SRC_SRC))
@@ -39,30 +44,31 @@ RMRF = rm -rf
 LIBCACH = ~/Library/Caches/
 
 $(OBJ_SRC_DIR)/%.o: ./src/%.c | $(OBJ_SRC_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_LEX_DIR)/%.o: ./lex/%.c | $(OBJ_LEX_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_PARS_DIR)/%.o: ./parsing/%.c | $(OBJ_PARS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_BUIL_DIR)/%.o: ./builtins/%.c | $(OBJ_BUIL_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_ERR_DIR)/%.o: ./error/%.c | $(OBJ_ERR_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_LIBFT_DIR)/%.o: ./libft/%.c | $(OBJ_LIBFT_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_UTILS_DIR)/%.o: ./utils/%.c | $(OBJ_UTILS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 all: $(NAME)
 
 $(NAME): $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
-	@$(CC) $(CFLAGS) $(LINK) -o $(NAME) $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
+	@#ar -rcs $(NAME) $(DIRECTORY_A)
+	@$(CC) $(CFLAGS) $(LINK) $(LINKERS) $(INCLUDES) -o $(NAME) $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
 	@$(MK) $(HD)
 
 $(OBJ_SRC_DIR):
@@ -100,6 +106,70 @@ fclean: clean
 	@# $(RMRF) $(LIBCACH)
 	@# $(RMRF) $(HD)
 
+readline: 
+	cd readline-master && make clean && ./configure --prefix=$(PREFIX) && make && make install
+
 re: fclean all
 
 .PHONY: all clean fclean re
+
+
+
+# RED="\033[1;31m"
+# GREEN='\033[3;32m'
+# NONE='\033[0m'
+
+# PREFIX = $(shell find ${HOME} -name ashhov_readline 2>/dev/null)
+
+# NAME = minishell
+
+# CC = cc
+
+# CFLAGS = -Wall -Werror -Wextra
+
+# # SRCS = $(wildcard *.c) $(wildcard builtins/*.c) $(wildcard error/*.c) $(wildcard builtin/*.c)
+
+# # OBJS = $(patsubst %.c, %.o, $(SRCS))
+
+# INCLUDES = -ILibft  -I./ashhov_readline/include
+
+# LINKERS	= -L./libft  -L./ashhov_readline/lib -lreadline
+
+# LINKERLIB = ./libft/libft.a
+
+# LIBFT = ./libft
+
+# # RM = rm -f
+
+# # %.o: %.c
+# # 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+# # all: readline $(NAME) 
+# all: $(NAME) 
+	
+# $(NAME): $(OBJS)
+# 	@$(MAKE) -C $(LIBFT)
+# 	@cp $(LINKERLIB) $(NAME)
+# 	@ar -rcs $(NAME) $(OBJS)
+# 	@$(CC) $(CFLAGS) $(LINKERS) $(INCLUDES) $(NAME) -o $(NAME)
+# 	@echo $(NONE) $(GREEN)"       >Compiled< $(NAME)" $(NONE)
+
+# # clean:
+# # 	@$(MAKE) clean -C $(LIBFT)
+# # 	@$(RM) $(OBJS)
+
+# # fclean: clean
+# # 	@$(MAKE) fclean -C $(LIBFT)
+# # 	@$(RM) $(NAME)
+# # 	@stty sane
+# # 	@echo $(NONE) $(RED)"       >Removed< $(NAME)" $(NONE)
+
+# readline: 
+# 	cd readline-master && make clean && ./configure --prefix=$(PREFIX) && make && make install
+
+# # re: fclean all
+
+# norm: clean
+# 	norminette $(SRCS)
+
+# .PHONY: all clean fclean re

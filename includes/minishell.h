@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/24 18:11:50 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:26:56 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int		append_env(t_env **env, char *key, char *value);
 int		append_filename(t_filename **head, char *str, int pipe_index, int input_index);
 int		append_pipeexec(t_pipe_exec **pipe_list, char **cmd_line, char *infile, int out);
 void	remove_node_from_token(t_token **token, int index);
+void	clean_backslash(t_token	**token);
 void	clean_space_from_token(t_token	**token);
 void	set_env(t_env **env, char **envp);
 char 	*find_value_env(t_env	*env, char *key);

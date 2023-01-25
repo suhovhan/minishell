@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 20:14:53 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:29:19 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int	fill_quotes_external(char **get_line, t_token **token, int quote)
 	else
 		type = _EXPANSION_DUBLE;
 	(*get_line)++;
-	if (**get_line != '\0' && **get_line != quote)
-			append_token(token, type, fill_word(get_line, quote, 0));
+	if (**get_line != '\0')
+		append_token(token, type, fill_word(get_line, quote, 0));
 	return (0);
 }
 

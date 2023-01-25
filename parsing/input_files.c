@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 01:51:01 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/16 16:09:06 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/25 17:13:37 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,3 @@ void	redirect_input(t_addres *addres)
 	}
 }
 
-int	open_red_in(char *filename)
-{
-	int	fd;
-
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		print_no_such_file_or_directory();
-	else
-		dup2(fd, 0);
-	close(fd);
-	return (fd);
-}
