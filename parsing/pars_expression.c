@@ -6,76 +6,110 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/24 18:40:32 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/26 16:23:40 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <string.h>
 
-char	*open_expression_in_line(t_env *env, char *str)
+char	*line_width_expression(t_env *env, char **str)
 {
-	char	*new_line;
-	char	*ptr;
 	char	*expressed_line;
-	char	*ret;
+	char	*ptr;
 
-	new_line = ft_strdup("");
-	while(str && *str)
-		if (str && *str && *str == '$')
+	expressed_line = NULL;
+	ptr = NULL;
+	if (str && *str && **str && **str == '$')
+	{
+		expressed_line = execute_expression(str);
+		ptr = expressed_line;
+		if (ft_strcmp(expressed_line, "(null)") != 0)
 		{
-			expressed_line = execute_expression(&str);
-			ptr = expressed_line;
-			if (ft_strcmp(expressed_line, "(null)") != 0)
-			{
-				if (ft_strlen(expressed_line) == 0)
-					expressed_line = ft_strdup("$");
-				else
-					expressed_line = find_value_env(env, ptr);
-				if (ptr)
-					free(ptr);
-					ptr = NULL;
-				ptr = new_line;
-				// if (expressed_line && *expressed_line)
-				// {
-					if (!new_line || !*new_line)
-						new_line = ft_strdup(expressed_line);
-					else
-						new_line = ft_strjoin(new_line, expressed_line);
-					free(expressed_line);
-					expressed_line = NULL;
-				// }
-				if (ptr)
-				{
-					free(ptr);	
-					ptr = NULL;
-				}
-			}
+			if (ft_strlen(expressed_line) == 0)
+				expressed_line = ft_strdup("$");
 			else
-				str++;
+				expressed_line = find_value_env(env, ptr);
 		}
 		else
 		{
-			ptr = new_line;
-			ret = NULL;
-			ret = malloc(sizeof(char) * 2);
-			ret[0] = *str;
-			ret[1] = '\0';
-			if (!new_line || !*new_line)
-				new_line = ft_strdup(ret);
-			else
-				new_line = ft_strjoin(new_line, ret);
-			if (ptr)
-			{
-				free(ptr);
-				ptr = NULL;
-			}
-			free(ret);
-			ret = NULL;
-			str++;
+			(*str)++;
+			return (NULL);
 		}
-	return (new_line);
+		if (ptr)
+			free(ptr);
+	}
+	return (expressed_line);
 }
+
+char *line_widthout_expression(char **str)
+{
+	char	*ret;
+	char	*ptr;
+	char	*tmp;
+
+	ptr = NULL;
+	ret = NULL;
+	while (str && *str && **str && **str != '$')
+	{
+		ptr = (char *)malloc(sizeof(char) * 2);
+		ptr[0] = **str;
+		ptr[1] = '\0';
+		if (!ret)
+			ret = ft_strdup(ptr);
+		else
+		{
+			tmp = ret;
+			ret = ft_strjoin(ret, ptr);
+			free(tmp);
+		}
+		free(ptr);
+		(*str)++;
+	}
+	return (ret);
+}
+
+char	*open_expression_in_line(t_env *env, char *str)
+{
+	char	*ptr;
+	char	*tmp;
+	char	*ret;
+
+	ret = NULL;
+	ptr = NULL;
+	tmp = NULL;
+	while (str && *str)
+	{
+		if (*str == '$')
+			ptr = line_width_expression(env, &str);
+		else
+			ptr = line_widthout_expression(&str);
+		if (!ret)
+			ret = ft_strdup(ptr);
+		else
+		{
+			tmp = ret;
+			if (!ptr)
+				ret = ft_strdup(ptr);
+			else
+				ret = ft_strjoin(ret, ptr);
+			free(tmp);
+		}
+		free(ptr);
+	}
+	return (ret);
+}
+
+// char	*open_expression_in_line(t_env *env, char *str)
+// {
+// 	char	*new_line;
+// 	char	*ptr;
+// 	char	*expressed_line;
+// 	char	*ret;
+
+// 	new_line = NULL;
+// 	while(str && *str)
+
+
 
 void	pars_expression(t_addres *addres)
 {
@@ -89,6 +123,8 @@ void	pars_expression(t_addres *addres)
 		{
 			ptr = tmp->token;
 			tmp->token = open_expression_in_line(addres->env, ptr);
+			if (!tmp->token)
+				tmp->token = ft_strdup("");
 			tmp->type = _EXTERNAL;
 			free(ptr);
 			ptr = NULL;

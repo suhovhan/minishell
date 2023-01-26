@@ -77,7 +77,7 @@ int	append_filename(t_filename **head, char *str, int pipe_index, int input_inde
 	return (0);
 }
 
-int	append_env(t_env **env, char *key, char *value)
+int	append_env(t_env **env, char *key, char *value, int flag)
 {
 	t_env	*new_node;
 	t_env	*last_node;
@@ -85,6 +85,7 @@ int	append_env(t_env **env, char *key, char *value)
 	new_node = malloc(sizeof(t_env));
 	new_node->key = key;
 	new_node->value = value;
+	new_node->flag = flag;
 	new_node->next = NULL;
 	if (*env == NULL)
 		*env = new_node;

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 21:03:31 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 19:56:38 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/26 19:53:17 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	set_env(t_env **env, char **envp)
 	{
 		j = -1;
 		split_env = get_env(envp[i]);
-		append_env(env, ft_strdup(split_env[0]), ft_strdup(split_env[1]));
+		append_env(env, ft_strdup(split_env[0]), ft_strdup(split_env[1]), 0);
 		while (split_env[++j])
 		{
 			free(split_env[j]);
@@ -85,4 +85,40 @@ void	set_env(t_env **env, char **envp)
 		free(split_env);
 		split_env = NULL;
 	}
+}
+
+void	change_value(t_env **env, char *key, char *value)
+{
+	t_env	*tmp;
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+		{
+			free(tmp->value);
+			tmp->value = value;
+		}
+		tmp = tmp->next;
+	}
+}
+
+void	setup_env(t_env **env, char **envp)
+{
+	char	*shlvl;
+	int		lvl;
+
+	set_env(env, envp);
+	shlvl = find_value_env(*env, "SHLVL");
+	lvl = ft_atoi(shlvl) + 1;
+	if (lvl == 1000)
+		lvl = 0;
+	else if (lvl > 1000)
+	{
+		printf("minishell: warning: shell level (%d) too high, resetting to 1\n", lvl);
+		lvl = 1;
+	}
+	shlvl = ft_itoa(lvl);
+	change_value(env, "SHLVL", shlvl);
+	append_env(env, ft_strdup("?"), ft_strdup("0"), -1);
 }

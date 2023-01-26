@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:56:25 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/15 15:14:09 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/26 19:28:07 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	list_size(t_env *env)
 		return (0);
 	while (env)
 	{
-		count++;
+		if (env->flag == 0)
+			count++;
 		env = env->next;
 	}
 	return (count);
@@ -40,11 +41,14 @@ char	**list_to_char(t_addres *address)
 	temp = address->env;
 	while (temp)
 	{
-		envp[i] = ft_strjoin(temp->key, "=");
-		ptr = envp[i];
-		envp[i] = ft_strjoin(envp[i], temp->value);
-		free(ptr);
-		i++;
+		if (temp->flag == 0)
+		{
+			envp[i] = ft_strjoin(temp->key, "=");
+			ptr = envp[i];
+			envp[i] = ft_strjoin(envp[i], temp->value);
+			free(ptr);
+			i++;
+		}
 		temp = temp->next;
 	}
 	envp[++i] = 0;

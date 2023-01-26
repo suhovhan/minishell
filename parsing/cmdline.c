@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 05:14:07 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/24 14:47:28 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/26 19:39:32 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ char	*check_path(char *str, char **env_path)
 
 	path = str;
 	i = -1;
+	if(!env_path || !*env_path)
+		return (str);
 	if (!access(str, F_OK))
 		return (str);
 	while (env_path[++i])
@@ -114,7 +116,7 @@ char	*check_path(char *str, char **env_path)
 			str = NULL;
 		}
 	}
-	printf("minishell: %s: command not found\n", path);
+	fprintf(stderr, "minishell: %s: command not found\n", path);
 	// there would be a function that have to kill process
 	return (NULL);
 }

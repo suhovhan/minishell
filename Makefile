@@ -5,9 +5,9 @@ LINK = -lreadline -lcurses
 HD = /var/tmp/hd_files
 
 
-#PREFIX = $(shell find -name ./ashhov_readline 2>/dev/null)
-#INCLUDES = -I./ashhov_readline/include
-#LINKERS	= -L./ashhov_readline/lib -lreadline
+PREFIX = $(shell find ${HOME} -name ashhov_readline 2>/dev/null)
+INCLUDES = -I./ashhov_readline/include
+LINKERS	= -L./ashhov_readline/lib -lreadline
 
 OBJ_SRC_DIR = obj_src
 SRC_SRC = $(wildcard src/*.c)
@@ -67,7 +67,6 @@ $(OBJ_UTILS_DIR)/%.o: ./utils/%.c | $(OBJ_UTILS_DIR)
 all: $(NAME)
 
 $(NAME): $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
-	@#ar -rcs $(NAME) $(DIRECTORY_A)
 	@$(CC) $(CFLAGS) $(LINK) $(LINKERS) $(INCLUDES) -o $(NAME) $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
 	@$(MK) $(HD)
 
@@ -111,7 +110,7 @@ readline:
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re readline
 
 
 
@@ -119,7 +118,6 @@ re: fclean all
 # GREEN='\033[3;32m'
 # NONE='\033[0m'
 
-# PREFIX = $(shell find ${HOME} -name ashhov_readline 2>/dev/null)
 
 # NAME = minishell
 
@@ -131,9 +129,6 @@ re: fclean all
 
 # # OBJS = $(patsubst %.c, %.o, $(SRCS))
 
-# INCLUDES = -ILibft  -I./ashhov_readline/include
-
-# LINKERS	= -L./libft  -L./ashhov_readline/lib -lreadline
 
 # LINKERLIB = ./libft/libft.a
 
@@ -149,9 +144,8 @@ re: fclean all
 	
 # $(NAME): $(OBJS)
 # 	@$(MAKE) -C $(LIBFT)
-# 	@cp $(LINKERLIB) $(NAME)
-# 	@ar -rcs $(NAME) $(OBJS)
-# 	@$(CC) $(CFLAGS) $(LINKERS) $(INCLUDES) $(NAME) -o $(NAME)
+	# @cp $(LINKERLIB) $(NAME)
+	# @ar -rcs $(NAME) $(OBJS)
 # 	@echo $(NONE) $(GREEN)"       >Compiled< $(NAME)" $(NONE)
 
 # # clean:
@@ -164,8 +158,6 @@ re: fclean all
 # # 	@stty sane
 # # 	@echo $(NONE) $(RED)"       >Removed< $(NAME)" $(NONE)
 
-# readline: 
-# 	cd readline-master && make clean && ./configure --prefix=$(PREFIX) && make && make install
 
 # # re: fclean all
 

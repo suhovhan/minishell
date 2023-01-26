@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/25 19:07:36 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/26 19:36:15 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,11 @@ char	*execute_expression(char **heredoc)
 	if (heredoc && *heredoc && **heredoc && **heredoc == '$')
 	{
 		(*heredoc)++;
+		if (**heredoc == '?')
+		{
+			(*heredoc)++;
+			return (ft_strdup("?"));
+		}
 		len = get_wordlen_expression(heredoc);
 		if (len == -1)
 			return ("(null)");
@@ -166,8 +171,7 @@ char *find_value_env(t_env	*env, char *key)
 	value = NULL;
 	while (env)
 	{
-		if (ft_strlen(env->key) == ft_strlen(key) && \
-		!(ft_strncmp(env->key, key, ft_strlen(key))))
+		if (!ft_strcmp(env->key, key))
 		{
 			value = ft_strdup(env->value);
 			break;

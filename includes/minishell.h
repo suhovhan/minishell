@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/25 19:26:56 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/26 19:22:08 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <fcntl.h>
 # include <sys/signal.h>
 # include <signal.h>
+# include <string.h>
+# include <errno.h>
 
 # include "libft.h"
 # include "minishell_structs.h"
@@ -97,14 +99,17 @@ void 	ft_env(char *line, t_addres *cmd);
 
 
 int		append_token(t_token **token, int type, char *str);
-int		append_env(t_env **env, char *key, char *value);
+int		append_env(t_env **env, char *key, char *value, int flag);
 int		append_filename(t_filename **head, char *str, int pipe_index, int input_index);
 int		append_pipeexec(t_pipe_exec **pipe_list, char **cmd_line, char *infile, int out);
 void	remove_node_from_token(t_token **token, int index);
 void	clean_backslash(t_token	**token);
 void	clean_space_from_token(t_token	**token);
-void	set_env(t_env **env, char **envp);
 char 	*find_value_env(t_env	*env, char *key);
+char	**get_env(char	*env);
+void	set_env(t_env **env, char **envp);
+void	change_value(t_env **env, char *key, char *value);
+void	setup_env(t_env **env, char **envp);
 char	*fill_word(char **get_line, char ch, int flag);
 int		word_len(char *get_line, char ch);
 char	*ft_cleanline(char *get_line);
@@ -113,7 +118,6 @@ char	*fillword(char *s, int start_index, int len);
 int		getwordcount(char *s, char c);
 char	*epur_str(char *str);
 // char	*env_path(char **env, char *pathname);
-char	**get_env(char	*env);
 int		get_wordlen_expression(char **heredoc);
 int		get_wordlen_expression(char **heredoc);
 char	*execute_expression(char **heredoc);

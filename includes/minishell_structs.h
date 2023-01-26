@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/24 16:04:19 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/26 19:08:37 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef	struct s_token
 
 typedef struct	s_env
 {
+	int				flag;
 	char 			*key;
 	char 			*value;
 	struct s_env	*next;
