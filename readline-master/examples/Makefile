@@ -21,7 +21,7 @@ RL_LIBRARY_VERSION = 8.0
 SHELL = /bin/sh
 RM = rm -f
 
-prefix = 
+prefix = /Users/suhovhan/Desktop/rank03/minishell/ashhov_readline
 exec_prefix = ${prefix}
 
 datarootdir = ${prefix}/share

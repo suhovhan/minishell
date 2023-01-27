@@ -108,60 +108,9 @@ fclean: clean
 readline: 
 	cd readline-master && make clean && ./configure --prefix=$(PREFIX) && make && make install
 
+norm:
+	norminette $(SRC_SRC) $(SRC_PARS) $(SRC_ERR) $(SRC_LEX) $(SRC_LIBFT) $(SRC_UTILS) $(SRC_BUIL) ./includes
+
 re: fclean all
 
-.PHONY: all clean fclean re readline
-
-
-
-# RED="\033[1;31m"
-# GREEN='\033[3;32m'
-# NONE='\033[0m'
-
-
-# NAME = minishell
-
-# CC = cc
-
-# CFLAGS = -Wall -Werror -Wextra
-
-# # SRCS = $(wildcard *.c) $(wildcard builtins/*.c) $(wildcard error/*.c) $(wildcard builtin/*.c)
-
-# # OBJS = $(patsubst %.c, %.o, $(SRCS))
-
-
-# LINKERLIB = ./libft/libft.a
-
-# LIBFT = ./libft
-
-# # RM = rm -f
-
-# # %.o: %.c
-# # 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-# # all: readline $(NAME) 
-# all: $(NAME) 
-	
-# $(NAME): $(OBJS)
-# 	@$(MAKE) -C $(LIBFT)
-	# @cp $(LINKERLIB) $(NAME)
-	# @ar -rcs $(NAME) $(OBJS)
-# 	@echo $(NONE) $(GREEN)"       >Compiled< $(NAME)" $(NONE)
-
-# # clean:
-# # 	@$(MAKE) clean -C $(LIBFT)
-# # 	@$(RM) $(OBJS)
-
-# # fclean: clean
-# # 	@$(MAKE) fclean -C $(LIBFT)
-# # 	@$(RM) $(NAME)
-# # 	@stty sane
-# # 	@echo $(NONE) $(RED)"       >Removed< $(NAME)" $(NONE)
-
-
-# # re: fclean all
-
-# norm: clean
-# 	norminette $(SRCS)
-
-# .PHONY: all clean fclean re
+.PHONY: all clean fclean re readline norm

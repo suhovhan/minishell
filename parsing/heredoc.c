@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 19:54:23 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 15:09:41 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	*get_heredoc_del(char *name, int index)
 
 int	run_heredoc_external(t_env *env, char *token, int descriptor)
 {
+	char	*ptr;
 	char	*heredoc;
 	char	*heredoc_tmp;
 	char	*expression;
@@ -49,14 +50,16 @@ int	run_heredoc_external(t_env *env, char *token, int descriptor)
 		{
 			if (heredoc_tmp && *heredoc_tmp && *heredoc_tmp == '$')
 			{
-				expression = execute_expression(&heredoc_tmp);
-				if (ft_strlen(expression) == 0)
+				ptr = execute_expression(&heredoc_tmp);
+				if (ft_strlen(ptr) == 0)
 					write(descriptor, "$", 1);
-				expression = find_value_env(env, expression);
+				expression = find_value_env(env, ptr);
 				if (expression && *expression)
 					write(descriptor, expression, ft_strlen(expression));
 				free(expression);
+				free(ptr);
 				expression = NULL;
+				ptr = NULL;
 			}
 			else
 			{

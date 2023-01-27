@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 21:03:31 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/26 19:53:17 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 13:45:08 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void	setup_env(t_env **env, char **envp)
 		printf("minishell: warning: shell level (%d) too high, resetting to 1\n", lvl);
 		lvl = 1;
 	}
+	free(shlvl);
 	shlvl = ft_itoa(lvl);
 	change_value(env, "SHLVL", shlvl);
 	append_env(env, ft_strdup("?"), ft_strdup("0"), -1);

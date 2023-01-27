@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:56:25 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/26 19:28:07 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:53:20 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	**list_to_char(t_addres *address)
 		}
 		temp = temp->next;
 	}
-	envp[++i] = 0;
+	envp[i] = NULL;
 	return (envp);
 }
 

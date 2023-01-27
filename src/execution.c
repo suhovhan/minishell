@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 18:04:41 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/26 19:39:59 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:53:30 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ void	exec_zeropipe(t_addres *addres, char **env)
 		{
 			path = env_path(addres->env);
 			addres->cmd_line[0] = check_path(addres->cmd_line[0], path);
-			execve(addres->cmd_line[0], addres->cmd_line, env);
-			// if (execve(addres->cmd_line[0], addres->cmd_line, env) == -1)
-			// {
-			// 	fprintf(stderr, "minishell-$: %s : No such file or directory\n", addres->cmd_line[0]);
-			// }
-			// exit(127);
+			// execve(addres->cmd_line[0], addres->cmd_line, env);
+			if (execve(addres->cmd_line[0], addres->cmd_line, env) == -1)
+			{
+				fprintf(stderr, "minishell-$: %s : No such file or directory\n", addres->cmd_line[0]);
+			}
+			exit(127);
 		}
 	}
 	dup2(addres->std_out_copy, 1);

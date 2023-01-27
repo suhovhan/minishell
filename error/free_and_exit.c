@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/21 20:17:53 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:07:45 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,11 @@ void	free_mtx(char **mtx)
 	if (mtx)
 	{
 		while (mtx[++i])
+		{
 			free(mtx[i]);
+			mtx[i] = NULL;
+		}
 		free(mtx);
+		mtx = NULL;
 	}
 }

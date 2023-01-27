@@ -48,7 +48,7 @@ MV = mv
 
 SHELL = /bin/sh
 
-prefix = 
+prefix = /Users/suhovhan/Desktop/rank03/minishell/ashhov_readline
 exec_prefix = ${prefix}
 
 datarootdir = ${prefix}/share
