@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 01:53:43 by suhovhan          #+#    #+#             */
-/*   Updated: 2022/12/20 01:54:04 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 17:20:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,4 +15,5 @@
 void	print_no_such_file_or_directory()
 {
 	printf("no such file or directory\n");
+	
 }

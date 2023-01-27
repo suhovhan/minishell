@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 18:04:41 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 14:53:30 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 17:42:32 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,15 @@ void	child_proc(t_addres *addres, t_pipe_exec *tmp, char **env, int (*fds)[2], i
 	if(i == 0)
 	{
 		if (tmp->fd_infile != -1)
+		{
 			dup2(tmp->fd_infile, 0);
+			// close(tmp->fd_infile);
+		}
 		if (tmp->output != -1)
+		{
 			dup2(tmp->output, 1);
+			// close(tmp->output);
+		}
 		else
 			dup2(fds[i][1], 1);
 		close(fds[i][0]);
@@ -82,11 +88,17 @@ void	child_proc(t_addres *addres, t_pipe_exec *tmp, char **env, int (*fds)[2], i
 	else if (i < addres->pipe_count)
 	{
 		if (tmp->fd_infile != -1)
+		{
 			dup2(tmp->fd_infile, 0);
+			// close(tmp->fd_infile);
+		}
 		else
 			dup2(fds[i - 1][0], 0);
 		if (tmp->output != -1)
+		{
 			dup2(tmp->output, 1);
+			// close(tmp->output);
+		}
 		else
 			dup2(fds[i][1], 1);
 		close(fds[i - 1][0]);
@@ -104,11 +116,17 @@ void	child_proc(t_addres *addres, t_pipe_exec *tmp, char **env, int (*fds)[2], i
 	else 
 	{
 		if (tmp->fd_infile != -1)
+		{
 			dup2(tmp->fd_infile, 0);
+			// close(tmp->fd_infile);
+		}
 		else
 			dup2(fds[i - 1][0], 0);
 		if (tmp->output != -1)
+		{
 			dup2(tmp->output, 1);
+			// close(tmp->output);
+		}
 		close(fds[i - 1][0]);
 		close(fds[i - 1][1]);
 		if (isbuiltin(tmp->cmd_line, addres) == -1)
@@ -150,7 +168,7 @@ void	pipe_execution(t_addres *addres, char **env)
 		if (i < addres->pipe_count)
 			close(fds[i][1]);
 		if (i > 0)
-			close(fds[i - 1][0]);	
+			close(fds[i - 1][0]);
 		tmp = tmp->next;
 	}
 	i = -1;

@@ -6,13 +6,13 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 02:58:10 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/26 19:50:43 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 19:39:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	isbuiltin(char **cmd_line, t_addres *status)
+int	isbuiltin(char **cmd_line, t_addres *addres)
 {
 	if (!cmd_line)
 		return (0);
@@ -21,11 +21,11 @@ int	isbuiltin(char **cmd_line, t_addres *status)
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "pwd"))
 		pwd(*cmd_line);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "cd"))
-		cd(cmd_line[1], status->env);
+		cd(cmd_line[1], addres->env);
 	// else if (cmd_line[0] && !ft_strmp(cmd_line[0], "export"))
 	// 	export(cmd_line[1]);
-	// else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "unset"))
-	// 	unset(cmd_line[1]);
+	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "unset"))
+		unset(&(addres->env), cmd_line);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "exit"))
 	{
 		exit(0);

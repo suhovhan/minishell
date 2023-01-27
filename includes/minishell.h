@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/26 19:22:08 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 19:38:38 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int		is_digit(char **str);
 void	ft_exit(char **line, t_addres cmd);
 void	pwd(char	*cmd);
 void 	ft_env(char *line, t_addres *cmd);
+void	unset(t_env **env, char **cmd);
 
 
 //utils functions
