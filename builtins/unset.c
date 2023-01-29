@@ -6,13 +6,13 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 14:15:59 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/27 19:40:33 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 19:57:36 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	unset_handling(char *s)
+int	env_key_handling(char *s)
 {
 	int i;
 
@@ -64,7 +64,7 @@ void	unset(t_env **env, char **cmd)
 	i = 0;
 	while(cmd && cmd[++i])
 	{
-		if (unset_handling(cmd[i]) == 0)
+		if (env_key_handling(cmd[i]) == 0)
 			remove_node(env, cmd[i]);
 		else
 			printf("minishell: unset: `%s': not a valid identifier\n", cmd[i]);

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 21:03:31 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 13:45:08 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 20:42:41 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,20 +87,24 @@ void	set_env(t_env **env, char **envp)
 	}
 }
 
-void	change_value(t_env **env, char *key, char *value)
+int	change_value(t_env **env, char *key, char *value)
 {
 	t_env	*tmp;
+	int		i;
 
 	tmp = *env;
+	i = -1;
 	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, key))
 		{
+			i = 0;
 			free(tmp->value);
 			tmp->value = value;
 		}
 		tmp = tmp->next;
 	}
+	return (i);
 }
 
 void	setup_env(t_env **env, char **envp)

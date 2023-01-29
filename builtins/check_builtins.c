@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 02:58:10 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 19:39:00 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/27 19:55:40 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	isbuiltin(char **cmd_line, t_addres *addres)
 		pwd(*cmd_line);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "cd"))
 		cd(cmd_line[1], addres->env);
-	// else if (cmd_line[0] && !ft_strmp(cmd_line[0], "export"))
-	// 	export(cmd_line[1]);
+	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "export"))
+		export(&addres->env, cmd_line);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "unset"))
 		unset(&(addres->env), cmd_line);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "exit"))

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 19:38:38 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 14:04:27 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ void	ft_exit(char **line, t_addres cmd);
 void	pwd(char	*cmd);
 void 	ft_env(char *line, t_addres *cmd);
 void	unset(t_env **env, char **cmd);
+void	export(t_env **env, char **cmd);
+int		env_key_handling(char *s);
 
 
 //utils functions
@@ -109,7 +111,7 @@ void	clean_space_from_token(t_token	**token);
 char 	*find_value_env(t_env	*env, char *key);
 char	**get_env(char	*env);
 void	set_env(t_env **env, char **envp);
-void	change_value(t_env **env, char *key, char *value);
+int		change_value(t_env **env, char *key, char *value);
 void	setup_env(t_env **env, char **envp);
 char	*fill_word(char **get_line, char ch, int flag);
 int		word_len(char *get_line, char ch);
@@ -123,6 +125,8 @@ int		get_wordlen_expression(char **heredoc);
 int		get_wordlen_expression(char **heredoc);
 char	*execute_expression(char **heredoc);
 
+//	signal functions
+void	sigint_main(int	signum);
 
 //
 void	pipe_execution(t_addres *addres, char **env);

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 17:01:06 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 15:04:36 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int ac, char **av, char **env)
 	addres.std_out_copy = dup(1);
 	addres.std_input_copy = dup(0);
 	// rl_catch_signals = 0;
+	// signal(SIGINT, sigint_main);
 	setup_env(&(addres.env), env);
 	while (1)
 	{
@@ -50,6 +51,12 @@ int	main(int ac, char **av, char **env)
 		}
 		append_addres(&addres, &get_line_tmp);
 		clean_backslash(&addres.token);
+		// t_token	*tmp = addres.token;
+		// while (tmp)
+		// {
+		// 	printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
+		// 	tmp = tmp->next;
+		// }
 		if (check_pipe(addres.token) == -1 || heredoc(&addres) == -1 || check_redirections(addres.token) == -1)
 		{
 			free(get_line);
@@ -57,11 +64,12 @@ int	main(int ac, char **av, char **env)
 			continue;
 		}
 		pars_expression(&addres);
-		// redirect_input(&addres);
+		redirect_input(&addres);
 		run_redirections(&addres);
 		clean_space_from_token(&(addres.token));
 		environment = list_to_char(&addres);
 		execution(&addres, environment);
+		change_value(&(addres.env), "?", ft_itoa(addres.exit_status));
 		free_mtx(environment);
 		free(get_line);
 		get_line = NULL;

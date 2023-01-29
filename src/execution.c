@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 18:04:41 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 17:42:32 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 13:27:53 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,19 @@ void	exec_zeropipe(t_addres *addres, char **env)
 	{
 		pid = fork();
 		if (pid)
-			wait(&pid);
+		{
+			waitpid(pid, &addres->exit_status, 0);
+			if (WIFEXITED(addres->exit_status))
+				addres->exit_status = WEXITSTATUS(addres->exit_status);
+			else if (WIFSIGNALED(addres->exit_status))
+			{
+				if (addres->exit_status == SIGQUIT)
+					write(1, "Quit: 3\n", 8);
+				else if (addres->exit_status == SIGINT)
+					write(1, "\n", 1);
+				addres->exit_status += 128;
+			}
+		}
 		else
 		{
 			path = env_path(addres->env);
@@ -66,12 +78,12 @@ void	child_proc(t_addres *addres, t_pipe_exec *tmp, char **env, int (*fds)[2], i
 		if (tmp->fd_infile != -1)
 		{
 			dup2(tmp->fd_infile, 0);
-			// close(tmp->fd_infile);
+			close(tmp->fd_infile);
 		}
 		if (tmp->output != -1)
 		{
 			dup2(tmp->output, 1);
-			// close(tmp->output);
+			close(tmp->output);
 		}
 		else
 			dup2(fds[i][1], 1);
@@ -90,14 +102,14 @@ void	child_proc(t_addres *addres, t_pipe_exec *tmp, char **env, int (*fds)[2], i
 		if (tmp->fd_infile != -1)
 		{
 			dup2(tmp->fd_infile, 0);
-			// close(tmp->fd_infile);
+			close(tmp->fd_infile);
 		}
 		else
 			dup2(fds[i - 1][0], 0);
 		if (tmp->output != -1)
 		{
 			dup2(tmp->output, 1);
-			// close(tmp->output);
+			close(tmp->output);
 		}
 		else
 			dup2(fds[i][1], 1);
@@ -118,14 +130,14 @@ void	child_proc(t_addres *addres, t_pipe_exec *tmp, char **env, int (*fds)[2], i
 		if (tmp->fd_infile != -1)
 		{
 			dup2(tmp->fd_infile, 0);
-			// close(tmp->fd_infile);
+			close(tmp->fd_infile);
 		}
 		else
 			dup2(fds[i - 1][0], 0);
 		if (tmp->output != -1)
 		{
 			dup2(tmp->output, 1);
-			// close(tmp->output);
+			close(tmp->output);
 		}
 		close(fds[i - 1][0]);
 		close(fds[i - 1][1]);
@@ -173,7 +185,19 @@ void	pipe_execution(t_addres *addres, char **env)
 	}
 	i = -1;
 	while(++i <= addres->pipe_count)
-		wait(NULL);
+	{
+		waitpid(pid[i], &addres->exit_status, 0);
+		if (WIFEXITED(addres->exit_status))
+			;
+		else if (WIFSIGNALED(addres->exit_status))
+		{
+			if (addres->exit_status == SIGQUIT && i == addres->pipe_count + 1)
+				write(1, ":Quit 3\n", 8);
+			else if (addres->exit_status == SIGINT && i == addres->pipe_count + 1)
+				write(1, "\n", 1);
+			addres->exit_status += 128;
+		}
+	}
 	free(fds);
 	free(pid);
 }

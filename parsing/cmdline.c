@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 05:14:07 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/26 19:39:32 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 12:46:27 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,6 @@ char	*check_path(char *str, char **env_path)
 		}
 	}
 	fprintf(stderr, "minishell: %s: command not found\n", path);
-	// there would be a function that have to kill process
+	exit(127);
 	return (NULL);
 }

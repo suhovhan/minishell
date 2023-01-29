@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/26 16:23:40 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/28 18:59:41 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,21 +99,46 @@ char	*open_expression_in_line(t_env *env, char *str)
 	return (ret);
 }
 
-// char	*open_expression_in_line(t_env *env, char *str)
-// {
-// 	char	*new_line;
-// 	char	*ptr;
-// 	char	*expressed_line;
-// 	char	*ret;
+void	setup_needle_list(t_token **token, char *line, int index)
+{
+	t_token	*new_list;
+	t_token	*tmp;
+	t_token	*ptr;
 
-// 	new_line = NULL;
-// 	while(str && *str)
-
-
+	set_token(&new_list, &line);
+	tmp = *token;
+	while (tmp && tmp->index != index)
+		tmp = tmp->next;
+	ptr = tmp->next;
+	if (tmp->prev)
+	{
+		tmp->prev->next = new_list;
+		new_list->prev = tmp->prev;
+	}
+	while (new_list->next)
+	{
+		new_list->index = -1;
+		if (new_list->type == _HEREDOC)
+			new_list->type = _EXTERNAL;
+		new_list = new_list->next;
+	}
+	new_list->index = -1;
+	if (new_list->type == _HEREDOC)
+		new_list->type = _EXTERNAL;
+	if (ptr)
+	{
+		ptr->prev = new_list;
+		new_list->next = ptr;
+	}
+	while (new_list->prev)
+		new_list = new_list->prev;
+	*token = new_list;
+}
 
 void	pars_expression(t_addres *addres)
 {
 	t_token	*tmp;
+	t_token	*last;
 	char	*ptr;
 
 	tmp = addres->token;
@@ -125,9 +150,18 @@ void	pars_expression(t_addres *addres)
 			tmp->token = open_expression_in_line(addres->env, ptr);
 			if (!tmp->token)
 				tmp->token = ft_strdup("");
+			else if (tmp->type == _EXTERNAL && ft_strcmp(ptr, tmp->token))
+			{
+				last = tmp->next;
+				setup_needle_list(&addres->token, tmp->token, tmp->index);
+				free(tmp->token);
+				free(tmp);
+				free(ptr);
+				tmp = last;
+				continue;
+			}
 			tmp->type = _EXTERNAL;
 			free(ptr);
-			ptr = NULL;
 		}
 		else if (tmp->type == _EXPANSION_SINGLE)
 			tmp->type = _EXTERNAL;
