@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 14:15:59 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/27 19:57:36 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/31 13:54:49 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	unset(t_env **env, char **cmd)
 	int	i;
 
 	i = 0;
+	printf("%s\n", cmd[i]);
 	while(cmd && cmd[++i])
 	{
 		if (env_key_handling(cmd[i]) == 0)

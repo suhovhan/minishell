@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:56:25 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/27 19:57:57 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 16:26:33 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void ft_env(char *line, t_addres *cmd)
 			cmd->exit_status = 127;
 		}
 		if (env_handling(get_line) == 0)
-		{	
+		{
 			printf("%s\n", list_to_char(cmd)[++i]);
 			cmd->exit_status = 0;
 		}

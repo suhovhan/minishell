@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:45 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/25 18:06:30 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:33:33 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	set_pipelist(t_addres *addres)
 
 void	open_infile(t_pipe_exec **pipelist)
 {
-	t_pipe_exec *tmp;
+	t_pipe_exec	*tmp;
 
 	tmp = *pipelist;
 	while (tmp)
@@ -59,4 +59,3 @@ void	open_infile(t_pipe_exec **pipelist)
 		tmp = tmp->next;
 	}
 }
-

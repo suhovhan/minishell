@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 01:51:01 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/25 17:13:37 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:42:08 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	redirect_input(t_addres *addres)
 			if (descriptor == -1)
 				print_no_such_file_or_directory();
 			if (!addres->infile || index > addres->infile->input_index)
-				add_infile(addres, ft_strdup(tmp->token), pipe_index, tmp->index);
+				add_infile(addres, ft_strdup(tmp->token), \
+				pipe_index, tmp->index);
 			close(addres->descriptor_input);
 			tmp = tmp->next;
 			remove_node_from_token(&(addres->token), index);
@@ -50,4 +51,3 @@ void	redirect_input(t_addres *addres)
 			tmp = tmp->next;
 	}
 }
-

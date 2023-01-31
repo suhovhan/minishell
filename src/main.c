@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 15:04:36 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/30 20:12:23 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,42 @@ void	p_mtx(char **mtx)
 	}
 }
 
+int a()
+{
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
 	t_addres	addres;
+	struct termios def;
 	char		*get_line;
 	char		*get_line_tmp;
 	char		**environment;
 	addres.std_out_copy = dup(1);
 	addres.std_input_copy = dup(0);
-	// rl_catch_signals = 0;
-	// signal(SIGINT, sigint_main);
+	rl_catch_signals = 0;
+	addres.exit_status = 0;
 	setup_env(&(addres.env), env);
+	rl_event_hook = a;
+	if (tcgetattr(0, &def) < 0)
+		perror("minishell: signal_error1");
 	while (1)
 	{
+		if (tcsetattr(0, TCSANOW, &def) < 0)
+			printf("minishell: signal_error2\n");
+		sig_main(0);
 		get_line = readline("minishell-$ ");
 		get_line_tmp = get_line;
 		if (get_line && *get_line)
 			add_history(get_line);
-		else
-			continue;
+		if (!get_line)
+		{
+			ft_putstr_fd("exit\n", 1);
+			exit(addres.exit_status);
+		}
 		if (check_quotes(get_line))
 		{
 			free(get_line);
@@ -51,13 +66,19 @@ int	main(int ac, char **av, char **env)
 		}
 		append_addres(&addres, &get_line_tmp);
 		clean_backslash(&addres.token);
-		// t_token	*tmp = addres.token;
-		// while (tmp)
-		// {
-		// 	printf("index = %d\ttype = %d\ttoken = %s\n", tmp->index, tmp->type, tmp->token);
-		// 	tmp = tmp->next;
-		// }
-		if (check_pipe(addres.token) == -1 || heredoc(&addres) == -1 || check_redirections(addres.token) == -1)
+		if (check_pipe(addres.token) == -1)
+		{
+			free(get_line);
+			free_token(&(addres.token));
+			continue;
+		}
+		if (heredoc(&addres) == -1)
+		{
+			free(get_line);
+			free_token(&(addres.token));
+			continue;
+		}
+		if (check_redirections(addres.token) == -1)
 		{
 			free(get_line);
 			free_token(&(addres.token));

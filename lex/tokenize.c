@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:21 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/28 19:06:01 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:35:06 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,15 @@ void	fill_external(char **get_line, t_token **token)
 	res = malloc(sizeof(char) * (ft_strlen(*get_line) + 1));
 	while (**get_line == ' ')
 		res[++i] = ' ';
-		while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
-			&& **get_line != '>' && **get_line != '|' \
-			&& **get_line != '"' && **get_line != 39) && res)
-		{
-			res[++i] = **get_line;
-			(*get_line)++;
-		}
+	while (**get_line != '\0' && (**get_line != ' ' && **get_line != '<' \
+	&& **get_line != '>' && **get_line != '|' \
+	&& **get_line != '"' && **get_line != 39) && res)
+	{
+		res[++i] = **get_line;
+		(*get_line)++;
+	}
 	res[++i] = '\0';
-	line = (char*)malloc(sizeof(char) * (ft_strlen(res) + 1));
+	line = (char *)malloc(sizeof(char) * (ft_strlen(res) + 1));
 	i = -1;
 	while (res[++i])
 		line[i] = res[i];

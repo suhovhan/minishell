@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:59 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/15 14:31:51 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:20:52 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 int	check_single_quotes(char **get_line)
 {
-	int	single = 0;
+	int	single;
 
-	single++;
+	single = 1;
 	(*get_line)++;
 	while (get_line && *get_line && **get_line)
 	{
 		if (get_line && *get_line && **get_line == 39)
 		{
 			single++;
-			break;
+			break ;
 		}
 		else
 			(*get_line)++;
@@ -33,16 +33,16 @@ int	check_single_quotes(char **get_line)
 
 int	check_duble_quotes(char **get_line)
 {
-	int	duble = 0;
+	int	duble;
 
-	duble++;
+	duble = 1;
 	(*get_line)++;
 	while (get_line && *get_line && **get_line)
 	{
 		if (get_line && *get_line && **get_line == '"')
 		{
 			duble++;
-			break;
+			break ;
 		}
 		else
 			(*get_line)++;
@@ -84,7 +84,8 @@ int	check_redirections(t_token *token)
 			if (token && token->type == _SPACE)
 				token = token->next;
 			if (token == NULL || (token->type != _EXTERNAL && \
-			token->type != _EXPANSION_DUBLE && token->type != _EXPANSION_SINGLE))
+			token->type != _EXPANSION_DUBLE && \
+			token->type != _EXPANSION_SINGLE))
 			{
 				print_syntax_error(1);
 				return (-1);
@@ -97,7 +98,7 @@ int	check_redirections(t_token *token)
 
 int	check_heredoc(t_addres *addres)
 {
-	int	i;
+	int		i;
 	t_token	*tmp;
 
 	i = 0;

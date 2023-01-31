@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 15:09:41 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/30 20:20:15 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char	*get_heredoc_del(char *name, int index)
 {
 	char	*del;
 	char	*str;
-	
 
 	str = ft_itoa(index);
 	del = ft_strjoin("/var/tmp/hd_files/.heredoc_", str);
@@ -38,9 +37,10 @@ int	run_heredoc_external(t_env *env, char *token, int descriptor)
 	while (1)
 	{
 		heredoc = readline("> ");
+		if (!heredoc)
+			break;
 		heredoc_tmp = heredoc;
-		if (ft_strlen(heredoc_tmp) == ft_strlen(token) && \
-		!ft_strncmp(heredoc_tmp, token, ft_strlen(token)))
+		if (!ft_strcmp(heredoc_tmp, token))
 		{
 			free(heredoc);
 			heredoc = NULL;
@@ -81,6 +81,8 @@ int	run_heredoc_expansion(char *token, int descriptor)
 	while (1)
 	{
 		heredoc = readline("> ");
+		if (!heredoc)
+			break;
 		if (ft_strlen(heredoc) == ft_strlen(token) && \
 		!ft_strncmp(heredoc, token, ft_strlen(token)))
 		{
@@ -113,7 +115,8 @@ char	*run_heredoc(t_addres *addres, char *token, int type, int index)
 	return (del);
 }
 
-void	add_infile(t_addres *addres, char *filename, int pipe_index, int input_index)
+void	add_infile(t_addres *addres, char *filename, \
+int pipe_index, int input_index)
 {
 	t_filename	*tmp;
 
@@ -140,6 +143,7 @@ int	heredoc(t_addres *addres)
 	pipe_index = 0;
 	tmp = addres->token;
 	ptr = addres->token;
+	del = NULL;
 	while (tmp)
 	{
 		if (tmp->type == _PIPE)
@@ -155,13 +159,22 @@ int	heredoc(t_addres *addres)
 				tmp = tmp->next;
 				remove_node_from_token(&(addres->token), index);
 			}
-			if (!tmp || (tmp->type != _EXTERNAL && tmp->type != _EXPANSION_SINGLE \
+			if (!tmp || (tmp->type != _EXTERNAL && \
+			tmp->type != _EXPANSION_SINGLE \
 			&& tmp->type != _EXPANSION_DUBLE))
 			{
 				print_syntax_error(1);
 				return (-1);
 			}
-			del = run_heredoc(addres, tmp->token, tmp->type, tmp->index);
+			int pid = fork();
+			if (pid)
+				wait(NULL);
+			else
+			{
+				sig_main(3);
+				del = run_heredoc(addres, tmp->token, tmp->type, tmp->index);
+				exit(0);
+			}
 			add_infile(addres, del, pipe_index, tmp->index);
 			index = tmp->index;
 			tmp = tmp->next;

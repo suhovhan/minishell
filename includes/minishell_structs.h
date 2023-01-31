@@ -6,14 +6,12 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 14:29:32 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:29:51 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_STRUCTS_H
 # define MINISHELL_STRUCTS_H
-
-typedef struct s_pipe_execution_structure t_pipe_execution_structure;
 
 typedef enum s_types
 {
@@ -29,24 +27,24 @@ typedef enum s_types
 	_DELIMITER = 9, // redirection filename
 }			t_types;
 
-typedef	struct s_token
+typedef struct s_token
 {
-	int					index;
-	int					type;
-	char				*token;
+	int				index;
+	int				type;
+	char			*token;
 	struct s_token	*next;
 	struct s_token	*prev;
 }				t_token;
 
-typedef struct	s_env
+typedef struct s_env
 {
 	int				flag;
-	char 			*key;
-	char 			*value;
+	char			*key;
+	char			*value;
 	struct s_env	*next;
 }				t_env;
 
-typedef	struct s_filename
+typedef struct s_filename
 {
 	int					input_index;
 	int					pipe_index;
@@ -57,19 +55,19 @@ typedef	struct s_filename
 
 typedef struct s_pipe_exec
 {
-	char	**cmd_line;
-	char	*infile;
-	int		fd_infile;
-	int		output;
+	char				**cmd_line;
+	char				*infile;
+	int					fd_infile;
+	int					output;
 	struct s_pipe_exec	*next;
 }				t_pipe_exec;
 
-typedef struct	s_addres
+typedef struct s_addres
 {
 	int				exit_status;
 	int				descriptor_input;
 	int				std_out_copy;
-	int 			std_input_copy;
+	int				std_input_copy;
 	int				*descriptor_output;
 	int				pipe_count;
 	int				shlvl;
@@ -79,6 +77,5 @@ typedef struct	s_addres
 	t_env			*env;
 	t_token			*token;
 }				t_addres;
-
 
 #endif

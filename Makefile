@@ -5,9 +5,9 @@ LINK = -lreadline -lcurses
 HD = /var/tmp/hd_files
 
 
-PREFIX = $(shell find ${HOME} -name ashhov_readline 2>/dev/null)
-INCLUDES = -I./ashhov_readline/include
-LINKERS	= -L./ashhov_readline/lib -lreadline
+PREFIX = $(shell find ${HOME} -name mpetrosy 2>/dev/null)
+INCLUDES = -I./mpetrosy/include
+LINKERS	= -L./mpetrosy/lib -lreadline
 
 OBJ_SRC_DIR = obj_src
 SRC_SRC = $(wildcard src/*.c)

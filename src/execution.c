@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 18:04:41 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 13:27:53 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/30 17:13:05 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	exec_zeropipe(t_addres *addres, char **env)
 	close(addres->descriptor_output[0]);
 	if (isbuiltin(addres->cmd_line, addres) == -1)
 	{
+		sig_main(1);
 		pid = fork();
 		if (pid)
 		{
@@ -45,13 +46,11 @@ void	exec_zeropipe(t_addres *addres, char **env)
 		}
 		else
 		{
+			sig_main(2);
 			path = env_path(addres->env);
 			addres->cmd_line[0] = check_path(addres->cmd_line[0], path);
-			// execve(addres->cmd_line[0], addres->cmd_line, env);
 			if (execve(addres->cmd_line[0], addres->cmd_line, env) == -1)
-			{
 				fprintf(stderr, "minishell-$: %s : No such file or directory\n", addres->cmd_line[0]);
-			}
 			exit(127);
 		}
 	}
@@ -73,6 +72,7 @@ void	child_proc(t_addres *addres, t_pipe_exec *tmp, char **env, int (*fds)[2], i
 {
 	char	**path;
 
+	sig_main(2);
 	if(i == 0)
 	{
 		if (tmp->fd_infile != -1)
@@ -172,6 +172,7 @@ void	pipe_execution(t_addres *addres, char **env)
 	i = -1;
 	while(++i <= addres->pipe_count)
 	{
+		sig_main(1);
 		pid[i] = fork();
 		if (pid[i] == -1) // kill all processes
 			exit (1);

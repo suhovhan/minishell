@@ -52,7 +52,7 @@ SHELL = /bin/sh
 host_os = darwin18.7.0
 host_vendor = apple
 
-prefix = /Users/suhovhan/Desktop/rank03/minishell/ashhov_readline
+prefix = /Users/suhovhan/Desktop/rank03/minishell/mpetrosy
 exec_prefix = ${prefix}
 includedir = ${prefix}/include
 bindir = ${exec_prefix}/bin

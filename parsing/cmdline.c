@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 05:14:07 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 12:46:27 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:36:58 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**cmd_line(t_token *token)
 	int		count;
 	int		i;
 	char	**cmd_line;
-	t_token *tmp;
+	t_token	*tmp;
 
 	tmp = token;
 	count = 0;
@@ -56,7 +56,7 @@ char	**cmd_line(t_token *token)
 		if (token && token->type != _PIPE)
 			token = token->next;
 	}
-	cmd_line = (char**)malloc(sizeof(char*) * (count + 1));
+	cmd_line = (char **)malloc(sizeof(char *) * (count + 1));
 	while (++i < count)
 		cmd_line[i] = get_arg(&tmp);
 	cmd_line[i] = 0;
@@ -83,7 +83,7 @@ char	**env_path(t_env *env)
 				free(ptr);
 				ptr = NULL;
 			}
-			break;
+			break ;
 		}
 		env = env->next;
 	}
@@ -97,7 +97,7 @@ char	*check_path(char *str, char **env_path)
 
 	path = str;
 	i = -1;
-	if(!env_path || !*env_path)
+	if (!env_path || !*env_path)
 		return (str);
 	if (!access(str, F_OK))
 		return (str);

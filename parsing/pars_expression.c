@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/28 18:59:41 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:42:51 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*line_width_expression(t_env *env, char **str)
 	return (expressed_line);
 }
 
-char *line_widthout_expression(char **str)
+char	*line_widthout_expression(char **str)
 {
 	char	*ret;
 	char	*ptr;
@@ -158,7 +158,7 @@ void	pars_expression(t_addres *addres)
 				free(tmp);
 				free(ptr);
 				tmp = last;
-				continue;
+				continue ;
 			}
 			tmp->type = _EXTERNAL;
 			free(ptr);

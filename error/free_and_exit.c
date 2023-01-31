@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 14:07:45 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/29 19:14:04 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 void	free_addres(t_addres *addres)
 {
 	free_token(&addres->token);
-	free_filename(&addres->infile);	
+	free_filename(&addres->infile);
 	free_pipeexec(&addres->pipe_list);
 	free(addres->descriptor_output);
 }
 
 int	free_token(t_token **token)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	if (!token || !*token)
 		return (0);
@@ -38,7 +38,7 @@ int	free_token(t_token **token)
 
 int	free_filename(t_filename **filename)
 {
-	t_filename *tmp;
+	t_filename	*tmp;
 
 	if (!filename || !*filename)
 		return (0);
@@ -54,7 +54,7 @@ int	free_filename(t_filename **filename)
 
 int	free_pipeexec(t_pipe_exec **pipelist)
 {
-	t_pipe_exec *tmp;
+	t_pipe_exec	*tmp;
 
 	if (!pipelist || !*pipelist)
 		return (0);
@@ -73,7 +73,7 @@ int	free_pipeexec(t_pipe_exec **pipelist)
 
 int	free_env(t_env **env)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	if (!env || !*env)
 		return (0);
@@ -88,7 +88,7 @@ int	free_env(t_env **env)
 	return (0);
 }
 
-void	exit_shell(t_addres *addres, int	exit_code)
+void	exit_shell(t_addres *addres, int exit_code)
 {
 	if (exit_code == _HEREDOC)
 		printf("minishell: maximum here-document count exceeded\n");
