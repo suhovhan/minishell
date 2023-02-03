@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 19:41:17 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 19:42:51 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 17:47:56 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,20 @@ char	*line_widthout_expression(char **str)
 	return (ret);
 }
 
+void	norm_expression_line(char **ptr, char **tmp, char **ret)
+{
+	*ret = NULL;
+	*ptr = NULL;
+	*tmp = NULL;	
+}
+
 char	*open_expression_in_line(t_env *env, char *str)
 {
 	char	*ptr;
 	char	*tmp;
 	char	*ret;
 
-	ret = NULL;
-	ptr = NULL;
-	tmp = NULL;
+	norm_expression_line(&ptr, &tmp, &ret);
 	while (str && *str)
 	{
 		if (*str == '$')
@@ -99,13 +104,31 @@ char	*open_expression_in_line(t_env *env, char *str)
 	return (ret);
 }
 
+t_token	*set_newlist(char *line)
+{
+	t_token	*new_list;
+	t_token *tmp;
+	
+	new_list = 0;
+	set_token(&new_list, &line);
+	tmp = new_list;
+	while (tmp)
+	{
+		tmp->index = -1;
+		if (new_list->type == _HEREDOC)
+			new_list->type = _EXTERNAL;
+		tmp = tmp->next;
+	}
+	return (new_list);
+}
+
 void	setup_needle_list(t_token **token, char *line, int index)
 {
 	t_token	*new_list;
 	t_token	*tmp;
 	t_token	*ptr;
 
-	set_token(&new_list, &line);
+	new_list = set_newlist(line);
 	tmp = *token;
 	while (tmp && tmp->index != index)
 		tmp = tmp->next;
@@ -116,15 +139,7 @@ void	setup_needle_list(t_token **token, char *line, int index)
 		new_list->prev = tmp->prev;
 	}
 	while (new_list->next)
-	{
-		new_list->index = -1;
-		if (new_list->type == _HEREDOC)
-			new_list->type = _EXTERNAL;
 		new_list = new_list->next;
-	}
-	new_list->index = -1;
-	if (new_list->type == _HEREDOC)
-		new_list->type = _EXTERNAL;
 	if (ptr)
 	{
 		ptr->prev = new_list;
@@ -153,7 +168,7 @@ void	pars_expression(t_addres *addres)
 			else if (tmp->type == _EXTERNAL && ft_strcmp(ptr, tmp->token))
 			{
 				last = tmp->next;
-				setup_needle_list(&addres->token, tmp->token, tmp->index);
+				setup_needle_list(&(addres->token), tmp->token, tmp->index);
 				free(tmp->token);
 				free(tmp);
 				free(ptr);

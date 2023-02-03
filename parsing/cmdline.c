@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 05:14:07 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 19:36:58 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/02 18:58:30 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,33 +90,88 @@ char	**env_path(t_env *env)
 	return (env_path);
 }
 
-char	*check_path(char *str, char **env_path)
+char	*my_strchr(char *str, char c)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i] && str[i] != c)
+		;
+	if (str[i] != '\0')
+		return (str);
+	return (0);
+}
+
+int	check_backslash(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] == '/')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	return (-1);
+}
+
+void	norm_check_cmd(char *str)
+{
+	if ((opendir(str) && my_strchr(str, '/') != 0) \
+	|| (check_backslash(str) == 0 && ft_strlen(str) != 0))
+	{
+		ft_putstr_fd("minishell-$: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": is a directory\n", 2);
+		exit(126);
+	}
+	if (access(str, F_OK) == 0 && access(str, X_OK) != 0)
+	{
+		ft_putstr_fd("minishell-$: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		exit(126);
+	}
+	if (opendir(str) == 0 && my_strchr(str, '/') != 0)
+	{
+		ft_putstr_fd("minishell-$: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		exit(127);
+	}
+}
+
+void	check_cmd(char *str, char **path)
+{
+	norm_check_cmd(str);
+	if (!path)
+	{
+		ft_putstr_fd("minishell-$: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		exit(127);
+	}
+	ft_putstr_fd("minishell-$: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	exit(127);
+}
+
+char	*check_path(char *str, char **env_path, int flag)
 {
 	int		i;
 	char	*path;
 
-	path = str;
+	path = 0;
 	i = -1;
-	if (!env_path || !*env_path)
-		return (str);
+	if (flag == 1)
+		check_cmd(str, env_path);
+	while (env_path && env_path[++i])
+	{
+		path = ft_strjoin(env_path[i], str);
+		if (!access(path, F_OK))
+			return (path);
+	}
 	if (!access(str, F_OK))
 		return (str);
-	while (env_path[++i])
-	{
-		str = ft_strjoin(env_path[i], path);
-		if (!access(str, F_OK))
-		{
-			free(path);
-			path = NULL;
-			return (str);
-		}
-		else
-		{
-			free(str);
-			str = NULL;
-		}
-	}
-	fprintf(stderr, "minishell: %s: command not found\n", path);
-	exit(127);
 	return (NULL);
 }

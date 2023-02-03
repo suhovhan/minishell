@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:47:29 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/27 15:06:09 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/02 19:07:46 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ void	go_to(char *cur_path)
 {
 	char	*go_to_path;
 	t_env	*temp;
-	t_env	*env = NULL;
+	t_env	*env;
 
+	env = NULL;
 	go_to_path = NULL;
 	go_to_path = getcwd(go_to_path, 256);
-	// printf("%s\n", getcwd(go_to_path, 256));
 	temp = env;
 	while (temp)
 	{
@@ -59,9 +59,14 @@ void	cd(char *line, t_env *env)
 	else if (get_line[0])
 	{
 		if (chdir(get_line[0]) == -1)
-			printf("minishell: cd: %s: No such file or directory\n", get_line[0]);
+		{
+			ft_putstr_fd("minishell: cd: ", 2);
+			ft_putstr_fd(get_line[0], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);	
+		}
 		else
 			go_to(get_line[0]);
+		printf("%s\n", get_line[0]);
 	}
 	free_mtx(get_line);
 }

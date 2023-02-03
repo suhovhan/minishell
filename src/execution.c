@@ -6,171 +6,137 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 18:04:41 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/30 17:13:05 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 17:19:51 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	exec_zeropipe(t_addres *addres, char **env)
+void	run_cmd(t_addres *addres, t_pipe_exec *tmp, char **env)
 {
-	int		pid;
 	char	**path;
+	char	*cmd;
 
-	path = NULL;
-	addres->cmd_line = cmd_line(addres->token);
-	if (addres->infile)
-		addres->descriptor_input = open(addres->infile->filename, O_RDONLY);
-	dup2(addres->descriptor_input, 0);
-	if (addres->descriptor_output[0])
-		dup2(addres->descriptor_output[0], 1);
-	close(addres->descriptor_input);
-	close(addres->descriptor_output[0]);
-	if (isbuiltin(addres->cmd_line, addres) == -1)
+	cmd = 0;
+	if (isbuiltin(tmp->cmd_line, addres) == -1)
 	{
-		sig_main(1);
-		pid = fork();
-		if (pid)
-		{
-			waitpid(pid, &addres->exit_status, 0);
-			if (WIFEXITED(addres->exit_status))
-				addres->exit_status = WEXITSTATUS(addres->exit_status);
-			else if (WIFSIGNALED(addres->exit_status))
-			{
-				if (addres->exit_status == SIGQUIT)
-					write(1, "Quit: 3\n", 8);
-				else if (addres->exit_status == SIGINT)
-					write(1, "\n", 1);
-				addres->exit_status += 128;
-			}
-		}
-		else
-		{
-			sig_main(2);
-			path = env_path(addres->env);
-			addres->cmd_line[0] = check_path(addres->cmd_line[0], path);
-			if (execve(addres->cmd_line[0], addres->cmd_line, env) == -1)
-				fprintf(stderr, "minishell-$: %s : No such file or directory\n", addres->cmd_line[0]);
-			exit(127);
-		}
+		path = env_path(addres->env);
+		cmd = ft_strdup(tmp->cmd_line[0]);
+		tmp->cmd_line[0] = check_path(tmp->cmd_line[0], path, 0);
+		execve(tmp->cmd_line[0], tmp->cmd_line, env);
+		check_path(cmd, path, 1);
 	}
-	dup2(addres->std_out_copy, 1);
-	dup2(addres->std_input_copy, 0);
-	free_mtx(addres->cmd_line);
-	free_mtx(path);
 }
 
-void	execution(t_addres *addres, char **env)
+void	first_cmd(t_addres *addres, t_pipe_exec *tmp, \
+char **env, int (*fds)[2], int i)
 {
-	if (addres->pipe_count == 0)
-		exec_zeropipe(addres, env);
-	else if (addres->pipe_count > 0)
-		pipe_execution(addres, env);
+	if (tmp->fd_infile != -1)
+	{
+		dup2(tmp->fd_infile, 0);
+		close(tmp->fd_infile);
+	}
+	if (tmp->output != -1)
+	{
+		dup2(tmp->output, 1);
+		close(tmp->output);
+	}
+	else
+		dup2(fds[i][1], 1);
+	close(fds[i][0]);
+	close(fds[i][1]);
+	run_cmd(addres, tmp, env);
+	exit(0);	
 }
 
-void	child_proc(t_addres *addres, t_pipe_exec *tmp, char **env, int (*fds)[2], int i)
+void	needle_cmd(t_addres *addres, t_pipe_exec *tmp, \
+char **env, int (*fds)[2], int i)
 {
-	char	**path;
+	if (tmp->fd_infile != -1)
+	{
+		dup2(tmp->fd_infile, 0);
+		close(tmp->fd_infile);
+	}
+	else
+		dup2(fds[i - 1][0], 0);
+	if (tmp->output != -1)
+	{
+		dup2(tmp->output, 1);
+		close(tmp->output);
+	}
+	else
+		dup2(fds[i][1], 1);
+	close(fds[i - 1][0]);
+	close(fds[i - 1][1]);
+	close(fds[i][0]);
+	close(fds[i][1]);
+	run_cmd(addres, tmp, env);
+	exit(0);
+}
 
+void	last_cmd(t_addres *addres, t_pipe_exec *tmp, \
+char **env, int (*fds)[2], int i)
+{
+	if (tmp->fd_infile != -1)
+	{
+		dup2(tmp->fd_infile, 0);
+		close(tmp->fd_infile);
+	}
+	else
+		dup2(fds[i - 1][0], 0);
+	if (tmp->output != -1)
+	{
+		dup2(tmp->output, 1);
+		close(tmp->output);
+	}
+	close(fds[i - 1][0]);
+	close(fds[i - 1][1]);
+	run_cmd(addres, tmp, env);
+	exit(0);
+}
+
+void	child_proc(t_addres *addres, t_pipe_exec *tmp, \
+char **env, int (*fds)[2], int i)
+{
 	sig_main(2);
-	if(i == 0)
-	{
-		if (tmp->fd_infile != -1)
-		{
-			dup2(tmp->fd_infile, 0);
-			close(tmp->fd_infile);
-		}
-		if (tmp->output != -1)
-		{
-			dup2(tmp->output, 1);
-			close(tmp->output);
-		}
-		else
-			dup2(fds[i][1], 1);
-		close(fds[i][0]);
-		close(fds[i][1]);
-		if (isbuiltin(tmp->cmd_line, addres) == -1)
-		{
-			path = env_path(addres->env);
-			tmp->cmd_line[0] = check_path(tmp->cmd_line[0], path);
-			execve(tmp->cmd_line[0], tmp->cmd_line, env);
-		}
-		exit(0);
-	}
+	if (i == 0)
+		first_cmd(addres, tmp, env, fds, i);
 	else if (i < addres->pipe_count)
+		needle_cmd(addres, tmp, env, fds, i);
+	else
+		last_cmd(addres, tmp, env, fds, i);
+}
+
+void	get_sig(t_addres *addres, int *pid)
+{
+	int	i;
+
+	i = -1;
+	while (++i <= addres->pipe_count)
 	{
-		if (tmp->fd_infile != -1)
+		waitpid(pid[i], &addres->exit_status, 0);
+		if (WIFEXITED(addres->exit_status))
+			;
+		else if (WIFSIGNALED(addres->exit_status))
 		{
-			dup2(tmp->fd_infile, 0);
-			close(tmp->fd_infile);
+			if (addres->exit_status == SIGQUIT && i == addres->pipe_count + 1)
+				write(1, ":Quit 3\n", 8);
+			else if (addres->exit_status == SIGINT \
+			&& i == addres->pipe_count + 1)
+				write(1, "\n", 1);
+			addres->exit_status += 128;
 		}
-		else
-			dup2(fds[i - 1][0], 0);
-		if (tmp->output != -1)
-		{
-			dup2(tmp->output, 1);
-			close(tmp->output);
-		}
-		else
-			dup2(fds[i][1], 1);
-		close(fds[i - 1][0]);
-		close(fds[i - 1][1]);
-		close(fds[i][0]);
-		close(fds[i][1]);
-		if (isbuiltin(tmp->cmd_line, addres) == -1)
-		{
-			path = env_path(addres->env);
-			tmp->cmd_line[0] = check_path(tmp->cmd_line[0], path);
-			execve(tmp->cmd_line[0], tmp->cmd_line, env);
-		}
-		exit(0);
-	}
-	else 
-	{
-		if (tmp->fd_infile != -1)
-		{
-			dup2(tmp->fd_infile, 0);
-			close(tmp->fd_infile);
-		}
-		else
-			dup2(fds[i - 1][0], 0);
-		if (tmp->output != -1)
-		{
-			dup2(tmp->output, 1);
-			close(tmp->output);
-		}
-		close(fds[i - 1][0]);
-		close(fds[i - 1][1]);
-		if (isbuiltin(tmp->cmd_line, addres) == -1)
-		{
-			path = env_path(addres->env);
-			tmp->cmd_line[0] = check_path(tmp->cmd_line[0], path);
-			execve(tmp->cmd_line[0], tmp->cmd_line, env);
-		}
-		exit(0);
 	}
 }
 
-void	pipe_execution(t_addres *addres, char **env)
+void	multi_piping(t_addres *addres, char **env, int (*fds)[2], int *pid)
 {
 	t_pipe_exec	*tmp;
-	int		*pid;
-	int 	(*fds)[2];
-	int i = -1;
+	int			i;
 
-	fds = malloc(sizeof(int *) * addres->pipe_count);
-	if(!fds)
-		return ;
-	pid = (int *)malloc(sizeof(int) * (addres->pipe_count + 1));
-	if(!pid)
-		return ;
-	set_pipelist(addres);
-	open_infile(&addres->pipe_list);
-	tmp = addres->pipe_list;
-	while(++i < addres->pipe_count)
-		pipe(fds[i]);
 	i = -1;
-	while(++i <= addres->pipe_count)
+	tmp = addres->pipe_list;
+	while (++i <= addres->pipe_count)
 	{
 		sig_main(1);
 		pid[i] = fork();
@@ -184,21 +150,27 @@ void	pipe_execution(t_addres *addres, char **env)
 			close(fds[i - 1][0]);
 		tmp = tmp->next;
 	}
+}
+
+void	pipe_execution(t_addres *addres, char **env)
+{
+	int			*pid;
+	int			(*fds)[2];
+	int			i;
+
 	i = -1;
-	while(++i <= addres->pipe_count)
-	{
-		waitpid(pid[i], &addres->exit_status, 0);
-		if (WIFEXITED(addres->exit_status))
-			;
-		else if (WIFSIGNALED(addres->exit_status))
-		{
-			if (addres->exit_status == SIGQUIT && i == addres->pipe_count + 1)
-				write(1, ":Quit 3\n", 8);
-			else if (addres->exit_status == SIGINT && i == addres->pipe_count + 1)
-				write(1, "\n", 1);
-			addres->exit_status += 128;
-		}
-	}
+	fds = malloc(sizeof(int *) * addres->pipe_count);
+	if (!fds)
+		return ;
+	pid = (int *)malloc(sizeof(int) * (addres->pipe_count + 1));
+	if (!pid)
+		return ;
+	set_pipelist(addres);
+	open_infile(&addres->pipe_list);
+	while (++i < addres->pipe_count)
+		pipe(fds[i]);
+	multi_piping(addres, env, fds, pid);
+	get_sig(addres, pid);
 	free(fds);
 	free(pid);
 }

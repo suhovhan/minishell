@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/02 18:41:38 by suhovhan          #+#    #+#             */
+/*   Updated: 2023/02/02 18:41:39 by suhovhan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	get_and_set_attr(int flag)
@@ -17,10 +29,11 @@ void	get_and_set_attr(int flag)
 	}
 }
 
-void 	ft_ctrl_c(int signum)
+void	ft_ctrl_c(int signum)
 {
 	(void)signum;
 	rl_done = 1;
+	q_status = 1;
 	rl_replace_line("", 0);
 	write(1, "\n", 1);
 	rl_on_new_line();
@@ -28,8 +41,6 @@ void 	ft_ctrl_c(int signum)
 
 void	sig_main(int flag)
 {
-	// get_and_set_attr(0);
-
 	if (flag == 0)
 	{
 		signal(SIGQUIT, SIG_IGN);

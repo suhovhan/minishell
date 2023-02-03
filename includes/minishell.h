@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/31 13:49:06 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 16:41:29 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 # include <errno.h>
 # include <termios.h>
 # include <term.h>
+# include <dirent.h>
 
 # include "libft.h"
 # include "minishell_structs.h"
-
+int		q_status;
 //lexical analize functions
 void	set_token(t_token **token, char **get_line);
 int		fill_spaces(char **get_line, t_token **token);
@@ -54,12 +55,12 @@ int		check_heredoc(t_addres *addres);
 int		check_syntax(t_token *token);
 int		check_pipe(t_token *token);
 int		check_redirections(t_token *token);
-void	print_no_such_file_or_directory(void);
+int		print_no_such_file_or_directory(char *filename);
 //parsing functions
 char	*get_arg(t_token **token);
 char	**cmd_line(t_token *token);
 char	**env_path(t_env *env);
-char	*check_path(char *str, char **env_path);
+char	*check_path(char *str, char **env_path, int flag);
 char	*get_heredoc_del(char *name, int index);
 void	add_infile(t_addres *addres, char *filename, \
 int index, int input_index);
@@ -105,7 +106,6 @@ char	*ft_cleanline(char *get_line);
 char	**ft_smart_split(char *s);
 char	*fillword(char *s, int start_index, int len);
 int		getwordcount(char *s, char c);
-char	*epur_str(char *str);
 // char	*env_path(char **env, char *pathname);
 int		get_wordlen_expression(char **heredoc);
 int		get_wordlen_expression(char **heredoc);
@@ -117,6 +117,7 @@ void	get_and_set_attr(int flag);
 // zibilnoc
 void	pipe_execution(t_addres *addres, char **env);
 void	execution(t_addres *addres, char **env);
+void	exec_zeropipe(t_addres *addres, char **env);
 void	exec_cmd(t_addres *addres);
 void	p_mtx(char **str);
 void	jogenq_incha(t_env *env, char *heredoc);

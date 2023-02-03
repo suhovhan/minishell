@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 19:14:04 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/02 19:03:47 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	free_token(t_token **token)
 		(*token) = (*token)->next;
 		free(tmp->token);
 		free(tmp);
+		tmp->token = NULL;
+		tmp = NULL;
 	}
 	return (0);
 }
@@ -48,6 +50,8 @@ int	free_filename(t_filename **filename)
 		(*filename) = (*filename)->next;
 		free(tmp->filename);
 		free(tmp);
+		tmp->filename = NULL;
+		tmp = NULL;
 	}
 	return (0);
 }
@@ -66,7 +70,9 @@ int	free_pipeexec(t_pipe_exec **pipelist)
 			free_mtx(tmp->cmd_line);
 		if (tmp->infile)
 			free(tmp->infile);
+		tmp->infile = NULL;
 		free(tmp);
+		tmp = NULL;
 	}
 	return (0);
 }
@@ -83,7 +89,10 @@ int	free_env(t_env **env)
 		(*env) = (*env)->next;
 		free(tmp->key);
 		free(tmp->value);
+		tmp->key = NULL;
+		tmp->value = NULL;
 		free(tmp);
+		tmp = NULL;
 	}
 	return (0);
 }
@@ -108,6 +117,7 @@ void	free_mtx(char **mtx)
 		while (mtx[++i])
 		{
 			free(mtx[i]);
+			mtx[i] = NULL;
 			mtx[i] = NULL;
 		}
 		free(mtx);

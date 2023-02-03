@@ -6,97 +6,11 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 02:51:14 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/30 20:20:15 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 16:32:56 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*get_heredoc_del(char *name, int index)
-{
-	char	*del;
-	char	*str;
-
-	str = ft_itoa(index);
-	del = ft_strjoin("/var/tmp/hd_files/.heredoc_", str);
-	free(str);
-	str = NULL;
-	str = ft_strjoin(del, name);
-	free(del);
-	del = NULL;
-	return (str);
-}
-
-int	run_heredoc_external(t_env *env, char *token, int descriptor)
-{
-	char	*ptr;
-	char	*heredoc;
-	char	*heredoc_tmp;
-	char	*expression;
-
-	while (1)
-	{
-		heredoc = readline("> ");
-		if (!heredoc)
-			break;
-		heredoc_tmp = heredoc;
-		if (!ft_strcmp(heredoc_tmp, token))
-		{
-			free(heredoc);
-			heredoc = NULL;
-			return (0);
-		}
-		while (heredoc_tmp && *heredoc_tmp)
-		{
-			if (heredoc_tmp && *heredoc_tmp && *heredoc_tmp == '$')
-			{
-				ptr = execute_expression(&heredoc_tmp);
-				if (ft_strlen(ptr) == 0)
-					write(descriptor, "$", 1);
-				expression = find_value_env(env, ptr);
-				if (expression && *expression)
-					write(descriptor, expression, ft_strlen(expression));
-				free(expression);
-				free(ptr);
-				expression = NULL;
-				ptr = NULL;
-			}
-			else
-			{
-				write(descriptor, &(*heredoc_tmp), 1);
-				heredoc_tmp++;
-			}
-		}
-		write(descriptor, "\n", 1);
-		free(heredoc);
-		heredoc = NULL;
-	}
-	return (0);
-}
-
-int	run_heredoc_expansion(char *token, int descriptor)
-{
-	char	*heredoc;
-
-	while (1)
-	{
-		heredoc = readline("> ");
-		if (!heredoc)
-			break;
-		if (ft_strlen(heredoc) == ft_strlen(token) && \
-		!ft_strncmp(heredoc, token, ft_strlen(token)))
-		{
-			free(heredoc);
-			heredoc = NULL;
-			return (0);
-		}
-		write(descriptor, heredoc, ft_strlen(heredoc));
-		write(descriptor, "\n", 1);
-		free(heredoc);
-		heredoc = NULL;
-	}
-	return (0);
-}
 
 char	*run_heredoc(t_addres *addres, char *token, int type, int index)
 {
@@ -115,70 +29,63 @@ char	*run_heredoc(t_addres *addres, char *token, int type, int index)
 	return (del);
 }
 
-void	add_infile(t_addres *addres, char *filename, \
-int pipe_index, int input_index)
+void	heredoc_norm1(t_addres *addres, t_token **tmp)
 {
-	t_filename	*tmp;
+	int		index;
 
-	tmp = addres->infile;
-	while (tmp)
+	index = (*tmp)->index;
+	(*tmp) = (*tmp)->next;
+	remove_node_from_token(&(addres->token), index);
+	if ((*tmp) && (*tmp)->type == _SPACE)
 	{
-		if (tmp->pipe_index == pipe_index && tmp->input_index < input_index)
-		{
-			tmp->filename = filename;
-			tmp->input_index = input_index;
-		}
-		tmp = tmp->next;
+		index = (*tmp)->index;
+		(*tmp) = (*tmp)->next;
+		remove_node_from_token(&(addres->token), index);
 	}
+}
+
+int	heredoc_norm(t_addres *addres, t_token **tmp, int pipe_index)
+{
+	int		pid;
+	int		index;
+
+	heredoc_norm1(addres, tmp);
+	if (!(*tmp) || ((*tmp)->type != _EXTERNAL && \
+	(*tmp)->type != _EXPANSION_SINGLE \
+	&& (*tmp)->type != _EXPANSION_DUBLE))
+		return (-1);
+	pid = fork();
+	if (pid)
+		wait(NULL);
+	else
+	{
+		sig_main(3);
+		run_heredoc(addres, (*tmp)->token, (*tmp)->type, (*tmp)->index);
+		exit(0);
+	}
+	add_infile(addres, get_heredoc_del((*tmp)->token, \
+	(*tmp)->index), pipe_index, (*tmp)->index);
+	index = (*tmp)->index;
+	(*tmp) = (*tmp)->next;
+	remove_node_from_token(&(addres->token), index);
+	return (0);
 }
 
 int	heredoc(t_addres *addres)
 {
-	t_token	*ptr;
 	t_token	*tmp;
-	int		index;
-	char	*del;
 	int		pipe_index;
 
 	pipe_index = 0;
 	tmp = addres->token;
-	ptr = addres->token;
-	del = NULL;
 	while (tmp)
 	{
 		if (tmp->type == _PIPE)
 			pipe_index++;
 		if (tmp && tmp->type == _HEREDOC)
 		{
-			index = tmp->index;
-			tmp = tmp->next;
-			remove_node_from_token(&(addres->token), index);
-			if (tmp && tmp->type == _SPACE)
-			{
-				index = tmp->index;
-				tmp = tmp->next;
-				remove_node_from_token(&(addres->token), index);
-			}
-			if (!tmp || (tmp->type != _EXTERNAL && \
-			tmp->type != _EXPANSION_SINGLE \
-			&& tmp->type != _EXPANSION_DUBLE))
-			{
-				print_syntax_error(1);
+			if (heredoc_norm(addres, &tmp, pipe_index) == -1)
 				return (-1);
-			}
-			int pid = fork();
-			if (pid)
-				wait(NULL);
-			else
-			{
-				sig_main(3);
-				del = run_heredoc(addres, tmp->token, tmp->type, tmp->index);
-				exit(0);
-			}
-			add_infile(addres, del, pipe_index, tmp->index);
-			index = tmp->index;
-			tmp = tmp->next;
-			remove_node_from_token(&(addres->token), index);
 		}
 		else
 			tmp = tmp->next;

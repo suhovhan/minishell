@@ -1,0 +1,76 @@
+src/execution.c: Error!
+Error: TAB_INSTEAD_SPC      (line:  49, col:  13):	Found tab when expecting space
+Error: TOO_MANY_FUNCS       (line: 110, col:   1):	Too many functions in file
+Error: TOO_MANY_FUNCS       (line: 132, col:   1):	Too many functions in file
+Error: WRONG_SCOPE_COMMENT  (line: 143, col:  27):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line: 143, col:  27):	Comment is invalid in this scope
+Error: TOO_MANY_FUNCS       (line: 155, col:   1):	Too many functions in file
+src/main.c: Error!
+Error: TOO_MANY_LINES       (line:  94, col:   1):	Function has more than 25 lines
+parsing/cmdline.c: Error!
+Error: TOO_MANY_FUNCS       (line: 117, col:   1):	Too many functions in file
+Error: TOO_MANY_FUNCS       (line: 143, col:   1):	Too many functions in file
+Error: TOO_MANY_FUNCS       (line: 159, col:   1):	Too many functions in file
+parsing/pars_expression.c: Error!
+Error: TAB_INSTEAD_SPC      (line:  75, col:  17):	Found tab when expecting space
+Error: TOO_MANY_LINES       (line: 142, col:   1):	Function has more than 25 lines
+Error: TOO_MANY_FUNCS       (line: 144, col:   1):	Too many functions in file
+Error: TOO_MANY_LINES       (line: 176, col:   1):	Function has more than 25 lines
+parsing/red_manager.c: Error!
+Error: TOO_MANY_LINES       (line: 102, col:   1):	Function has more than 25 lines
+error/free_and_exit.c: Error!
+Error: TOO_MANY_FUNCS       (line: 100, col:   1):	Too many functions in file
+Error: TOO_MANY_FUNCS       (line: 110, col:   1):	Too many functions in file
+error/syntax_error.c: Error!
+Error: TOO_MANY_FUNCS       (line: 123, col:   1):	Too many functions in file
+Error: TOO_MANY_FUNCS       (line: 145, col:   1):	Too many functions in file
+builtins/cd.c: Error!
+Error: TAB_INSTEAD_SPC      (line:  65, col:  61):	Found tab when expecting space
+builtins/env.c: Error!
+Error: PREPROC_START_LINE   (line:  13, col:   1):	Preprocessor statement not at the beginning of the line
+Error: SPACE_EMPTY_LINE     (line:  13, col:   2):	Space on empty line
+Error: CONSECUTIVE_NEWLINES (line:  31, col:   1):	Consecutive newlines
+Error: SPACE_AFTER_KW       (line:  68, col:  13):	Missing space after keyword
+Error: SPACE_BEFORE_FUNC    (line:  87, col:   5):	space before function name
+builtins/export.c: Error!
+Error: TOO_MANY_TABS_FUNC   (line:  36, col:   5):	extra tabs before function name
+Error: SPACE_AFTER_KW       (line:  44, col:  13):	Missing space after keyword
+Error: SPACE_AFTER_KW       (line:  56, col:  12):	Missing space after keyword
+Error: SPACE_AFTER_KW       (line:  71, col:  14):	Missing space after keyword
+Error: MULT_IN_SINGLE_INSTR (line:  89, col:   1):	Multiple instructions in single line control structure
+Error: LINE_TOO_LONG        (line: 101, col:  82):	line too long
+Error: TOO_MANY_LINES       (line: 106, col:   1):	Function has more than 25 lines
+builtins/unset.c: Error!
+Error: SPACE_REPLACE_TAB    (line:  17, col:   8):	Found space when expecting tab
+Error: LINE_TOO_LONG        (line:  20, col:  82):	line too long
+Error: LINE_TOO_LONG        (line:  23, col:  82):	line too long
+Error: MULT_IN_SINGLE_INSTR (line:  46, col:   1):	Multiple instructions in single line control structure
+Error: SPACE_AFTER_KW       (line:  55, col:  17):	Missing space after keyword
+Error: SPACE_AFTER_KW       (line:  66, col:   5):	Missing space after keyword
+Error: SPC_BFR_PAR          (line:  66, col:  10):	Missing space before parenthesis (brace/bracket)
+./includes/minishell.h: Error!
+Error: NL_AFTER_PREPROC     (line:  30, col:   1):	Preprocessor statement must be followed by a newline
+Error: GLOBAL_VAR_NAMING    (line:  30, col:   9):	Global variable must start with g_
+Error: MIXED_SPACE_TAB      (line: 115, col:   5):	Mixed spaces and tabs
+Error: SPACE_REPLACE_TAB    (line: 115, col:   5):	Found space when expecting tab
+./includes/minishell_structs.h: Error!
+Error: WRONG_SCOPE_COMMENT  (line:  18, col:  20):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  18, col:  20):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  19, col:  17):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  19, col:  17):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  20, col:  18):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  20, col:  18):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  21, col:  19):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  21, col:  19):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  22, col:  16):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  22, col:  16):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  23, col:  19):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  23, col:  19):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  24, col:  18):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  24, col:  18):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  25, col:  28):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  25, col:  28):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  26, col:  27):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  26, col:  27):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  27, col:  21):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  27, col:  21):	Comment is invalid in this scope

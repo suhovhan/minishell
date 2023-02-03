@@ -6,37 +6,27 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/30 20:12:23 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 16:25:27 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	p_mtx(char **mtx)
-{
-	int		i = -1;
-	int		j;
-	while (mtx[++i])
-	{
-		j = -1;
-		printf("%d = [%s]\n",i, mtx[i]);
-	}
-}
-
-int a()
+int	a(void)
 {
 	return (0);
 }
 
 int	main(int ac, char **av, char **env)
 {
+	t_addres		addres;
+	struct termios	def;
+	char			*get_line;
+	char			*get_line_tmp;
+	char			**environment;
+
 	(void)ac;
 	(void)av;
-	t_addres	addres;
-	struct termios def;
-	char		*get_line;
-	char		*get_line_tmp;
-	char		**environment;
 	addres.std_out_copy = dup(1);
 	addres.std_input_copy = dup(0);
 	rl_catch_signals = 0;
@@ -47,6 +37,7 @@ int	main(int ac, char **av, char **env)
 		perror("minishell: signal_error1");
 	while (1)
 	{
+		q_status = 0;
 		if (tcsetattr(0, TCSANOW, &def) < 0)
 			printf("minishell: signal_error2\n");
 		sig_main(0);
@@ -62,7 +53,7 @@ int	main(int ac, char **av, char **env)
 		if (check_quotes(get_line))
 		{
 			free(get_line);
-			continue;
+			continue ;
 		}
 		append_addres(&addres, &get_line_tmp);
 		clean_backslash(&addres.token);
@@ -70,19 +61,20 @@ int	main(int ac, char **av, char **env)
 		{
 			free(get_line);
 			free_token(&(addres.token));
-			continue;
+			continue ;
 		}
 		if (heredoc(&addres) == -1)
 		{
+			print_syntax_error(1);
 			free(get_line);
-			free_token(&(addres.token));
-			continue;
+			free_addres(&addres);
+			continue ;
 		}
 		if (check_redirections(addres.token) == -1)
 		{
 			free(get_line);
 			free_token(&(addres.token));
-			continue;
+			continue ;
 		}
 		pars_expression(&addres);
 		redirect_input(&addres);
@@ -90,6 +82,8 @@ int	main(int ac, char **av, char **env)
 		clean_space_from_token(&(addres.token));
 		environment = list_to_char(&addres);
 		execution(&addres, environment);
+		if (q_status)
+			addres.exit_status = q_status;
 		change_value(&(addres.env), "?", ft_itoa(addres.exit_status));
 		free_mtx(environment);
 		free(get_line);

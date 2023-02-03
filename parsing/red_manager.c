@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 21:43:03 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 19:43:10 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/01/31 15:30:57 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	open_red_out(char *filename)
 
 	fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		print_no_such_file_or_directory();
+		print_no_such_file_or_directory(filename);
 	return (fd);
 }
 
@@ -117,6 +117,6 @@ int	open_red_append(char *filename)
 
 	fd = open(filename, O_RDWR | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		print_no_such_file_or_directory();
+		print_no_such_file_or_directory(filename);
 	return (fd);
 }

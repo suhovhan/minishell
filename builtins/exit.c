@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 16:32:49 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/31 14:02:26 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/02 16:48:42 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,14 @@ int	is_digit(char *str)
 	return (0);
 }
 
-void	num_req(char **line, t_addres *cmd)
+void	num_req(char *line, t_addres *cmd)
 {
-	char			**get_line;
-	long double		max;
-
-	get_line = line;
-	max = 9223372036854775807;
-	get_line++;
-	if ((is_digit(get_line) == -1) || (ft_atoi(get_line[1]) > max || ft_atoi(get_line[1]) < (max * (-1) - 1)))
+	if (ft_strcmp(line, "9223372036854775807") > 0)
 	{
 		printf("exit\n");
-		printf("minishell: exit: %s: numeric argument required\n", get_line[0]);
+		printf("minishell: exit: %s: numeric argument required\n", line);
 		cmd->exit_status = 255;
 		exit (cmd->exit_status);
-	}
-}
-
-void	many_args(char **line, t_addres *cmd)
-{
-	char			**get_line;
-
-	get_line = line;
-	if (is_digit(&get_line[1]) == 0 && get_line[2])
-	{
-		printf("minishell: exit: too many arguments\n");
-		cmd->exit_status = 1;
 	}
 }
 
@@ -72,7 +54,8 @@ void	ft_exit(char **line, t_addres *cmd)
 		exit(cmd->exit_status);
 	}
 	else if (is_digit(line[1]) == 0 && !line[2])
-	{	
+	{
+		num_req(line[1], cmd);
 		if (line[1][0] != '-' || line[1][0] == '+')
 			cmd->exit_status = ft_atoi(line[1]) % 256;
 		else
@@ -84,7 +67,7 @@ void	ft_exit(char **line, t_addres *cmd)
 		cmd->exit_status = 1;
 		return ;
 	}
-	num_req(line, cmd);
+	num_req(line[1], cmd);
 	change_value(&(cmd->env), "?", ft_itoa(cmd->exit_status));
 	exit (cmd->exit_status);
 }

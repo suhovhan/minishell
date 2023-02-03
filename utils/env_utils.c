@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 21:03:31 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/27 20:42:41 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 13:33:06 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,29 +101,9 @@ int	change_value(t_env **env, char *key, char *value)
 			i = 0;
 			free(tmp->value);
 			tmp->value = value;
+			break ;
 		}
 		tmp = tmp->next;
 	}
 	return (i);
-}
-
-void	setup_env(t_env **env, char **envp)
-{
-	char	*shlvl;
-	int		lvl;
-
-	set_env(env, envp);
-	shlvl = find_value_env(*env, "SHLVL");
-	lvl = ft_atoi(shlvl) + 1;
-	if (lvl == 1000)
-		lvl = 0;
-	else if (lvl > 1000)
-	{
-		printf("minishell: warning: shell level (%d) too high, resetting to 1\n", lvl);
-		lvl = 1;
-	}
-	free(shlvl);
-	shlvl = ft_itoa(lvl);
-	change_value(env, "SHLVL", shlvl);
-	append_env(env, ft_strdup("?"), ft_strdup("0"), -1);
 }
