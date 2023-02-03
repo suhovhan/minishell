@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:08 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 19:29:51 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 18:47:22 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 typedef enum s_types
 {
-	_EXTERNAL = 0, // text
-	_SPACE = 1, // space
-	_RED_IN = 2, // < redirection input
-	_RED_OUT = 3, // > redirection output
-	_PIPE = 4, // | pipe
-	_HEREDOC = 5, // << heredoc
-	_APPEND = 6, // >> append
-	_EXPANSION_SINGLE = 7, // [ '...' ]
-	_EXPANSION_DUBLE = 8, // [ "..." ]
-	_DELIMITER = 9, // redirection filename
+	_EXTERNAL = 0,
+	_SPACE = 1,
+	_RED_IN = 2,
+	_RED_OUT = 3,
+	_PIPE = 4,
+	_HEREDOC = 5,
+	_APPEND = 6,
+	_EXPANSION_SINGLE = 7,
+	_EXPANSION_DUBLE = 8,
+	_DELIMITER = 9,
 }			t_types;
 
 typedef struct s_token

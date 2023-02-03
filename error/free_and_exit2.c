@@ -1,19 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   directory_error.c                                  :+:      :+:    :+:   */
+/*   free_and_exit2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 01:53:43 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/31 14:53:19 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 18:42:23 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	print_no_such_file_or_directory(char *filename)
+void	free_mtx(char **mtx)
 {
-	printf("minishell: %s: No such file or directory\n", filename);
-	return (1);
+	int	i;
+
+	i = -1;
+	if (mtx)
+	{
+		while (mtx[++i])
+		{
+			free(mtx[i]);
+			mtx[i] = NULL;
+			mtx[i] = NULL;
+		}
+		free(mtx);
+		mtx = NULL;
+	}
 }

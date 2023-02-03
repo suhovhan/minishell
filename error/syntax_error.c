@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:59 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 19:20:52 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 18:45:39 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,30 +96,6 @@ int	check_redirections(t_token *token)
 	return (0);
 }
 
-int	check_heredoc(t_addres *addres)
-{
-	int		i;
-	t_token	*tmp;
-
-	i = 0;
-	tmp = addres->token;
-	if (tmp->type == _HEREDOC)
-	{
-		if (++i > 16)
-			exit_shell(addres, _HEREDOC);
-		tmp = tmp->next;
-		while (tmp != NULL && tmp->type == _SPACE)
-			tmp = tmp->next;
-		if (tmp == NULL || (tmp->type != _EXTERNAL && \
-		tmp->type != _EXPANSION_DUBLE && tmp->type != _EXPANSION_SINGLE))
-		{
-			print_syntax_error(1);
-			return (-1);
-		}
-	}
-	return (0);
-}
-
 int	check_pipe(t_token *token)
 {
 	if (token != NULL && token->type == _SPACE)
@@ -139,19 +115,5 @@ int	check_pipe(t_token *token)
 		if (token != NULL)
 			token = token->next;
 	}
-	return (0);
-}
-
-int	check_syntax(t_token *token)
-{
-	if (token == NULL)
-		return (0);
-	if (check_pipe(token) == -1)
-	{
-		print_syntax_error(124);
-		return (-1);
-	}
-	if (check_redirections(token) == -1)
-		return (-1);
 	return (0);
 }

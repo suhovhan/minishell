@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:50 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/02 19:03:47 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 18:42:18 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,32 +95,4 @@ int	free_env(t_env **env)
 		tmp = NULL;
 	}
 	return (0);
-}
-
-void	exit_shell(t_addres *addres, int exit_code)
-{
-	if (exit_code == _HEREDOC)
-		printf("minishell: maximum here-document count exceeded\n");
-	addres->exit_status = 2;
-	addres->shlvl--;
-	free_token(&addres->token);
-	exit(addres->exit_status);
-}
-
-void	free_mtx(char **mtx)
-{
-	int	i;
-
-	i = -1;
-	if (mtx)
-	{
-		while (mtx[++i])
-		{
-			free(mtx[i]);
-			mtx[i] = NULL;
-			mtx[i] = NULL;
-		}
-		free(mtx);
-		mtx = NULL;
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 18:41:38 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/02 18:41:39 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 18:48:55 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_ctrl_c(int signum)
 {
 	(void)signum;
 	rl_done = 1;
-	q_status = 1;
+	g_status = 1;
 	rl_replace_line("", 0);
 	write(1, "\n", 1);
 	rl_on_new_line();

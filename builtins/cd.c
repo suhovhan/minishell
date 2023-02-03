@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:47:29 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/02/02 19:07:46 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 18:46:24 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	cd(char *line, t_env *env)
 		{
 			ft_putstr_fd("minishell: cd: ", 2);
 			ft_putstr_fd(get_line[0], 2);
-			ft_putstr_fd(": No such file or directory\n", 2);	
+			ft_putstr_fd(": No such file or directory\n", 2);
 		}
 		else
 			go_to(get_line[0]);

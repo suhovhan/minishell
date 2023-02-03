@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:36 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 16:25:27 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 18:48:42 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int ac, char **av, char **env)
 		perror("minishell: signal_error1");
 	while (1)
 	{
-		q_status = 0;
+		g_status = 0;
 		if (tcsetattr(0, TCSANOW, &def) < 0)
 			printf("minishell: signal_error2\n");
 		sig_main(0);
@@ -82,8 +82,8 @@ int	main(int ac, char **av, char **env)
 		clean_space_from_token(&(addres.token));
 		environment = list_to_char(&addres);
 		execution(&addres, environment);
-		if (q_status)
-			addres.exit_status = q_status;
+		if (g_status)
+			addres.exit_status = g_status;
 		change_value(&(addres.env), "?", ft_itoa(addres.exit_status));
 		free_mtx(environment);
 		free(get_line);

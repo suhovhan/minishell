@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 16:41:29 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/03 19:09:50 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 
 # include "libft.h"
 # include "minishell_structs.h"
-int		q_status;
+
+int		g_status;
 //lexical analize functions
 void	set_token(t_token **token, char **get_line);
 int		fill_spaces(char **get_line, t_token **token);
@@ -62,6 +63,8 @@ char	**cmd_line(t_token *token);
 char	**env_path(t_env *env);
 char	*check_path(char *str, char **env_path, int flag);
 char	*get_heredoc_del(char *name, int index);
+char	*my_strchr(char *str, char c);
+int		check_backslash(char *str);
 void	add_infile(t_addres *addres, char *filename, \
 int index, int input_index);
 int		heredoc(t_addres *addres);
@@ -70,8 +73,10 @@ int		run_heredoc_external(t_env *env, char *token, int descriptor);
 int		run_heredoc_expansion(char *token, int descriptor);
 char	*open_expression_in_line(t_env *env, char *str);
 void	pars_expression(t_addres *addres);
+int		pars_expression_norm(t_addres *addres, t_token **tmp);
+void	setup_needle_list(t_token **token, char *line, int index);
+t_token	*set_newlist(char *line);
 void	redirect_input(t_addres *addres);
-int		open_red_in(char *filename);
 void	run_redirections(t_addres *addres);
 int		open_red_out(char *filename);
 int		open_red_append(char *filename);
@@ -106,22 +111,27 @@ char	*ft_cleanline(char *get_line);
 char	**ft_smart_split(char *s);
 char	*fillword(char *s, int start_index, int len);
 int		getwordcount(char *s, char c);
-// char	*env_path(char **env, char *pathname);
 int		get_wordlen_expression(char **heredoc);
 int		get_wordlen_expression(char **heredoc);
 char	*execute_expression(char **heredoc);
-//	signal functions
+//	src functions
 void	sig_main(int flag);
-void 	ft_ctrl_c(int signum);
+void	ft_ctrl_c(int signum);
 void	get_and_set_attr(int flag);
-// zibilnoc
 void	pipe_execution(t_addres *addres, char **env);
+void	multi_piping(t_addres *addres, char **env, int (*fds)[2], int *pid);
 void	execution(t_addres *addres, char **env);
 void	exec_zeropipe(t_addres *addres, char **env);
-void	exec_cmd(t_addres *addres);
-void	p_mtx(char **str);
-void	jogenq_incha(t_env *env, char *heredoc);
-int		is_alpha(char *str);
+void	child_proc(t_addres *addres, t_pipe_exec *tmp, \
+char **env, int (*fds)[2], int i);
+void	last_cmd(t_addres *addres, t_pipe_exec *tmp, \
+char **env, int (*fds)[2], int i);
+void	needle_cmd(t_addres *addres, t_pipe_exec *tmp, \
+char **env, int (*fds)[2], int i);
+void	first_cmd(t_addres *addres, t_pipe_exec *tmp, \
+char **env, int (*fds)[2], int i);
+void	run_cmd(t_addres *addres, t_pipe_exec *tmp, char **env);
+void	get_sig(t_addres *addres, int *pid);
 void	cd(char *line, t_env *env);
 char	**list_to_char(t_addres *address);
 int		list_size(t_env *env);
