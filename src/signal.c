@@ -6,26 +6,31 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 18:41:38 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 18:48:55 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 14:42:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	get_and_set_attr(int flag)
+int	a(void)
 {
-	struct termios	ts;
+	return (0);
+}
 
-	tcgetattr(STDIN_FILENO, &ts);
+void	set_term_attr(int flag)
+{
+	struct termios	termios_p;
+
+	tcgetattr(0, &termios_p);
 	if (flag == 0)
 	{
-		ts.c_lflag &= ~ECHOCTL;
-		tcsetattr(STDIN_FILENO, TCSANOW, &ts);
+		termios_p.c_lflag &= ~ECHOCTL;
+		tcsetattr(0, 0, &termios_p);
 	}
 	else if (flag == 1)
 	{
-		ts.c_lflag |= ECHOCTL;
-		tcsetattr(STDIN_FILENO, TCSANOW, &ts);
+		termios_p.c_lflag |= ECHOCTL;
+		tcsetattr(0, 0, &termios_p);
 	}
 }
 

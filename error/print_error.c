@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:41:55 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 18:46:06 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 17:21:13 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int	print_no_such_file_or_directory(char *filename)
 {
-	printf("minishell: %s: No such file or directory\n", filename);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(filename, 2);
+	perror(": ");
 	return (1);
 }
 
@@ -34,7 +36,7 @@ int	print_syntax_error(int c)
 void	exit_shell(t_addres *addres, int exit_code)
 {
 	if (exit_code == _HEREDOC)
-		printf("minishell: maximum here-document count exceeded\n");
+		perror("minishell: ");
 	addres->exit_status = 2;
 	addres->shlvl--;
 	free_token(&addres->token);

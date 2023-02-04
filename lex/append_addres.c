@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 01:57:26 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/01/29 19:33:05 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 13:14:16 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,6 @@ void	append_addres(t_addres *addres, char **get_line)
 		addres->descriptor_output[i] = -1;
 		append_filename(&addres->infile, NULL, i, -1);
 	}
+	addres->std_out_copy = dup(1);
+	addres->std_input_copy = dup(0);
 }

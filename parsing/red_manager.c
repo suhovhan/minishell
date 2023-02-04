@@ -6,11 +6,27 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 21:43:03 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 19:00:12 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 14:39:42 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	parser(t_addres *addres, char **get_line)
+{
+	if (get_line && *get_line && **get_line)
+		add_history(*get_line);
+	if (main_tokenize(addres, *get_line) == -1)
+	{
+		free(*get_line);
+		return (-1);
+	}
+	free(*get_line);
+	*get_line = NULL;
+	if (main_redirect(addres) == -1)
+		return (-1);
+	return (0);
+}
 
 void	red_meneger_norm(t_addres *addres, t_token **tmp, int pipe_index)
 {

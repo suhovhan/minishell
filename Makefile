@@ -44,30 +44,30 @@ RMRF = rm -rf
 LIBCACH = ~/Library/Caches/
 
 $(OBJ_SRC_DIR)/%.o: ./src/%.c | $(OBJ_SRC_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_LEX_DIR)/%.o: ./lex/%.c | $(OBJ_LEX_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_PARS_DIR)/%.o: ./parsing/%.c | $(OBJ_PARS_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_BUIL_DIR)/%.o: ./builtins/%.c | $(OBJ_BUIL_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_ERR_DIR)/%.o: ./error/%.c | $(OBJ_ERR_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_LIBFT_DIR)/%.o: ./libft/%.c | $(OBJ_LIBFT_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_UTILS_DIR)/%.o: ./utils/%.c | $(OBJ_UTILS_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 all: $(NAME)
 
 $(NAME): $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
-	@$(CC) $(CFLAGS) $(LINK) $(LINKERS) $(INCLUDES) -o $(NAME) $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
+	$(CC) $(CFLAGS) $(LINK) $(LINKERS) $(INCLUDES) -o $(NAME) $(OBJ_SRC) $(OBJ_LEX) $(OBJ_PARS) $(OBJ_BUIL) $(OBJ_ERR) $(OBJ_LIBFT) $(OBJ_UTILS)
 	@$(MK) $(HD)
 
 $(OBJ_SRC_DIR):
@@ -92,24 +92,24 @@ $(OBJ_UTILS_DIR):
 	@$(MK) $(OBJ_UTILS_DIR)
 
 clean:
-	@$(RMRF) $(OBJ_SRC_DIR)
-	@$(RMRF) $(OBJ_LEX_DIR)
-	@$(RMRF) $(OBJ_PARS_DIR)
-	@$(RMRF) $(OBJ_BUIL_DIR)
-	@$(RMRF) $(OBJ_ERR_DIR)
-	@$(RMRF) $(OBJ_LIBFT_DIR)
-	@$(RMRF) $(OBJ_UTILS_DIR)
+	$(RMRF) $(OBJ_SRC_DIR)
+	$(RMRF) $(OBJ_LEX_DIR)
+	$(RMRF) $(OBJ_PARS_DIR)
+	$(RMRF) $(OBJ_BUIL_DIR)
+	$(RMRF) $(OBJ_ERR_DIR)
+	$(RMRF) $(OBJ_LIBFT_DIR)
+	$(RMRF) $(OBJ_UTILS_DIR)
 
 fclean: clean
-	@$(RF)  $(NAME)
-	@# $(RMRF) $(LIBCACH)
-	@# $(RMRF) $(HD)
+	$(RF)  $(NAME)
+	# $(RMRF) $(LIBCACH)
+	# $(RMRF) $(HD)
 
 readline: 
 	cd readline-master && make clean && ./configure --prefix=$(PREFIX) && make && make install
 
 norm:
-	norminette $(SRC_SRC) $(SRC_PARS) $(SRC_ERR) $(SRC_LEX) $(SRC_LIBFT) $(SRC_UTILS) $(SRC_BUIL) ./includes
+	@norminette $(SRC_SRC) $(SRC_PARS) $(SRC_ERR) $(SRC_LEX) $(SRC_LIBFT) $(SRC_UTILS) $(SRC_BUIL) ./includes
 
 re: fclean all
 

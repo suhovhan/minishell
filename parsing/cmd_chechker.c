@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 18:32:02 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 18:33:33 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 17:23:00 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	norm_check_cmd(char *str)
 	if ((opendir(str) && my_strchr(str, '/') != 0) \
 	|| (check_backslash(str) == 0 && ft_strlen(str) != 0))
 	{
-		ft_putstr_fd("minishell-$: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd(": is a directory\n", 2);
 		exit(126);
@@ -31,7 +31,7 @@ void	norm_check_cmd(char *str)
 	}
 	if (opendir(str) == 0 && my_strchr(str, '/') != 0)
 	{
-		ft_putstr_fd("minishell-$: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(127);
@@ -43,12 +43,12 @@ void	check_cmd(char *str, char **path)
 	norm_check_cmd(str);
 	if (!path)
 	{
-		ft_putstr_fd("minishell-$: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(127);
 	}
-	ft_putstr_fd("minishell-$: ", 2);
+	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": command not found\n", 2);
 	exit(127);

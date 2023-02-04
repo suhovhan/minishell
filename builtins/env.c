@@ -6,11 +6,23 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:56:25 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/01/29 16:26:33 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 18:01:10 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "../includes/minishell.h"
+#include "../includes/minishell.h"
+
+void	print_env(char **env)
+{
+	int	i;
+
+	i = -1;
+	while (env[++i])
+	{
+		ft_putstr_fd(env[i], 1);
+		write(1, "\n", 1);
+	}
+}
 
 int	list_size(t_env *env)
 {
@@ -27,7 +39,6 @@ int	list_size(t_env *env)
 	}
 	return (count);
 }
-
 
 char	**list_to_char(t_addres *address)
 {
@@ -59,52 +70,38 @@ int	env_handling(char **s)
 {
 	int	i;
 
-	i = 0;
-	while (s[i])
+	i = -1;
+	while (s[++i])
 	{
 		if (ft_strcmp(s[i], "env") != 0)
-			return (1);
-		else
-			break;
-		i++;
+			return (i);
 	}
-	return (0);
+	return (-1);
 }
 
-void	shlvl(t_env *env)
-{
-	t_env	*temp;
-
-	temp = env;
-	while (temp)
-	{
-		if (ft_strcmp(temp->key, "SHLVL") == 0)
-			temp->value++;
-		temp = temp->next;
-	}
-}
-
-void ft_env(char *line, t_addres *cmd)
+void	ft_env(char **line, t_addres *cmd)
 {
 	int		i;
+	char	**env;
 	t_env	*temp;
 	char	**get_line;
 
 	i = 0;
 	temp = cmd->env;
-	get_line = ft_split(line, ' ');
-	while (temp)
+	get_line = line;
+	if (env_handling(get_line) != -1)
 	{
-		if (env_handling(get_line) == 1)
-		{
-			printf("env: %s: No such file or directory\n", get_line[i]);
-			cmd->exit_status = 127;
-		}
-		if (env_handling(get_line) == 0)
-		{
-			printf("%s\n", list_to_char(cmd)[++i]);
-			cmd->exit_status = 0;
-		}
-		temp = temp->next;
+		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd(get_line[env_handling(get_line)], 2);
+		perror(": ");
+		cmd->exit_status = 127;
 	}
+	else if (env_handling(get_line) == -1)
+	{
+		env = list_to_char(cmd);
+		print_env(env);
+		free_mtx(env);
+		cmd->exit_status = 0;
+	}
+	temp = temp->next;
 }

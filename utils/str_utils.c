@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:39 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 13:31:59 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 14:59:42 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,18 @@ char	*find_value_env(t_env	*env, char *key)
 		env = env->next;
 	}
 	return (value);
+}
+
+int	lenght_until(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == c)
+			break ;
+		i++;
+	}
+	return (i);
 }

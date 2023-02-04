@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 16:32:49 by mpetrosy          #+#    #+#             */
-/*   Updated: 2023/02/02 16:48:42 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 17:18:34 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ void	num_req(char *line, t_addres *cmd)
 {
 	if (ft_strcmp(line, "9223372036854775807") > 0)
 	{
-		printf("exit\n");
-		printf("minishell: exit: %s: numeric argument required\n", line);
+		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(line, 2);
+		perror(": ");
 		cmd->exit_status = 255;
 		exit (cmd->exit_status);
 	}
@@ -50,7 +52,7 @@ void	ft_exit(char **line, t_addres *cmd)
 {
 	if (!line[1])
 	{
-		printf("exit\n");
+		ft_putstr_fd("exit\n", 2);
 		exit(cmd->exit_status);
 	}
 	else if (is_digit(line[1]) == 0 && !line[2])
@@ -63,7 +65,7 @@ void	ft_exit(char **line, t_addres *cmd)
 	}
 	else if (line[2])
 	{
-		printf("minishell: exit: too many arguments\n");
+		perror("minishell: ");
 		cmd->exit_status = 1;
 		return ;
 	}

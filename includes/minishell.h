@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 16:42:15 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 19:09:50 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 17:56:05 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int		check_pipe(t_token *token);
 int		check_redirections(t_token *token);
 int		print_no_such_file_or_directory(char *filename);
 //parsing functions
+int		parser(t_addres *addres, char **get_line);
 char	*get_arg(t_token **token);
 char	**cmd_line(t_token *token);
 char	**env_path(t_env *env);
@@ -82,12 +83,14 @@ int		open_red_out(char *filename);
 int		open_red_append(char *filename);
 //bulitines functions
 int		isbuiltin(char **cmd_line, t_addres *status);
+int		lenght_until(char *str, char c);
 void	echo(char **cmd);
 int		is_digit(char *str);
 void	ft_exit(char **line, t_addres *cmd);
 void	pwd(char	*cmd);
-void	ft_env(char *line, t_addres *cmd);
-void	unset(t_env **env, char **cmd);
+void	ft_env(char **line, t_addres *cmd);
+void	unset(t_addres *addres, t_env **env, char **cmd);
+void	export_value(t_env **env, char **cmd);
 void	export(t_env **env, char **cmd);
 int		env_key_handling(char *s);
 //utils functions
@@ -103,6 +106,7 @@ void	clean_space_from_token(t_token	**token);
 char	*find_value_env(t_env	*env, char *key);
 char	**get_env(char	*env);
 void	set_env(t_env **env, char **envp);
+void	change_flag(t_env **env, char *key, int flag);
 int		change_value(t_env **env, char *key, char *value);
 void	setup_env(t_env **env, char **envp);
 char	*fill_word(char **get_line, char ch, int flag);
@@ -115,11 +119,16 @@ int		get_wordlen_expression(char **heredoc);
 int		get_wordlen_expression(char **heredoc);
 char	*execute_expression(char **heredoc);
 //	src functions
+void	main_loop(t_addres *addres, struct termios def);
+int		main_tokenize(t_addres *addres, char *get_line);
+int		main_redirect(t_addres *addres);
+void	main_execution(t_addres *addres);
 void	sig_main(int flag);
 void	ft_ctrl_c(int signum);
-void	get_and_set_attr(int flag);
+void	set_term_attr(int flag);
+int		a(void);
 void	pipe_execution(t_addres *addres, char **env);
-void	multi_piping(t_addres *addres, char **env, int (*fds)[2], int *pid);
+int		multi_piping(t_addres *addres, char **env, int (*fds)[2], int *pid);
 void	execution(t_addres *addres, char **env);
 void	exec_zeropipe(t_addres *addres, char **env);
 void	child_proc(t_addres *addres, t_pipe_exec *tmp, \

@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 02:58:10 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 17:55:09 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 17:56:13 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ int	isbuiltin(char **cmd_line, t_addres *addres)
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "export"))
 		export(&addres->env, cmd_line);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "unset"))
-		unset(&(addres->env), cmd_line);
+		unset(addres, &(addres->env), cmd_line);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "exit"))
 		ft_exit(cmd_line, addres);
 	else if (cmd_line[0] && !ft_strcmp(cmd_line[0], "env"))
-		ft_env(cmd_line[1], addres);
+		ft_env(cmd_line, addres);
 	else
 		return (-1);
 	return (0);

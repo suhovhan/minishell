@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 18:04:41 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 18:30:32 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 13:11:19 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,27 @@ void	get_sig(t_addres *addres, int *pid)
 	}
 }
 
-void	multi_piping(t_addres *addres, char **env, int (*fds)[2], int *pid)
+void	kill_child(t_addres *addres, int *pid, int i, int (*fds)[2])
+{
+	int	j;
+
+	j = 0;
+	perror("minishell-$");
+	while (j < i)
+	{
+		if (j != addres->pipe_count)
+		{
+			close(fds[i][0]);
+			close(fds[i][1]);
+		}
+		kill(pid[j], SIGTERM);
+		waitpid(pid[j], 0, 0);
+		j++;
+	}
+	addres->exit_status = 258;
+}
+
+int	multi_piping(t_addres *addres, char **env, int (*fds)[2], int *pid)
 {
 	t_pipe_exec	*tmp;
 	int			i;
@@ -45,8 +65,11 @@ void	multi_piping(t_addres *addres, char **env, int (*fds)[2], int *pid)
 	{
 		sig_main(1);
 		pid[i] = fork();
-		if (pid[i] == -1) // kill all processes
-			exit (1);
+		if (pid[i] == -1)
+		{
+			kill_child(addres, pid, i, fds);
+			return (-1);
+		}
 		if (pid[i] == 0)
 			child_proc(addres, tmp, env, fds, i);
 		if (i < addres->pipe_count)
@@ -55,6 +78,7 @@ void	multi_piping(t_addres *addres, char **env, int (*fds)[2], int *pid)
 			close(fds[i - 1][0]);
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 void	pipe_execution(t_addres *addres, char **env)
@@ -74,8 +98,8 @@ void	pipe_execution(t_addres *addres, char **env)
 	open_infile(&addres->pipe_list);
 	while (++i < addres->pipe_count)
 		pipe(fds[i]);
-	multi_piping(addres, env, fds, pid);
-	get_sig(addres, pid);
+	if (multi_piping(addres, env, fds, pid) == 0)
+		get_sig(addres, pid);
 	free(fds);
 	free(pid);
 }

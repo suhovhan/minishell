@@ -6,7 +6,7 @@
 /*   By: suhovhan <suhovhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 18:50:47 by suhovhan          #+#    #+#             */
-/*   Updated: 2023/02/03 13:35:30 by suhovhan         ###   ########.fr       */
+/*   Updated: 2023/02/04 15:29:01 by suhovhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,22 @@ void	clean_backslash(t_token	**token)
 	}
 }
 
+void	change_flag(t_env **env, char *key, int flag)
+{
+	t_env	*tmp;
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+		{
+			tmp->flag = flag;
+			break ;
+		}
+		tmp = tmp->next;
+	}
+}
+
 void	setup_env(t_env **env, char **envp)
 {
 	char	*shlvl;
@@ -103,5 +119,6 @@ void	setup_env(t_env **env, char **envp)
 	free(shlvl);
 	shlvl = ft_itoa(lvl);
 	change_value(env, "SHLVL", shlvl);
+	change_flag(env, "OLDPWD", -1);
 	append_env(env, ft_strdup("?"), ft_strdup("0"), -1);
 }
