@@ -12,7 +12,7 @@ It is our own minishell.
 - Must be written in C
 - Should not quit unexpectedly
 - No leaks will be tolerated.
-- Makefile width flags -Wall -Wextra -Werroe
+- Makefile width flags -Wall -Wextra -Werror
 - Makefile: all clean fclean re
 
 ## Mandatory
